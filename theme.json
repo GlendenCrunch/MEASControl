@@ -1,0 +1,50 @@
+{
+    "bg_button": "#6699CC",
+    "bg_colour": "#848a98",
+    "fg_colour": "gold",
+    "pastel_setting": {
+        ".": {
+            "configure": {
+                "background": "#848a98",
+                "font": "red"
+            }
+        },
+        "TNotebook": {
+            "configure": {
+                "background": "#848a98",
+                "tabmargins": [
+                    2,
+                    0,
+                    0,
+                    0
+                ]
+            }
+        },
+        "TNotebook.Tab": {
+            "configure": {
+                "background": "#848a98",
+                "font": "arial 16",
+                "foreground": "black",
+                "pading": [
+                    10,
+                    2
+                ]
+            },
+            "map": {
+                "background": [
+                    [
+                        "selected",
+                        "gold"
+                    ]
+                ]
+            }
+        },
+        "Treeview": {
+            "configure": {
+                "background": "white",
+                "font": "arial 12",
+                "foreground": "blue"
+            }
+        }
+    }
+}
