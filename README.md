@@ -14,3 +14,5 @@
   + Lecroy: WJ312A, WJ324A(test)
 + Install: unpack anywhere
 + Interface:
+![alt text](https://github.com/GlendenCrunch/MEASControl/blob/main/image/ui_1.png)
+![alt text](https://github.com/GlendenCrunch/MEASControl/blob/main/image/ui_2.png)
