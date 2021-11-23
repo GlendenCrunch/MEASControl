@@ -1,4 +1,4 @@
-# MEASControl
+### MEASControl - программа калибровки цифровых мультиметров и осциллографов
 ### Calibration digital multimeter and oscilloscope
 + Python 3.8
 + pip install: pyvisa, openpyexcel, serial
