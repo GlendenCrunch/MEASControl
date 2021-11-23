@@ -1,5 +1,5 @@
 ### MEASControl - программа калибровки цифровых мультиметров и осциллографов
-+ Python 3.8
++ Python 3.8.2
 + pip install: pyvisa, openpyexcel, serial
 + Драйверы: NI-VISA
 + Калибратор для мультиметров: Fluke 5500A (5522A)
