@@ -1,4 +1,7 @@
+#!/usr/bin/python3-32
 # -*- coding: utf-8 -*-
 import subprocess
+import os
 
-subprocess.call(r'python -m PyInstaller --onefile --icon=icon/icon.ico --noconsole --name MEASControl C:\ITL\MEASControl\MEASControl.py')
+folder_1 = os.getcwd()
+subprocess.call('python -m PyInstaller --onefile --icon=icon/icon.ico --noconsole --name MEASControl {}\MEASControl.py'.format(folder_1))
