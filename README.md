@@ -12,5 +12,5 @@
   + Tektronix: TDS 2014B
   + Lecroy: WJ312A, WJ324A(test)
 + Interface:
-![alt text](https://github.com/GlendenCrunch/MEASControl/blob/main/image/ui_1.png)
-![alt text](https://github.com/GlendenCrunch/MEASControl/blob/main/image/ui_2.png)
+![alt text](https://github.com/GlendenCrunch/MEASControl/blob/main/image/1.png)
+![alt text](https://github.com/GlendenCrunch/MEASControl/blob/main/image/2.png)
