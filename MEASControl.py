@@ -17,8 +17,6 @@ import pyvisa
 import serial
 
 sem = threading.Semaphore()
-inst_dmm = 0
-inst_fluke = 0
 data_c2 = 0
 count = 1
 colour_cell = PatternFill(start_color='FFFFDAB9', end_color='FFFFDAB9', fill_type='solid')
@@ -56,7 +54,7 @@ class MeasControlGUI():
         self.f_var.set(1)
         self.dci_var.set(1)
         self.aci_var.set(1)
-        self.c_var.set(1)
+        self.c_var.set(0)   # временно отключил
         self.r2_var.set(1)
         self.r4_var.set(1)
         self.tr_var.set(1)
@@ -233,7 +231,7 @@ class MeasControlGUI():
     
     def about_win(self):
         self.win_one('О программе', '500x300+{}+{}')
-        text1 = ('MEASControl\rVersion: 1.06\rDate: 2021-06-18\rAutor: I T L ©')
+        text1 = ('MEASControl\rVersion: 1.07\rDate: 2021-12-24\rAutor: I T L ©')
         text2_0 = ('\tМультиметры:')
         text2_1 = ('\t\tОсциллографы:')
         text3 = ('Agilent/Keysight:\r34401A\r34410A\r34411A\r34420A\r34460A\r34461A\r34465A\r34470A')
@@ -330,8 +328,8 @@ class MeasControlGUI():
                 json.dump(self.sett_json, file_json, ensure_ascii=False, indent=4, sort_keys=True)
             self.parent.destroy()
             try:
-                inst_dmm.close()
-                inst_fluke.close()
+                self.inst_dmm.close()
+                self.inst_fluke.close()
             except AttributeError:
                 print ('Стиль изменён')
             os.system('{}\\MEASControl.py'.format(self.folder_1))
@@ -340,73 +338,78 @@ class MeasControlGUI():
         _button.place(x=120,y=250)
 
     def cnt(self):
-        dmm_34420_1 = sum(1 for line in open('{}\\file_py\\34420A.py'.format(self.folder_1), encoding='utf-8') if line.lstrip().startswith('_thdmm = Call_34420('))
         dmm_v778_1 = sum(1 for line in open('{}\\file_py\\v7-78.py'.format(self.folder_1), encoding='utf-8') if line.lstrip().startswith('_thdmm = Call(')) - 8
 
-        cnt_dict = {'34420A':dmm_34420_1, 'V7-78/1':dmm_v778_1}
-        cnt_list_dmm = ['34401A', '34410A', '34411A', '34460A', '34461A', '34465A', '34470A']
-        cnt_list_osc = ['WJ312A', 'WJ324A', 'TDS 1002B', 'TDS 1012B', 'TDS 2002B', 'TDS 2012B', 'TDS 2014B', 'TDS 2022B', 'TDS 2024B', 'MSO-X 3034A', 'MSO-X 3104T']
+        cnt_dict = {'V7-78/1':dmm_v778_1}
+        cnt_list = ['34401A', '34401A_gost', '34420A', '34410A', '34411A', '34460A', '34461A', '34465A', '34470A', 'WJ312A', 'WJ324A', 
+                    'TDS 1002B', 'TDS 1012B', 'TDS 2002B', 'TDS 2012B', 'TDS 2014B', 'TDS 2022B', 'TDS 2024B', 'MSO-X 3034A', 'MSO-X 3104T']
 
-        for i, item_i in enumerate(cnt_list_dmm):
-            osc_item = sum(1 for line in open('{}\\file_py\\{}.py'.format(self.folder_1, item_i), encoding='utf-8') if line.lstrip().startswith('_thdmm = Call('))
-            cnt_dict[item_i] = osc_item
-
-        for i, item_i in enumerate(cnt_list_osc):
-            osc_item = sum(1 for line in open('{}\\file_py\\{}.py'.format(self.folder_1, item_i), encoding='utf-8') if line.lstrip().startswith('_thosc = Call_oscill('))
-            cnt_dict[item_i] = osc_item
+        for item_0 in ['_thdmm = Call(', '_thosc = Call_oscill(']:
+            for item_i in cnt_list:
+                osc_item = sum(1 for line in open('{}\\file_py\\{}.py'.format(self.folder_1, item_i), encoding='utf-8') if line.lstrip().startswith(item_0))
+                if osc_item > 0:
+                    cnt_dict[item_i] = osc_item
 
         return cnt_dict
 
     def next(self):
         self.tab_control.select(self.tab2)
 
-    def pribor(self):
+    def visa_search(self):
         #self.rm = pyvisa.ResourceManager(visa_library='C:/Program Files/IVI Foundation/VISA/Win64/agvisa/agbin/visa32.dll')
         self.rm = pyvisa.ResourceManager()
         self.rm_tuple = self.rm.list_resources()
         self.rm_list = list(self.rm_tuple)
+        return self.rm_list
+    
+    def decay_cycle(self, rm):
+        for j, item in enumerate(self.rg6):
+            if re.search(list(self.rg6.keys())[j], rm):
+                rm = list(self.rg6.values())[j]
+        return rm
 
-        self.lb.delete(0, 'end')   
+    def adres_cycle(self, combo_dmm, rm):
+        for j, item in enumerate(self.rg6):
+            if combo_dmm == list(self.rg6.values())[j]:
+                adres = list(filter(lambda rmt: list(self.rg6.keys())[j] in rmt, rm))
+                if len(adres) > 0:
+                    return adres
+        
+        if combo_dmm[:4] in ('ASRL', 'USB0', 'TCPI'):
+            return [combo_dmm]
+
+    def pribor(self):
+        self.lb.delete(0, 'end')
         self.lb.insert('end', 'Обнаруженные приборы и порты:')
         self.lb.itemconfig('end', bg='light cyan')
-
-        for i, item_1 in enumerate(self.rm_list):
-            for j, item_2 in enumerate(self.rg6):
-                if re.search(list(self.rg6.keys())[j], self.rm_tuple[i]):
-                    self.rm_list[i] = list(self.rg6.values())[j]
-            
-            self.lb.insert('end', self.rm_list[i])
-        
-        self.combo_dmm.configure(values=self.rm_list)
-        self.combo_dmm.current(0)
-        self.combo_flu.configure(values=self.rm_list)
-        self.combo_flu.current(0)
+        self.visa_search()
+        decay_list = list(map(self.decay_cycle, self.rm_list))
+        self.lb.insert('end', *decay_list)
+        self.combo_dmm.configure(values=decay_list)
+        #self.combo_dmm.current(0)
+        self.combo_flu.configure(values=decay_list)
+        #self.combo_flu.current(0)
         self.var_spb1.set('10')
         self.var_spb2.set('4')
         self.tree.delete(*self.tree.get_children())
 
     def connect_dmm(self):
-        global inst_dmm
         today = datetime.today()
-        self.data_today = today.strftime('%d-%m-%Y,%H-%M-%S')       
-        for i, item_1 in enumerate(self.rm_list):
-            for j, item_2 in enumerate(self.rg6):
-                if self.combo_dmm.get() == list(self.rg6.values())[j]:
-                    if re.search(list(self.rg6.keys())[j], self.rm_tuple[i]):
-                        inst_dmm = self.rm.open_resource(self.rm_tuple[i])            
-                
+        self.data_today = today.strftime('%d-%m-%Y,%H-%M-%S')
+        
+        self.inst_dmm = self.rm.open_resource(self.adres_cycle(self.combo_dmm.get(), self.rm_list)[0])
         if self.combo_dmm.get()[:4] in ('ASRL', 'USB0', 'TCPI'):
-            inst_dmm = self.rm.open_resource(self.combo_dmm.get())
-            inst_dmm.write('SYST:REM')
+            self.inst_dmm.write('SYST:REM')
             time.sleep(1)
             
-        self.data_1 = inst_dmm.query("*IDN?")
+        self.data_1 = self.inst_dmm.query("*IDN?")
         self.a1 = self.data_1.split(',')
-        self.progr =  self.cnt()[self.a1[1]]
         if self.a1[1] == '34401A':
             chkbtn_1 = tk.Checkbutton(self.lbf1, bg="#848a98", activebackground="#848a98", text="МИ 1202-86, ГОСТ 8.366-79", variable=self.gost, onvalue=1, offvalue=0, font=('arial', 9, 'bold')).place(x=10,y=40)
         if self.a1[1] in ('34401A', '34410A', '34411A', '34420A', '34460A', '34461A', '34465A', '34470A', 'V7-78/1'):
             self.a10 = 'Мультиметр {} подключен'.format(self.a1[1])
+        elif self.a1[1] == ' CNT-90XL':
+            self.a10 = 'Частотомер {} подключен'.format(self.a1[1])
         elif self.a1[1] in ('WJ312A', 'WJ324A', 'TDS 2014B', 'MSO-X 3034A', 'MSO-X 3104T'):
             self.a10 = 'Осциллограф {} подключен'.format(self.a1[1])          
             self.fluk_on.configure(command=self.connect_fluke_9500)
@@ -439,12 +442,15 @@ class MeasControlGUI():
         self.tree.insert('', 'end', text='', image=self.img2, values=(self.b10.split(' ')[0], self.b1[1], self.b1[2], self.data_2))
     
     def connect_fluke_5500(self):
-        global inst_fluke
-        if self.combo_flu.get()[:4] == 'ASRL':
-            inst_fluke = self.rm.open_resource(self.combo_flu.get(), baud_rate=9600, data_bits=8, write_termination='\r', read_termination='\r')
+        try:
+            self.inst_fluke = self.rm.open_resource(self.combo_flu.get(), baud_rate=9600, data_bits=8, write_termination='\r', read_termination='\r')
             time.sleep(1)
-            self.data_2 = inst_fluke.query("*IDN?")
+            self.inst_fluke.write('*IDN?')
+            self.data_2 = my_gui.inst_fluke.read()
             self.connect_fluke_set()
+        except:
+            self.lb.insert('end', 'Ошибка: Калибратор не определён')
+            self.lb.itemconfig('end', bg='red')
 
     def write(self, message):
         self.ser.write('{}\r'.format(message).encode('UTF-8'))
@@ -473,17 +479,11 @@ class MeasControlGUI():
         except:
             self.lb.insert('end', 'Формирователь не обнаружен')
 
-    def border_cell(self):
-        for merged_cells in self.ws.merged_cells.ranges:
-            style = self.ws.cell(merged_cells.min_row, merged_cells.min_col)._style
-            for col in range(merged_cells.min_col, merged_cells.max_col + 1):
-                for row in range(merged_cells.min_row, merged_cells.max_row + 1): 
-                    self.ws.cell(row, col)._style = style
-
     def start(self):
         if self.gost.get() == 1:
-            self.name_a1 == '34401A_gost'
-        self.progress1.configure(maximum=self.progr)
+            self.name_a1 = '34401A_gost'
+            self.a1[1] = '34401A_gost'
+        self.progress1.configure(maximum=self.cnt()[self.a1[1]])
         self.lb.insert('end', 'Время начала: {}'.format(self.data_today[11:]))
         self.wb = load_workbook('{}\\shablon\\{}.xlsx'.format(self.folder_1, self.name_a1))
         self.ws = self.wb.active
@@ -491,178 +491,124 @@ class MeasControlGUI():
 
 # =============================================== Multimetrs ===============================================
 class Call(Thread):
-    def __init__(self, name, d1, volt1, volt2, cell1, cell2, band, time, accurancy):
+    def __init__(self, name, vfluke, confdmm, cell1, cell2, vary1, vary2, accur):
         Thread.__init__(self)
         self.name = name
-        self.d1 = d1
-        self.volt1 = volt1
-        self.volt2 = volt2
+        self.vfluke = vfluke
+        self.confdmm = confdmm
         self.cell1 = cell1
         self.cell2 = cell2
-        self.band = band
-        self.time = time
-        self.accurancy = accurancy
+        self.vary1 = vary1
+        self.vary2 = vary2
+        self.accur = accur
         self.start()
-    
-    def agilent(self):
-        global data_true, data_error
-        if self.name == 'cap':
-            data_true = (data_0 - data_c2) * 1E+9
-        elif self.name == 'res2':
-            data_true = data_0 / 1E+6
-        elif self.name in ('dc', 'ac', 'dci', 'aci', 'fr', 'res4'):
-            data_true = data_0
 
-        if self.name == 'cap':
-            data_error = ((data_0 - data_c2 - self.d1) / self.d1) * 100
+    def v7_78_agilent(self):
+        my_gui.inst_dmm.write(self.confdmm)
+        my_gui.inst_dmm.write(self.vary1)
+        time.sleep(1)
+        my_gui.inst_fluke.write(self.vfluke)
+        my_gui.inst_fluke.write('OPER')
+        time.sleep(self.vary2)
+        my_gui.inst_dmm.write('READ?')
+        if self.vary1 == 'DET:BAND 3':
+            time.sleep(7)
         else:
-            data_error = ((data_0 - self.d1) / self.d1) * 100
-        
-    def v7_78(self):
-        global data_true, data_error
-        data_true = data_0
-        if self.name == 'res2':
-            if self.volt2.split(' ')[2] in ('OHM','KOHM'):
-                data_true = data_0 / 1E+3
-            elif self.volt2.split(' ')[2] == 'MOHM':
-                data_true = data_0 / 1E+6
-
-        elif self.name in ('dci','aci', 'res4'):
-            if self.volt1.split(' ')[1] in ('0.001','0.005','0.01','0.05', '0.1'):
-                data_true = data_true * 1E+3
-
+            time.sleep(2)
+        data_0 = float(my_gui.inst_dmm.read())
+        self.data_true = data_0
+        if self.vfluke.split(' ')[2] in ('mV', 'mV,', 'mA', 'mA,'):
+            self.data_true = data_0 * 1E+3
+        elif self.vfluke.split(' ')[2] in ('uA', 'uA,'):
+            self.data_true = data_0 * 1E+6
+        elif self.vfluke.split(' ')[2] in ('kOHM', 'kOHM;'):
+            self.data_true = data_0 / 1E+3
+        elif self.vfluke.split(' ')[2] in ('MOHM', 'MOHM;'):
+            self.data_true = data_0 / 1E+6
+        elif self.vfluke.split(' ')[2] in ('GOHM', 'GOHM;'):
+            self.data_true = data_0 / 1E+9 
+        elif self.vfluke.split(' ')[2] == 'NF':
+            self.data_true = (data_0 - data_c2) * 1E+9 
+        elif self.vfluke.split(' ')[2] == 'UF':
+            self.data_true = (data_0 - data_c2) * 1E+6 
         elif self.name == 'fr':
-            if self.volt1.split(' ')[4] == 'kHz':
-                data_true = data_true / 1E+3                      
+            if self.vfluke.split(' ')[4] == 'kHz':
+                self.data_true = data_0 / 1E+3
 
-        elif self.name in ('dc', 'ac'):
-            if self.volt1.split(' ')[1] in ('0.01','0.05','0.1','-0.1','0.5'):
-                data_true = data_true * 1E+3                
+    def agilent_34420A(self):
+        my_gui.inst_dmm.write(self.confdmm)
+        my_gui.inst_dmm.write(self.vary1)
+        my_gui.inst_dmm.write(self.vary2)
+        time.sleep(1)
+        if len(self.vfluke) > 0:
+            my_gui.inst_fluke.write(self.vfluke)
+            my_gui.inst_fluke.write('OPER')
+        time.sleep(5)
+        my_gui.inst_dmm.write('READ?')
+        time.sleep(2)
+        data_0 = float(my_gui.inst_dmm.read())
+        self.data_true = data_0
+        if self.name == 'dcv':
+            if self.vfluke.split(' ')[2] == 'mV':
+                self.data_true = data_0 * 1E+3 
+                self.data_error = (self.data_true - float(self.vfluke.split(' ')[1])) * 1E+3
+            else:
+                if self.accur.split(' ')[1] == 'u':
+                    self.data_error = (self.data_true - float(self.vfluke.split(' ')[1])) * 1E+6
+                elif self.accur.split(' ')[1] == 'm':
+                    self.data_error = (self.data_true - float(self.vfluke.split(' ')[1])) * 1E+3
+        elif self.name == 'r':
+            if self.vfluke.split(' ')[2] == 'kOHM;':
+                self.data_true = data_0 / 1E+3
+            elif self.vfluke.split(' ')[2] == 'MOHM;':
+                self.data_true = data_0 / 1E+6
+            if self.accur in ('72 u', '620 u', '62 m', '620 m', '74 Ohm'):
+                self.data_error = (self.data_true - float(self.vfluke.split(' ')[1])) * 1E+6
+            elif self.accur in ('6.2 m', '6.4 Ohm'):
+                self.data_error = (self.data_true - float(self.vfluke.split(' ')[1])) * 1E+3
+        elif self.name in ('dcv0', 'r0'):
+            if self.accur.split(' ')[1] == 'n':
+                self.data_true = data_0 * 1E+3
+            elif self.accur.split(' ')[1] == 'm':
+                self.data_true = data_0 / 1E+3 
+            elif self.accur.split(' ')[1] == 'Ohm':
+                self.data_true = data_0 / 1E+6
+            self.data_error = self.data_true * 1E+6
 
     def run(self):
         sem.acquire()
-        global count, data_0
-        my_gui.statusbar["text"] = 'Статус: работа   Прогресс: {} из {}'.format(count, my_gui.progr)
+        global count
+        my_gui.statusbar["text"] = 'Статус: работа   Прогресс: {} из {}'.format(count, my_gui.cnt()[my_gui.a1[1]])
         my_gui.lb2.delete(0, 'end')
-        my_gui.lb2.insert('end', 'Режим {}: {}'.format(self.name,self.volt1[4:]))
+        my_gui.lb2.insert('end', 'Режим {}: {}'.format(self.name, self.vfluke[4:]))
         my_gui.lb2.see('end')
-        inst_dmm.write(self.volt2)
-        inst_dmm.write(self.band)
-        time.sleep(1)
-        inst_fluke.write(self.volt1)
-        inst_fluke.write('OPER')
-        time.sleep(self.time)
-        inst_dmm.write('READ?')
-        if self.band == 'DET:BAND 3':
-            time.sleep(8)
-        else:
-            time.sleep(2)
-        data_0 = float(inst_dmm.read())
-                
-        if my_gui.a1[1] in ('34401A', '34410A', '34411A', '34460A', '34461A', '34465A', '34470A'):
-            self.agilent()
-        elif my_gui.a1[1] == 'V7-78/1':
-            self.v7_78()
+
+        if my_gui.a1[1] in ('34401A', '34401A_gost', '34410A', '34411A', '34460A', '34461A', '34465A', '34470A', 'V7-78/1'):
+            self.v7_78_agilent()
+        elif my_gui.a1[1] == '34420A':
+            self.agilent_34420A()
 
         for row in my_gui.ws.rows:
             for cell in row:
                 if cell.value == self.cell1:
-                    cell.value = data_true
-                    if my_gui.a1[1] == 'V7-78/1':
-                        if data_true > self.accurancy or data_true < self.cell2:
-                            cell.fill = colour_cell
-                if my_gui.a1[1] in ('34401A', '34410A', '34411A', '34460A', '34461A', '34465A', '34470A'):
-                    if cell.value == self.cell2:
-                        cell.value = data_error
-                        if data_error > self.accurancy or data_error < -self.accurancy:
+                    cell.value = self.data_true
+                    if my_gui.a1[1] in ('34401A', '34401A_gost', '34410A', '34411A', '34460A', '34461A', '34465A', '34470A', 'V7-78/1'):
+                        if self.data_true > self.accur or self.data_true < self.cell2:
                             cell.fill = colour_cell
 
-        my_gui.border_cell()     
+                if my_gui.a1[1] == '34420A':
+                    if cell.value == self.cell2:
+                        cell.value = self.data_error
+                        if self.data_error > float(self.accur.split(' ')[0]) or self.data_error < -float(self.accur.split(' ')[0]):
+                            cell.fill = colour_cell
+
         my_gui.wb.save('{}\\Protocol\\Multimeter\\{}'.format(my_gui.folder_1, my_gui.name_protokol.get()))
-        inst_fluke.write('STBY')
+        my_gui.inst_fluke.write('STBY')
         time.sleep(1)
         my_gui.progress1.step(1)
         count += 1
         sem.release()
 
-class Call_34420(Thread):
-    def __init__(self, name, vfluk, vary, vdmm, cel1, cel2, accur):
-        Thread.__init__(self)
-        self.name = name
-        self.vfluk = vfluk
-        self.vary = vary
-        self.vdmm = vdmm
-        self.cel1 = cel1
-        self.cel2 = cel2
-        self.accur = accur        
-        self.start()
-
-    def run(self):
-        sem.acquire()
-        global count
-        my_gui.statusbar["text"] = 'Статус: работа   Прогресс: {} из {}'.format(count, my_gui.progr)
-        if self.name in ('dcv0', 'dcv'):
-            inst_dmm.write('CONF:VOLT')
-        elif self.name in ('r0', 'r'):
-            inst_dmm.write('CONF:FRES')        
-        inst_dmm.write(self.vary)
-        inst_dmm.write(self.vdmm)
-        if len(self.vfluk) > 0:
-            inst_fluke.write(self.vfluk)
-            time.sleep(1)
-            inst_fluke.write('OPER')
-        time.sleep(3)
-        inst_dmm.write('READ?')
-        time.sleep(1)
-        if self.name in ('dcv0', 'r0'):
-            if self.accur.split(' ')[1] == 'n':
-                data_true = float(inst_dmm.read()) * 1E+3
-            elif self.accur.split(' ')[1] == 'u':
-                data_true = float(inst_dmm.read())
-            elif self.accur.split(' ')[1] == 'm':
-                data_true = float(inst_dmm.read()) / 1E+3            
-            elif self.accur.split(' ')[1] == 'Ohm':
-                data_true = float(inst_dmm.read()) / 1E+6
-            data_error = data_true * 1E+6 
-        elif self.name == 'dcv':
-            if self.vfluk.split(' ')[2] == 'mV':
-                data_true = float(inst_dmm.read()) * 1E+3
-                data_error = (data_true - float(self.vfluk.split(' ')[1])) * 1E+3
-            else:
-                data_true = float(inst_dmm.read())
-                if self.accur.split(' ')[1] == 'u':
-                    data_error = (data_true - float(self.vfluk.split(' ')[1])) * 1E+6
-                if self.accur.split(' ')[1] == 'm':
-                    data_error = (data_true - float(self.vfluk.split(' ')[1])) * 1E+3
-        elif self.name == 'r':           
-            if self.vfluk.split(' ')[2] == 'OHM;':
-                data_true = float(inst_dmm.read())
-            elif self.vfluk.split(' ')[2] == 'kOHM;':
-                data_true = float(inst_dmm.read()) / 1E+3
-            elif self.vfluk.split(' ')[2] == 'MOHM;':
-                data_true = float(inst_dmm.read()) / 1E+6
-
-            if self.accur in ('72 u', '620 u', '62 m', '620 m'):
-                data_error = (data_true - float(self.vfluk.split(' ')[1])) * 1E+6
-            elif self.accur in ('6.2 m', '6.4 Ohm', '74 Ohm'):
-                data_error = (data_true - float(self.vfluk.split(' ')[1])) * 1E+3
-
-        for row in my_gui.ws.rows:
-            for cell in row:
-                if cell.value == self.cel1:
-                    cell.value = data_true
-                if cell.value == self.cel2:
-                    cell.value = data_error
-                    if data_error > float(self.accur.split(' ')[0]) or data_error < -float(self.accur.split(' ')[0]):
-                        cell.fill = colour_cell        
-                
-        my_gui.border_cell()
-        my_gui.wb.save('{}\\Protocol\\Multimeter\\{}'.format(my_gui.folder_1, my_gui.name_protokol.get()))
-        inst_fluke.write('STBY')
-        time.sleep(1)
-        my_gui.progress1.step(1)
-        count += 1
-        sem.release()        
 # ============================================ Oscilloscop ============================================
 # =============================================== WJ312 ===============================================
 class Param_wj312(Thread):
@@ -678,40 +624,40 @@ class Param_wj312(Thread):
     def run(self):
         sem.acquire()
         if self.name == '1':
-            inst_dmm.write('C1:TRA ON')
-            inst_dmm.write('C2:TRA OFF')
+            my_gui.inst_dmm.write('C1:TRA ON')
+            my_gui.inst_dmm.write('C2:TRA OFF')
         elif self.name == '2':
-            inst_dmm.write('C1:TRA OFF')
-            inst_dmm.write('C2:TRA ON')
+            my_gui.inst_dmm.write('C1:TRA OFF')
+            my_gui.inst_dmm.write('C2:TRA ON')
         elif self.name == '3':
-            inst_dmm.write('C3:TRA ON')
+            my_gui.inst_dmm.write('C3:TRA ON')
         elif self.name == '4':
-            inst_dmm.write('C4:TRA ON')
-        inst_dmm.write('C{}:CPL DC1M'.format(self.name))        
+            my_gui.inst_dmm.write('C4:TRA ON')
+        my_gui.inst_dmm.write('C{}:CPL DC1M'.format(self.name))        
         my_gui.query(self.imp)
         my_gui.query(self.rezfluke)
         if self.rezfluke == 'SCOP:SHAP EDGE':
             my_gui.query("PAR:EDGE:TRAN RIS")
             my_gui.query("PAR:EDGE:SPE 500E-12")
-            inst_dmm.write('C{}:VDIV 200mv'.format(self.name))
-            inst_dmm.write('C{}:OFST 200mv'.format(self.name))
-            inst_dmm.write('TLVL -200mv')
+            my_gui.inst_dmm.write('C{}:VDIV 200mv'.format(self.name))
+            my_gui.inst_dmm.write('C{}:OFST 200mv'.format(self.name))
+            my_gui.inst_dmm.write('TLVL -200mv')
         elif self.rezfluke == 'SCOP:SHAP SIN':
             my_gui.query('FREQ:FIX 10E+06')
-            inst_dmm.write('C{}:OFST 0mv'.format(self.name))
-            inst_dmm.write('TLVL 0mv')            
-        inst_dmm.write(self.point)
-        inst_dmm.write(self.tdiv)
-        inst_dmm.write('TRMD AUTO')
-        inst_dmm.write('MDSP ON')
-        inst_dmm.write('DIRM A')
-        inst_dmm.write('MSEL CH{},TOP'.format(self.name))
-        inst_dmm.write('DIRM B')
-        inst_dmm.write('MSEL CH{},BASE'.format(self.name))
-        inst_dmm.write('DIRM C')
-        inst_dmm.write('MSEL CH{},TR10-90'.format(self.name))
-        inst_dmm.write('DIRM D')
-        inst_dmm.write('MSEL CH{},FREQ'.format(self.name))
+            my_gui.inst_dmm.write('C{}:OFST 0mv'.format(self.name))
+            my_gui.inst_dmm.write('TLVL 0mv')            
+        my_gui.inst_dmm.write(self.point)
+        my_gui.inst_dmm.write(self.tdiv)
+        my_gui.inst_dmm.write('TRMD AUTO')
+        my_gui.inst_dmm.write('MDSP ON')
+        my_gui.inst_dmm.write('DIRM A')
+        my_gui.inst_dmm.write('MSEL CH{},TOP'.format(self.name))
+        my_gui.inst_dmm.write('DIRM B')
+        my_gui.inst_dmm.write('MSEL CH{},BASE'.format(self.name))
+        my_gui.inst_dmm.write('DIRM C')
+        my_gui.inst_dmm.write('MSEL CH{},TR10-90'.format(self.name))
+        my_gui.inst_dmm.write('DIRM D')
+        my_gui.inst_dmm.write('MSEL CH{},FREQ'.format(self.name))
         sem.release()    
 
 # =============================================== TDS_1000_2000_B ===============================================
@@ -729,50 +675,50 @@ class Param_tds2(Thread):
         sem.acquire()
         global tdiv_2
         if self.name == '1':
-            inst_dmm.write('SEL:CH1 ON')
-            inst_dmm.write('SEL:CH2 OFF')
-            inst_dmm.write('SEL:CH3 OFF')
-            inst_dmm.write('SEL:CH4 OFF')
+            my_gui.inst_dmm.write('SEL:CH1 ON')
+            my_gui.inst_dmm.write('SEL:CH2 OFF')
+            my_gui.inst_dmm.write('SEL:CH3 OFF')
+            my_gui.inst_dmm.write('SEL:CH4 OFF')
         elif self.name == '2':
-            inst_dmm.write('SEL:CH1 OFF')
-            inst_dmm.write('SEL:CH2 ON')
-            inst_dmm.write('SEL:CH3 OFF')
-            inst_dmm.write('SEL:CH4 OFF')
+            my_gui.inst_dmm.write('SEL:CH1 OFF')
+            my_gui.inst_dmm.write('SEL:CH2 ON')
+            my_gui.inst_dmm.write('SEL:CH3 OFF')
+            my_gui.inst_dmm.write('SEL:CH4 OFF')
         elif self.name == '3':
-            inst_dmm.write('SEL:CH1 OFF')
-            inst_dmm.write('SEL:CH2 OFF')
-            inst_dmm.write('SEL:CH3 ON')
-            inst_dmm.write('SEL:CH4 OFF')
+            my_gui.inst_dmm.write('SEL:CH1 OFF')
+            my_gui.inst_dmm.write('SEL:CH2 OFF')
+            my_gui.inst_dmm.write('SEL:CH3 ON')
+            my_gui.inst_dmm.write('SEL:CH4 OFF')
         elif self.name == '4':
-            inst_dmm.write('SEL:CH1 OFF')
-            inst_dmm.write('SEL:CH2 OFF')
-            inst_dmm.write('SEL:CH3 OFF')
-            inst_dmm.write('SEL:CH4 ON')
-        inst_dmm.write('CH{}:COUP DC'.format(self.name))           
-        inst_dmm.write('CH{}:PRObe 1'.format(self.name))
+            my_gui.inst_dmm.write('SEL:CH1 OFF')
+            my_gui.inst_dmm.write('SEL:CH2 OFF')
+            my_gui.inst_dmm.write('SEL:CH3 OFF')
+            my_gui.inst_dmm.write('SEL:CH4 ON')
+        my_gui.inst_dmm.write('CH{}:COUP DC'.format(self.name))           
+        my_gui.inst_dmm.write('CH{}:PRObe 1'.format(self.name))
         my_gui.query(self.imp)
         my_gui.query(self.rezfluke)
-        inst_dmm.write('CH{}:POS 0'.format(self.name))  # смещение сигнала
-        inst_dmm.write('TRIG:MAI:LEV 0')               # уровень запуска
+        my_gui.inst_dmm.write('CH{}:POS 0'.format(self.name))  # смещение сигнала
+        my_gui.inst_dmm.write('TRIG:MAI:LEV 0')               # уровень запуска
         if self.rezfluke == 'SCOP:SHAP MARK':
             my_gui.query(self.ffluke)
             tdiv_2 = self.ffluke.split(' ')[1]
         elif self.rezfluke == 'SCOP:SHAP EDGE':
             my_gui.query("PAR:EDGE:TRAN RIS")
             my_gui.query("PAR:EDGE:SPE 500E-12")
-            inst_dmm.write('CH{}:VOL 0.1'.format(self.name))
-            inst_dmm.write('CH{}:POS 2'.format(self.name))
-            inst_dmm.write('TRIG:MAI:LEV -0.2')  
+            my_gui.inst_dmm.write('CH{}:VOL 0.1'.format(self.name))
+            my_gui.inst_dmm.write('CH{}:POS 2'.format(self.name))
+            my_gui.inst_dmm.write('TRIG:MAI:LEV -0.2')  
             tdiv_2 = self.tdiv.split(' ')[1]       
-        inst_dmm.write(self.tdiv)
-        inst_dmm.write('TRIG:MAI:MOD AUTO')
-        inst_dmm.write('TRIG:MAI:EDGE:SOU CH{}'.format(self.name))
-        inst_dmm.write('MEASU:MEAS1:SOU CH{}'.format(self.name))
-        inst_dmm.write('MEASU:MEAS1:TYP MEAN')
-        inst_dmm.write('MEASU:MEAS3:SOU CH{}'.format(self.name))
-        inst_dmm.write('MEASU:MEAS3:TYP PERIod')
-        inst_dmm.write('MEASU:MEAS4:SOU CH{}'.format(self.name))
-        inst_dmm.write('MEASU:MEAS4:TYP RIS')
+        my_gui.inst_dmm.write(self.tdiv)
+        my_gui.inst_dmm.write('TRIG:MAI:MOD AUTO')
+        my_gui.inst_dmm.write('TRIG:MAI:EDGE:SOU CH{}'.format(self.name))
+        my_gui.inst_dmm.write('MEASU:MEAS1:SOU CH{}'.format(self.name))
+        my_gui.inst_dmm.write('MEASU:MEAS1:TYP MEAN')
+        my_gui.inst_dmm.write('MEASU:MEAS3:SOU CH{}'.format(self.name))
+        my_gui.inst_dmm.write('MEASU:MEAS3:TYP PERIod')
+        my_gui.inst_dmm.write('MEASU:MEAS4:SOU CH{}'.format(self.name))
+        my_gui.inst_dmm.write('MEASU:MEAS4:TYP RIS')
         sem.release()    
 
 # ================================== MSO-X 3000 =======================================================
@@ -789,44 +735,44 @@ class Param_msox3(Thread):
     def run(self):
         sem.acquire()
         if self.name == '1':
-            inst_dmm.write('CHAN1:DISP 1')
-            inst_dmm.write('CHAN2:DISP 0')
-            inst_dmm.write('CHAN3:DISP 0')
-            inst_dmm.write('CHAN4:DISP 0')
+            my_gui.inst_dmm.write('CHAN1:DISP 1')
+            my_gui.inst_dmm.write('CHAN2:DISP 0')
+            my_gui.inst_dmm.write('CHAN3:DISP 0')
+            my_gui.inst_dmm.write('CHAN4:DISP 0')
         elif self.name == '2':
-            inst_dmm.write('CHAN1:DISP 0')
-            inst_dmm.write('CHAN2:DISP 1')
-            inst_dmm.write('CHAN3:DISP 0')
-            inst_dmm.write('CHAN4:DISP 0')
+            my_gui.inst_dmm.write('CHAN1:DISP 0')
+            my_gui.inst_dmm.write('CHAN2:DISP 1')
+            my_gui.inst_dmm.write('CHAN3:DISP 0')
+            my_gui.inst_dmm.write('CHAN4:DISP 0')
         elif self.name == '3':
-            inst_dmm.write('CHAN1:DISP 0')
-            inst_dmm.write('CHAN2:DISP 0')
-            inst_dmm.write('CHAN3:DISP 1')
-            inst_dmm.write('CHAN4:DISP 0')
+            my_gui.inst_dmm.write('CHAN1:DISP 0')
+            my_gui.inst_dmm.write('CHAN2:DISP 0')
+            my_gui.inst_dmm.write('CHAN3:DISP 1')
+            my_gui.inst_dmm.write('CHAN4:DISP 0')
         elif self.name == '4':
-            inst_dmm.write('CHAN1:DISP 0')
-            inst_dmm.write('CHAN2:DISP 0')
-            inst_dmm.write('CHAN3:DISP 0')
-            inst_dmm.write('CHAN4:DISP 1')
-        inst_dmm.write(':TRIG:SOUR CHAN{}'.format(self.name))
-        inst_dmm.write(':MEAS:SOUR CHAN{}'.format(self.name))
-        inst_dmm.write('CHAN{}:COUP DC'.format(self.name))         
-        inst_dmm.write('CHAN{}:PROB 1'.format(self.name))
+            my_gui.inst_dmm.write('CHAN1:DISP 0')
+            my_gui.inst_dmm.write('CHAN2:DISP 0')
+            my_gui.inst_dmm.write('CHAN3:DISP 0')
+            my_gui.inst_dmm.write('CHAN4:DISP 1')
+        my_gui.inst_dmm.write(':TRIG:SOUR CHAN{}'.format(self.name))
+        my_gui.inst_dmm.write(':MEAS:SOUR CHAN{}'.format(self.name))
+        my_gui.inst_dmm.write('CHAN{}:COUP DC'.format(self.name))         
+        my_gui.inst_dmm.write('CHAN{}:PROB 1'.format(self.name))
         my_gui.query(self.imp)
         my_gui.query(self.rezfluke)
         if self.rezfluke == 'SCOP:SHAP DC':
-            inst_dmm.write('CHAN{}:OFFS 17.5'.format(self.name))  # смещение сигнала
-            inst_dmm.write('TRIG:LEV 0')                          # уровень запуска
+            my_gui.inst_dmm.write('CHAN{}:OFFS 17.5'.format(self.name))  # смещение сигнала
+            my_gui.inst_dmm.write('TRIG:LEV 0')                          # уровень запуска
         elif self.rezfluke == 'SCOP:SHAP EDGE':
             my_gui.query("PAR:EDGE:TRAN RIS")
             my_gui.query("PAR:EDGE:SPE 500E-12")
-            inst_dmm.write('CHAN{}:SCAL 0.05'.format(self.name))
-            inst_dmm.write('CHAN{}:OFFS -0.1'.format(self.name))
-            #inst_dmm.write('TRIG:LEV -0.2')
+            my_gui.inst_dmm.write('CHAN{}:SCAL 0.05'.format(self.name))
+            my_gui.inst_dmm.write('CHAN{}:OFFS -0.1'.format(self.name))
+            #my_gui.inst_dmm.write('TRIG:LEV -0.2')
         elif self.rezfluke == 'SCOP:SHAP MARK':
             my_gui.query(self.ffluke)
-            #inst_dmm.write('CHAN1:IMP FIFT') 
-        inst_dmm.write(self.tdiv)
+            #my_gui.inst_dmm.write('CHAN1:IMP FIFT') 
+        my_gui.inst_dmm.write(self.tdiv)
         sem.release()
 
 class Call_oscill(Thread):
@@ -842,7 +788,7 @@ class Call_oscill(Thread):
 
     def call_wj312(self):
         time.sleep(5)
-        data_true = float(inst_dmm.query(self.vosc2))
+        data_true = float(my_gui.inst_dmm.query(self.vosc2))
         data_error = (data_true - float(self.vfluk.split(' ')[1]))*1000
 
         for row in my_gui.ws.rows:
@@ -856,9 +802,9 @@ class Call_oscill(Thread):
 
     def call_tds2(self):
         time.sleep(2)
-        inst_dmm.write('ACQ:MOD AVE; NUMAV 16')
+        my_gui.inst_dmm.write('ACQ:MOD AVE; NUMAV 16')
         time.sleep(3)
-        data_true = float(inst_dmm.query(self.vosc2))
+        data_true = float(my_gui.inst_dmm.query(self.vosc2))
         if self.vosc2 in ('MEASU:MEAS1:VAL?'):
             data_error = ((data_true - float(self.vfluk.split(' ')[1])) / float(self.vfluk.split(' ')[1])) * 100
         elif self.vosc2 == 'MEASU:MEAS3:VAL?':
@@ -881,13 +827,13 @@ class Call_oscill(Thread):
                         if data_error > self.accur or data_error < -self.accur:
                             cell.fill = colour_cell
 
-        inst_dmm.write('ACQ:MOD SAM')
+        my_gui.inst_dmm.write('ACQ:MOD SAM')
     
     def call_msox_3(self):
         time.sleep(2)
-        inst_dmm.write(':ACQ:TYPE AVER; :ACQ:COUN 64')
+        my_gui.inst_dmm.write(':ACQ:TYPE AVER; :ACQ:COUN 64')
         time.sleep(3)
-        data_true = float(inst_dmm.query(self.vosc2))
+        data_true = float(my_gui.inst_dmm.query(self.vosc2))
         if self.vosc2 in (':MEAS:VMAX?'):
             accur_1 = float(self.vfluk.split(' ')[1]) + self.accur
             accur_2 = float(self.vfluk.split(' ')[1]) - self.accur
@@ -916,17 +862,17 @@ class Call_oscill(Thread):
                     if cell.value == self.cel2:
                         cell.value = data_true_1
 
-        inst_dmm.write(':ACQ:TYPE NORM')
+        my_gui.inst_dmm.write(':ACQ:TYPE NORM')
 
     def run(self):
         sem.acquire()
         global count
-        my_gui.statusbar["text"] = 'Статус: работа   Прогресс: {} из {}'.format(count, my_gui.progr) 
+        my_gui.statusbar["text"] = 'Статус: работа   Прогресс: {} из {}'.format(count, my_gui.cnt()[my_gui.a1[1]]) 
         my_gui.lb2.delete(0, 'end')
         my_gui.lb2.insert('end', '{} канал, напряжение {} Вольт'.format(self.vosc1.split(':')[0][-1],self.vfluk.split(' ')[1]))
         my_gui.lb2.see('end')
         my_gui.query(self.vfluk)       
-        inst_dmm.write(self.vosc1)
+        my_gui.inst_dmm.write(self.vosc1)
         my_gui.query("OUTP:STAT ON")
 
         if my_gui.a1[1] in ('WJ312A', 'WJ324A'):
@@ -936,7 +882,6 @@ class Call_oscill(Thread):
         elif my_gui.a1[1] in ('MSO-X 3034A', 'MSO-X 3104T'):
             self.call_msox_3()
 
-        my_gui.border_cell()
         my_gui.wb.save('{}\\Protocol\\Oscilloscope\\{}'.format(my_gui.folder_1, my_gui.name_protokol.get()))
         my_gui.query("OUTP:STAT OFF")
         time.sleep(1)
@@ -956,7 +901,7 @@ class Message(Thread):
         for row in my_gui.ws.rows:
             for cell in row:
                 if cell.value == '_type':
-                    cell.value = my_gui.a1[1]
+                    cell.value = my_gui.a1[1].split('_')[0]
                 if cell.value == '_numb':
                     cell.value = my_gui.a1[2]
                 if cell.value == '_customer':
@@ -985,11 +930,11 @@ class Reset(Thread):
             my_gui.query('*CLS')
             my_gui.query('*RST')
             if my_gui.a1[1] == 'MSO-X 3034A':
-                inst_dmm.write('*RST')
+                my_gui.inst_dmm.write('*RST')
         else:
-            inst_fluke.write('*CLS')
-            inst_fluke.write('*RST')
-            inst_dmm.write('*RST')
+            my_gui.inst_fluke.write('*CLS')
+            my_gui.inst_fluke.write('*RST')
+            my_gui.inst_dmm.write('*RST')
         time.sleep(2)
         sem.release()
 
@@ -1001,18 +946,45 @@ class cap(Thread):
     def run(self):
         sem.acquire()
         global data_c2
-        inst_dmm.write('CONF:CAP')
+        my_gui.inst_dmm.write('CONF:CAP')
         time.sleep(5)
-        inst_dmm.write('READ?')
+        my_gui.inst_dmm.write('READ?')
         time.sleep(5)
-        data_c2 = float(inst_dmm.read())
+        data_c2 = float(my_gui.inst_dmm.read())
         time.sleep(1)
         my_gui.progress1.step(1)
         sem.release()
 
+class Clear_merge(Thread):
+    def __init__(self):
+        Thread.__init__(self)
+        self.start()
+
+    def merged_cells(self):
+        for merged_cells in my_gui.ws.merged_cells.ranges:
+            style = my_gui.ws.cell(merged_cells.min_row, merged_cells.min_col)._style
+            for col in range(merged_cells.min_col, merged_cells.max_col + 1):
+                for row in range(merged_cells.min_row, merged_cells.max_row + 1): 
+                    my_gui.ws.cell(row, col)._style = style
+
+    def clear_rows(self):
+        for i in range (1, my_gui.ws.max_row + 1):
+            for j in range(1, my_gui.ws.max_column + 1):
+                if str(my_gui.ws.cell(i, j).value).find('_') != -1:
+                    my_gui.ws.cell(i, j).value = '-'      
+
+    def run(self):
+        sem.acquire()
+        self.clear_rows()
+        time.sleep(1)
+        self.merged_cells()
+        time.sleep(1)
+        my_gui.wb.save('{}\\Protocol\\Multimeter\\{}'.format(my_gui.folder_1, my_gui.name_protokol.get()))
+        sem.release()
 
 root = tk.Tk()
 my_gui = MeasControlGUI(root)
-my_gui.cnt()
-my_gui.pribor()
-root.mainloop()
+if __name__ == '__main__':
+    my_gui.cnt()
+    my_gui.pribor()
+    root.mainloop()
