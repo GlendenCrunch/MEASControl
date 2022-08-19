@@ -27,10 +27,6 @@ class MeasControlGUI():
     def __init__(self, parent):
         self.parent = parent
         self.folder_1 = os.getcwd()
-        self.rg6 = {'0A07': '34411A', '1A07': '34461A', '1301': '34461A', '1401': '34461A',
-                    '0101': '34465A', '0DAD':'V7-78/1', '1F01': 'N5183A', '5707': '33622A',
-                    '5418': 'N1913A', '0090': 'CNT-90XL', '0368': 'TDS 2014B',
-                    '17A4': 'MSO-X 3034A', '1770': 'MSO-X 3104T'}
         self.ser = 0
         self.name_protokol = tk.StringVar()
         self.temp = tk.StringVar()
@@ -78,6 +74,7 @@ class MeasControlGUI():
         elif self.sett_json['language'] == '1':
             self.lang_set = 'eng'
 
+        self.sign_pribor = self.sett_json['sign_pribor']
         self.bg_colour = self.theme_json['bg_colour']
         self.fg_colour = self.theme_json['fg_colour']
         self.bg_button = self.theme_json['bg_button']
@@ -238,8 +235,8 @@ class MeasControlGUI():
         text2_1 = ('\t\tОсциллографы:')
         text3 = ('Agilent/Keysight:\r34401A\r34410A\r34411A\r34420A\r34460A\r34461A\r34465A\r34470A')
         text4 = ('  АКИП:\r  B7-78/1\r\r\r\r\r\r\r\r')
-        text5 = ('       Lecroy:\r       WaveJet 312A\r       WaveJet 324A\r\r\r\r\r\r\r')
-        text6 = ('Tektronix:\rTDS1002\rTDS1012\rTDS2002\rTDS2012\rTDS2014\rTDS2022\rTDS2024\r\r')
+        text5 = ('       Lecroy:\r       WaveJet 312A\r\r\r\r\r\r\r\r')
+        text6 = ('Tektronix:\rTDS2014B\r\r\r\r\r\r\r\r')
         text7 = ('Keysight:\rMSO-X 3034A\r\r\r\r\r\r\r\r')
 
         top_1 = tk.Frame(self.top, height=70, relief="raise")
@@ -307,7 +304,7 @@ class MeasControlGUI():
                 c2.pack(anchor='w')
                 c3 = tk.Checkbutton(self.top, text="Период", variable=self.per_var, onvalue=1, offvalue=0)
                 c3.pack(anchor='w')
-            elif self.a1[1] in ('TDS 1002B','TDS 1012B','TDS 2002B','TDS 2012B','TDS 2014B', 'TDS 2022B', 'TDS 2024B'):
+            elif self.a1[1] in ('TDS 2014B', 'TDS 2014C'):
                 c1 = tk.Checkbutton(self.top, text="Постоянное напряжение", variable=self.dcv_var, onvalue=1, offvalue=0)
                 c1.pack(anchor='w')
                 c2 = tk.Checkbutton(self.top, text="Временной интервал", variable=self.per_var, onvalue=1, offvalue=0)
@@ -392,15 +389,15 @@ class MeasControlGUI():
         return self.rm_list
 
     def decay_cycle(self, rm):
-        for j, item in enumerate(self.rg6):
-            if re.search(list(self.rg6.keys())[j], rm):
-                rm = list(self.rg6.values())[j]
+        for j, item in enumerate(self.sign_pribor):
+            if re.search(list(self.sign_pribor.keys())[j], rm):
+                rm = list(self.sign_pribor.values())[j]
         return rm
 
     def adres_cycle(self, combo_dmm, rm):
-        for j, item in enumerate(self.rg6):
-            if combo_dmm == list(self.rg6.values())[j]:
-                adres = list(filter(lambda rmt: list(self.rg6.keys())[j] in rmt, rm))
+        for j, item in enumerate(self.sign_pribor):
+            if combo_dmm == list(self.sign_pribor.values())[j]:
+                adres = list(filter(lambda rmt: list(self.sign_pribor.keys())[j] in rmt, rm))
                 if len(adres) > 0:
                     return adres
 
@@ -440,7 +437,7 @@ class MeasControlGUI():
             self.a10 = f'Мультиметр {self.a1[1]} подключен'
         elif self.a1[1] == ' CNT-90XL':
             self.a10 = f'Частотомер {self.a1[1]} подключен'
-        elif self.a1[1] in ('WJ312A', 'WJ324A', 'TDS 2014B', 'MSO-X 3034A', 'MSO-X 3104T'):
+        elif self.a1[1] in ('WJ312A', 'WJ324A', 'TDS 2014B', 'TDS 2014C', 'MSO-X 3034A', 'MSO-X 3104T'):
             self.a10 = f'Осциллограф {self.a1[1]} подключен'
             self.fluk_on.configure(command=self.connect_fluke_9500)
             self.lab1 = tk.Label(self.lbf2, text=self.lang_json[self.lang_set]['Label_1'], bg=self.bg_colour, fg=self.fg_colour, font=('arial', 10, 'bold'))
@@ -458,10 +455,13 @@ class MeasControlGUI():
         self.name_protokol.set(f'{self.data_today},{self.name_a1},{self.a1[2]}.xlsx')
         self.lab3['text'] = f'Тип: {self.a1[1]}'
         self.lab4['text'] = f'Зав.№: {self.a1[2]}'
-        self.lb.insert('end', self.a10)
+        try:
+            self.lb.insert('end', self.a10)
+            self.tree.insert('', 'end', text='', image=self.img2, values=(self.a10.split(' ')[0], self.a1[1], self.a1[2], self.data_1))
+        except AttributeError:
+            self.lb.insert('end', self.data_1)
         self.lb.see('end')
         self.lb.itemconfig('end', bg='cyan')
-        self.tree.insert('', 'end', text='', image=self.img2, values=(self.a10.split(' ')[0], self.a1[1], self.a1[2], self.data_1))
 
     def connect_fluke_set(self):
         self.b1 = self.data_2.split(',')

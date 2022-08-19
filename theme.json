@@ -42,7 +42,7 @@
         "Treeview": {
             "configure": {
                 "background": "white",
-                "font": "arial 12",
+                "font": "arial 10",
                 "foreground": "blue"
             }
         }
