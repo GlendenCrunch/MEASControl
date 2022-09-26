@@ -1,13 +1,13 @@
 {
-    "bg_button": "#6699CC",
-    "bg_colour": "#848a98",
-    "fg_colour": "gold",
-    "pastel_setting": {
+    "dark": {
         ".": {
+            "bg_button": "#6699CC",
+            "bg_colour": "#848a98",
             "configure": {
                 "background": "#848a98",
-                "font": "red"
-            }
+                "font": "arial"
+            },
+            "fg_colour": "gold"
         },
         "TNotebook": {
             "configure": {
@@ -23,7 +23,7 @@
         "TNotebook.Tab": {
             "configure": {
                 "background": "#848a98",
-                "font": "arial 16",
+                "font": "arial 18",
                 "foreground": "black",
                 "pading": [
                     10,
@@ -35,6 +35,54 @@
                     [
                         "selected",
                         "gold"
+                    ]
+                ]
+            }
+        },
+        "Treeview": {
+            "configure": {
+                "background": "white",
+                "font": "arial 10",
+                "foreground": "blue"
+            }
+        }
+    },
+    "light": {
+        ".": {
+            "bg_button": "cyan4",
+            "bg_colour": "snow3",
+            "configure": {
+                "background": "snow3",
+                "font": "arial"
+            },
+            "fg_colour": "cyan4"
+        },
+        "TNotebook": {
+            "configure": {
+                "background": "snow3",
+                "tabmargins": [
+                    2,
+                    0,
+                    0,
+                    0
+                ]
+            }
+        },
+        "TNotebook.Tab": {
+            "configure": {
+                "background": "snow3",
+                "font": "arial 18",
+                "foreground": "black",
+                "pading": [
+                    10,
+                    2
+                ]
+            },
+            "map": {
+                "background": [
+                    [
+                        "selected",
+                        "cyan4"
                     ]
                 ]
             }

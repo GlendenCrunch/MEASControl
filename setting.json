@@ -1,5 +1,27 @@
 {
-    "language": "0",
+    "5522A": {
+        "OFF": "STBY",
+        "ON": "OPER",
+        "aci": "OUT ",
+        "acv": "OUT ",
+        "dci": "OUT ",
+        "dcv": "OUT ",
+        "fr": "OUT ",
+        "res": "OUT ",
+        "res4": "; ZCOMP WIRE4"
+    },
+    "N4-56": {
+        "OFF": "OUTP:STAT OFF",
+        "ON": "OUTP:STAT ON",
+        "aci": "CONF:CURR:AC ",
+        "acv": "CONF:VOLT:AC ",
+        "dci": "CONF:CURR ",
+        "dcv": "CONF:VOLT ",
+        "fr": "CONF:VOLT:AC ",
+        "res": "CONF:RES ",
+        "res4": ""
+    },
+    "language": "rus",
     "sign_pribor": {
         "0090": "CNT-90XL",
         "0101": "34465A",
@@ -16,5 +38,5 @@
         "5418": "N1913A",
         "5707": "33622A"
     },
-    "theme": "0"
+    "theme": "dark"
 }
