@@ -1,5 +1,5 @@
 {
-    "dark": {
+    "Dark": {
         ".": {
             "bg_button": "#6699CC",
             "bg_colour": "#848a98",
@@ -47,7 +47,7 @@
             }
         }
     },
-    "light": {
+    "Light": {
         ".": {
             "bg_button": "cyan4",
             "bg_colour": "snow3",

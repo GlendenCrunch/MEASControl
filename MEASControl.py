@@ -74,18 +74,8 @@ class MeasControlGUI():
         with open(f'{self.folder_1}\\language.json','r', encoding='utf-8') as file_json:
             self.lang_json = json.load(file_json)
 
-        if self.sett_json['language'] == 'rus':
-            lang_set = 'rus'
-        elif self.sett_json['language'] == 'eng':
-            lang_set = 'eng'
-
-        if self.sett_json['theme'] == 'dark':
-            theme_set = 'dark'
-        elif self.sett_json['theme'] == 'light':
-            theme_set = 'light'
-
-        self.lang = self.lang_json[lang_set]
-        self.theme = self.theme_json[theme_set]
+        self.lang = self.lang_json[self.sett_json['language']]
+        self.theme = self.theme_json[self.sett_json['theme']]
         self.sign_pribor = self.sett_json['sign_pribor']
 
         self.bg_colour = self.theme['.']['bg_colour']
@@ -328,27 +318,21 @@ class MeasControlGUI():
         lab_style = tk.Label(self.top, text='Цветовая тема:', font=self.ar10b)
         lab_style.place(x=20,y=15)
         combo_style = ttk.Combobox(self.top, state='readonly', values=['Dark', 'Light'], height=5, width=25)
+        combo_style.current(0)
         combo_style.place(x=150, y=15)
         lab_lang = tk.Label(self.top, text='Язык:', font=self.ar10b)
         lab_lang.place(x=20,y=45)
         combo_lang = ttk.Combobox(self.top, state='readonly', values=['Russia', 'English'], height=5, width=25)
+        combo_lang.current(0)
         combo_lang.place(x=150, y=45)
 
         def set_ok():
-            if combo_lang.get() == 'Russia':
-                self.sett_json['language'] = 'rus'
-            elif combo_lang.get() == 'English':
-                self.sett_json['language'] = 'eng'
+            self.sett_json['language'] = combo_lang.get()
+            self.sett_json['theme'] = combo_style.get()
 
-            if combo_style.get() == 'Dark':
-                self.sett_json['theme'] = 'dark'
-            elif combo_style.get() == 'Light':
-                self.sett_json['theme'] = 'light'
-
-            with open(f'{self.folder_1}\\theme.json', 'w', encoding='utf-8') as file_json:
-                json.dump(self.theme_json, file_json, ensure_ascii=False, indent=4, sort_keys=True)
             with open(f'{self.folder_1}\\setting.json', 'w', encoding='utf-8') as file_json:
                 json.dump(self.sett_json, file_json, ensure_ascii=False, indent=4, sort_keys=True)
+
             self.parent.destroy()
             try:
                 self.inst_dmm.close()
@@ -505,13 +489,17 @@ class MeasControlGUI():
             self.lb.insert('end', 'Формирователь не обнаружен')
 
     def start(self):
-        if self.gost.get() == 1:
-            self.a1[1] = '34401A_gost'
-        self.progress1.configure(maximum=self.cnt()[self.a1[1]])
-        self.lb.insert('end', f'Время начала: {self.data_today[11:]}')
-        self.wb = load_workbook(f'{self.folder_1}\\shablon\\{self.a1[1]}.xlsx')
-        self.ws = self.wb.active
-        exec(open(f'{self.folder_1}\\file_py\\{self.a1[1]}.py', encoding='utf-8').read())
+        try:
+            if self.gost.get() == 1:
+                self.a1[1] = '34401A_gost'
+            self.progress1.configure(maximum=self.cnt()[self.a1[1]])
+            self.lb.insert('end', f'Время начала: {self.data_today[11:]}')
+            self.wb = load_workbook(f'{self.folder_1}\\shablon\\{self.a1[1]}.xlsx')
+            self.ws = self.wb.active
+            exec(open(f'{self.folder_1}\\file_py\\{self.a1[1]}.py', encoding='utf-8').read())
+        except AttributeError:
+            self.lb.insert('end', 'Ошибка! Приборы не определены')
+            self.lb.itemconfig('end', bg='salmon')
 
 # ====================================== Multimetrs ======================================
 class Call(Thread):
@@ -938,9 +926,6 @@ class Message(Thread):
         self.text = text
         self.start()
 
-    def __repr__(self):
-        return self.text
-
     def run(self):
         sem.acquire()
         messagebox.showinfo('ВНИМАНИЕ!', self.text)
@@ -969,9 +954,6 @@ class Reset(Thread):
     def __init__(self):
         Thread.__init__(self)
         self.start()
-
-    def __repr__(self):
-        return 'Reset'
 
     def run(self):
         sem.acquire()

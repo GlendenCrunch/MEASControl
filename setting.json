@@ -21,7 +21,7 @@
         "res": "CONF:RES ",
         "res4": ""
     },
-    "language": "rus",
+    "language": "Russia",
     "sign_pribor": {
         "0090": "CNT-90XL",
         "0101": "34465A",
@@ -38,5 +38,5 @@
         "5418": "N1913A",
         "5707": "33622A"
     },
-    "theme": "dark"
+    "theme": "Dark"
 }

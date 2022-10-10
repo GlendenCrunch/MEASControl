@@ -1,5 +1,5 @@
 {
-    "rus": {
+    "Russia": {
         "fmenu_close":"Закрыть",
         "fset_1":"Калибровка/Поверка",
         "fset_2":"Стили",
@@ -48,7 +48,7 @@
         "set_style_win_4":"Стиль изменён",
         "pribor_1":"Обнаруженные приборы и порты:"
     },
-    "eng": {
+    "English": {
         "fmenu_close":"Close",
         "fset_1":"Calibration",
         "fset_2":"Style",
