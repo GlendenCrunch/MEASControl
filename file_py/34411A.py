@@ -1,11 +1,11 @@
 #!/usr/bin/python3-32
 # -*- coding: utf-8 -*-
 Reset()
-if self.dcv_var.get() == 1 or self.acv_var.get() == 1 or self.f_var.get() == 1 or self.r2_var.get():
+if self.vardict_boo['dcv_var'].get() == 1 or self.vardict_boo['acv_var'].get() == 1 or self.vardict_boo['f_var'].get() == 1 or self.vardict_boo['r2_var'].get() == 1:
     Message('Подключите провода к клеммам измерения напряжения, частоты или сопротивления')
-elif self.aci_var.get() == 1:
+elif self.vardict_boo['aci_var'].get() == 1:
     Message('Подключите провода для измерения тока')
-if self.dcv_var.get() == 1:
+if self.vardict_boo['dcv_var'].get() == 1:
     Call('dcv', '5 mV', 'CONF:VOLT:DC 0.1', 'dcv_1', '', 'DET:BAND 20', 3.0, 0.00375)
     Call('dcv', '50 mV', 'CONF:VOLT:DC 0.1', 'dcv_2', '', 'DET:BAND 20', 3.0, 0.0025)
     Call('dcv', '95 mV', 'CONF:VOLT:DC 0.1', 'dcv_3', '', 'DET:BAND 20', 3.0, 0.00475)
@@ -21,7 +21,7 @@ if self.dcv_var.get() == 1:
     Call('dcv', '50 V', 'CONF:VOLT:DC 1000', 'dcv_13', '', 'DET:BAND 20', 3.0, 0.008)
     Call('dcv', '500 V', 'CONF:VOLT:DC 1000', 'dcv_14', '', 'DET:BAND 20', 3.0, 0.02)
     Call('dcv', '950 V', 'CONF:VOLT:DC 1000', 'dcv_15', '', 'DET:BAND 20', 4.0, 0.038)
-if self.acv_var.get() == 1:
+if self.vardict_boo['acv_var'].get() == 1:
     Call('acv', '5 mV, 10 Hz', 'CONF:VOLT:AC 0.1', 'acv_1', '', 'DET:BAND 3', 8.0, 0.035)
     Call('acv', '5 mV, 50 Hz', 'CONF:VOLT:AC 0.1', 'acv_2', '', 'DET:BAND 20', 8.0, 0.033)
     Call('acv', '5 mV, 20 kHz', 'CONF:VOLT:AC 0.1', 'acv_3', '', 'DET:BAND 20', 5.0, 0.033)
@@ -96,7 +96,7 @@ if self.acv_var.get() == 1:
         Call('acv', '37.5 V, 100 kHz', 'CONF:VOLT:AC 750', 'acv_77', '', 'DET:BAND 20', 5.0, 0.8)
     Call('acv', '375 V, 50 Hz', 'CONF:VOLT:AC 750', 'acv_80', '', 'DET:BAND 20', 5.0, 0.45)
     Call('acv', '712.5 V, 50 Hz', 'CONF:VOLT:AC 750', 'acv_86', '', 'DET:BAND 20', 5.0, 0.152)
-if self.f_var.get() == 1:
+if self.vardict_boo['f_var'].get() == 1:
     Call('fr', '0.1 V, 5 Hz', 'CONF:FREQ 5 Hz', 'f_1', '', 'DET:BAND 20', 8.0, 0.0035)
     Call('fr', '10 V, 5 Hz', 'CONF:FREQ 5 Hz', 'f_2', '', 'DET:BAND 20', 8.0, 0.0035)
     Call('fr', '0.1 V, 10 Hz', 'CONF:FREQ 10 Hz', 'f_3', '', 'DET:BAND 20', 5.0, 0.004)
@@ -109,7 +109,7 @@ if self.f_var.get() == 1:
     Call('fr', '10 V, 100 kHz', 'CONF:FREQ 100 kHz', 'f_10', '', 'DET:BAND 20', 5.0, 0.005)
     Call('fr', '0.1 V, 300 kHz', 'CONF:FREQ 300 kHz', 'f_11', '', 'DET:BAND 20', 5.0, 0.015)
     Call('fr', '10 V, 300 kHz', 'CONF:FREQ 300 kHz', 'f_12', '', 'DET:BAND 20', 5.0, 0.015)
-if self.c_var.get() == 1:
+if self.vardict_boo['c_var'].get() == 1:
     Message('Измерение ёмкости.\nВытащите красный провод из каллибратора\nдля компенсации проводов')
     cap()
     Message('Верните провод на место')
@@ -128,7 +128,7 @@ if self.c_var.get() == 1:
     Call('cap', '0.5 UF', 'CONF:CAP 10 UF', 'c_13', '', 'DET:BAND 20', 5.0, 0.012)
     Call('cap', '5 UF', 'CONF:CAP 10 UF', 'c_14', '', 'DET:BAND 20', 5.0, 0.02)
     Call('cap', '9.5 UF', 'CONF:CAP 10 UF', 'c_15', '', 'DET:BAND 20', 5.0, 0.038)
-if self.r2_var.get() == 1:
+if self.vardict_boo['r2_var'].get() == 1:
     Call('res', '50 kOHM; ZCOMP WIRE2', 'CONF:RES 1 MOHM', 'r2_1', '', 'DET:BAND 20', 5.0, 0.016)
     Call('res', '0.5 MOHM; ZCOMP WIRE2', 'CONF:RES 1 MOHM', 'r2_2', '', 'DET:BAND 20', 5.0, 0.00006)
     Call('res', '0.95 MOHM; ZCOMP WIRE2', 'CONF:RES 1 MOHM', 'r2_3', '', 'DET:BAND 20', 5.0, 0.000114)
@@ -142,7 +142,7 @@ if self.r2_var.get() == 1:
     if self.b1[1] == '5522A':
         Call('res', '0.5 GOHM; ZCOMP WIRE2', 'CONF:RES 1 GOHM', 'r2_11', '', 'DET:BAND 20', 5.0, 0.04)
         Call('res', '0.95 GOHM; ZCOMP WIRE2', 'CONF:RES 1 GOHM', 'r2_12', '', 'DET:BAND 20', 5.0, 0.076)
-if self.r4_var.get() == 1:
+if self.vardict_boo['r4_var'].get() == 1:
     Message('Подключите провода по четырехпроводной схеме\n для измерения сопротивления')
     Call('res', '5 OHM', 'CONF:FRES 100', 'r4_1', '', 'DET:BAND 20', 5.0, 0.0045)
     Call('res', '50 OHM', 'CONF:FRES 100', 'r4_2', '', 'DET:BAND 20', 5.0, 0.005)
@@ -156,7 +156,7 @@ if self.r4_var.get() == 1:
     Call('res', '5 kOHM', 'CONF:FRES 100 KOHM', 'r4_10', '', 'DET:BAND 20', 5.0, 0.0015)
     Call('res', '50 kOHM', 'CONF:FRES 100 KOHM', 'r4_11', '', 'DET:BAND 20', 5.0, 0.005)
     Call('res', '95 kOHM', 'CONF:FRES 100 KOHM', 'r4_12', '', 'DET:BAND 20', 5.0, 0.0095)
-if self.dci_var.get() == 1:
+if self.vardict_boo['dci_var'].get() == 1:
     Message('Подключите провода\n для измерения тока')
     Call('dci', '5 uA', 'CONF:CURR:DC 0.0001', 'dci_1', '', 'DET:BAND 20', 5.0, 0.0275)
     Call('dci', '50 uA', 'CONF:CURR:DC 0.0001', 'dci_2', '', 'DET:BAND 20', 5.0, 0.025)
@@ -181,7 +181,7 @@ if self.dci_var.get() == 1:
         Message('Подключите красный провод на КАЛИБРАТОРЕ в разъем больше 2,5 А')
         Call('dci', '2.85 A', 'CONF:CURR:DC 3', 'dci_18', '', 'DET:BAND 20', 5.0, 0.004275)
         Message('Верните провод на КАЛИБРАТОРЕ обратно в разъем меньше 2,5 А')
-if self.aci_var.get() == 1:
+if self.vardict_boo['aci_var'].get() == 1:
     Call('aci', '30 uA, 50 Hz', 'CONF:CURR:AC 0.0001', 'aci_1', '', 'DET:BAND 20', 10.0, 0.07)
     Call('aci', '30 uA, 5 kHz', 'CONF:CURR:AC 0.0001', 'aci_2', '', 'DET:BAND 20', 5.0, 0.07)
     Call('aci', '30 uA, 10 kHz', 'CONF:CURR:AC 0.0001', 'aci_3', '', 'DET:BAND 20', 5.0, 0.1)

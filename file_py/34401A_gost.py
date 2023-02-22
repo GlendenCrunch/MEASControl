@@ -1,11 +1,11 @@
 #!/usr/bin/python3-32
 # -*- coding: utf-8 -*-
 Reset()
-if self.dcv_var.get() == 1 or self.acv_var.get() == 1 or self.f_var.get() == 1 or self.r2_var.get():
+if self.vardict_boo['dcv_var'].get() == 1 or self.vardict_boo['acv_var'].get() == 1 or self.vardict_boo['f_var'].get() == 1 or self.vardict_boo['r2_var'].get() == 1:
     Message('Подключите провода к клеммам измерения напряжения, частоты или сопротивления')
-elif self.aci_var.get() == 1:
+elif self.vardict_boo['aci_var'].get() == 1:
     Message('Подключите провода для измерения тока')
-if self.dcv_var.get() == 1:
+if self.vardict_boo['dcv_var'].get() == 1:
     Call('dcv', '10 mV', 'CONF:VOLT:DC 0.1', 'dcv_1', '', 'DET:BAND 20', 3, 0.004)
     Call('dcv', '50 mV', 'CONF:VOLT:DC 0.1', 'dcv_2', '', 'DET:BAND 20', 3, 0.006)
     Call('dcv', '100 mV', 'CONF:VOLT:DC 0.1', 'dcv_3', '', 'DET:BAND 20', 3, 0.0085)
@@ -26,7 +26,7 @@ if self.dcv_var.get() == 1:
     Call('dcv', '500 V', 'CONF:VOLT:DC 1000', 'dcv_18', '', 'DET:BAND 20', 4, 0.0325)
     Call('dcv', '1000 V', 'CONF:VOLT:DC 1000', 'dcv_19', '', 'DET:BAND 20', 4, 0.055)
     Call('dcv', '-1000 V', 'CONF:VOLT:DC 1000', 'dcv_20', '', 'DET:BAND 20', 8, 0.055)
-if self.acv_var.get() == 1:
+if self.vardict_boo['acv_var'].get() == 1:
     Call('acv', '10 mV, 10 Hz', 'CONF:VOLT:AC 0.1', 'acv_1', '', 'DET:BAND 3', 4, 0.075)
     Call('acv', '10 mV, 1 kHz', 'CONF:VOLT:AC 0.1', 'acv_2', '', 'DET:BAND 20', 4, 0.046)
     Call('acv', '10 mV, 50 kHz', 'CONF:VOLT:AC 0.1', 'acv_3', '', 'DET:BAND 20', 4, 0.062)
@@ -93,11 +93,11 @@ if self.acv_var.get() == 1:
         Call('acv', '500 V, 100 kHz', 'CONF:VOLT:AC 750', 'acv_61', '', 'DET:BAND 20', 4, 3.6)
         Call('acv', '750 V, 50 kHz', 'CONF:VOLT:AC 750', 'acv_64', '', 'DET:BAND 20', 4, 1.275)
         Call('acv', '750 V, 100 kHz', 'CONF:VOLT:AC 750', 'acv_65', '', 'DET:BAND 20', 4, 5.1)'''
-if self.f_var.get() == 1:
+if self.vardict_boo['f_var'].get() == 1:
     Call('fr', '0.01 V, 10 Hz', 'CONF:FREQ 100 Hz', 'f_1', '', 'DET:BAND 3', 4, 0.005)
     Call('fr', '1 V, 50 kHz', 'CONF:FREQ 100 kHz', 'f_2', '', 'DET:BAND 20', 4, 0.015)
     Call('fr', '1 V, 300 kHz', 'CONF:FREQ 300 kHz', 'f_3', '', 'DET:BAND 20', 4, 0.03)
-if self.r2_var.get() == 1:
+if self.vardict_boo['r2_var'].get() == 1:
     Call('res', '1 kOHM', 'CONF:RES 10 KOHM', 'r2_1', '', 'DET:BAND 20', 4, 0.0002)
     Call('res', '5 kOHM', 'CONF:RES 10 KOHM', 'r2_2', '', 'DET:BAND 20', 4, 0.0006)
     Call('res', '10 kOHM', 'CONF:RES 10 KOHM', 'r2_3', '', 'DET:BAND 20', 4, 0.0011)
@@ -113,7 +113,7 @@ if self.r2_var.get() == 1:
     Call('res', '10 MOHM', 'CONF:RES 100 MOHM', 'r2_13', '', 'DET:BAND 20', 4, 0.09)
     Call('res', '50 MOHM', 'CONF:RES 100 MOHM', 'r2_14', '', 'DET:BAND 20', 4, 0.41)
     Call('res', '100 MOHM', 'CONF:RES 100 MOHM', 'r2_15', '', 'DET:BAND 20', 4, 0.81)
-if self.r4_var.get() == 1:
+if self.vardict_boo['r4_var'].get() == 1:
     Message('Подключите провода по четырехпроводной схеме\n для измерения сопротивления')
     Call('res', '10 OHM', 'CONF:FRES 100', 'r4_1', '', 'DET:BAND 20', 4, 0.005)
     Call('res', '50 OHM', 'CONF:FRES 100', 'r4_2', '', 'DET:BAND 20', 4, 0.009)
@@ -121,7 +121,7 @@ if self.r4_var.get() == 1:
     Call('res', '0.1 kOHM', 'CONF:FRES 1 KOHM', 'r4_4', '', 'DET:BAND 20', 4, 0.00002)
     Call('res', '0.5 kOHM', 'CONF:FRES 1 KOHM', 'r4_5', '', 'DET:BAND 20', 4, 0.00006)
     Call('res', '1 kOHM', 'CONF:FRES 1 KOHM', 'r4_6', '', 'DET:BAND 20', 4, 0.00011)
-if self.dci_var.get() == 1:
+if self.vardict_boo['dci_var'].get() == 1:
     Message('Подключите провода для измерения тока')
     Call('dci', '1 mA', 'CONF:CURR:DC 0.01', 'dci_1', '', 'DET:BAND 20', 4, 0.0025)
     Call('dci', '5 mA', 'CONF:CURR:DC 0.01', 'dci_2', '', 'DET:BAND 20', 4, 0.0045)
@@ -135,7 +135,7 @@ if self.dci_var.get() == 1:
     Call('dci', '0.3 A', 'CONF:CURR:DC 3', 'dci_10', '', 'DET:BAND 20', 4, 0.00096)
     Call('dci', '1 A', 'CONF:CURR:DC 3', 'dci_11', '', 'DET:BAND 20', 4, 0.0018)
     Call('dci', '2.5 A', 'CONF:CURR:DC 3', 'dci_12', '', 'DET:BAND 20', 4, 0.0036)
-if self.aci_var.get() == 1:
+if self.vardict_boo['aci_var'].get() == 1:
     Call('aci', '0.1 A, 10 Hz', 'CONF:CURR:AC 1', 'aci_1', '', 'DET:BAND 3', 4, 0.0007)
     Call('aci', '0.1 A, 1 kHz', 'CONF:CURR:AC 1', 'aci_2', '', 'DET:BAND 20', 4, 0.0005)
     Call('aci', '0.1 A, 5 kHz', 'CONF:CURR:AC 1', 'aci_3', '', 'DET:BAND 20', 4, 0.0005)

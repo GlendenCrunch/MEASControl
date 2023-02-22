@@ -27,36 +27,14 @@ class MeasControlGUI():
         self.parent = parent
         self.folder_1 = os.getcwd()
         self.ser = 0
-        self.name_protokol = tk.StringVar()
-        self.temp = tk.StringVar()
-        self.humi = tk.StringVar()
-        self.press = tk.StringVar()
-        self.custom = tk.StringVar()
-        self.pover = tk.StringVar()
-        self.var_spb1 = tk.StringVar()
-        self.var_spb2 = tk.StringVar()
-        self.dcv_var = tk.BooleanVar()
-        self.acv_var = tk.BooleanVar()
-        self.f_var = tk.BooleanVar()
-        self.dci_var = tk.BooleanVar()
-        self.aci_var = tk.BooleanVar()
-        self.c_var = tk.BooleanVar()
-        self.r2_var = tk.BooleanVar()
-        self.r4_var = tk.BooleanVar()
-        self.tr_var = tk.BooleanVar()
-        self.per_var = tk.BooleanVar()
-        self.gost = tk.BooleanVar()
-        self.dcv_var.set(1)
-        self.acv_var.set(1)
-        self.f_var.set(1)
-        self.dci_var.set(1)
-        self.aci_var.set(1)
-        self.c_var.set(0)   # временно отключил
-        self.r2_var.set(1)
-        self.r4_var.set(1)
-        self.tr_var.set(1)
-        self.per_var.set(1)
-        self.gost.set(0)
+
+        self.varlist_str = ['name_protokol','temp','humi','press','custom','pover','var_spb1','var_spb2']
+        self.vardict_str = {self.var: tk.StringVar() for self.var in self.varlist_str}
+
+        self.varlist_boo = ['dcv_var','acv_var','f_var','dci_var','aci_var','r2_var','r4_var','tr_var','per_var','c_var','gost']
+        self.vardict_boo = {self.var: tk.BooleanVar() for self.var in self.varlist_boo}
+        for self.var in self.varlist_boo[:9]:
+            self.vardict_boo[self.var].set(1)
 
         self.ar10b = ('arial', 10, 'bold')
         self.ar12b = ('arial', 12, 'bold')
@@ -106,36 +84,34 @@ class MeasControlGUI():
         main_menu.add_cascade(label=self.lang['add_cascade_3'], menu=fsetting)
         main_menu.add_cascade(label=self.lang['add_cascade_4'], command=self.about_win)
 
-        #self.menuframe = tk.Frame(self.parent)
-        self.tabframe = tk.Frame(self.parent)
-        self.rightframe = tk.Frame(self.parent)
-        self.statusframe = tk.Frame(self.parent)
+        tabframe = tk.Frame(self.parent)
+        rightframe = tk.Frame(self.parent)
+        statusframe = tk.Frame(self.parent)
 
-        #self.menuframe.grid(row=0, column=0,sticky="nsew")
-        self.tabframe.grid(row=1, column=0, ipadx=185, ipady=210,sticky="nsew")
-        self.rightframe.grid(row=1, column=1, sticky="ns")
-        self.statusframe.grid(row=2, column=0, columnspan=2, sticky="ew")
+        tabframe.grid(row=1, column=0, ipadx=185, ipady=210,sticky="nsew")
+        rightframe.grid(row=1, column=1, sticky="ns")
+        statusframe.grid(row=2, column=0, columnspan=2, sticky="ew")
 
-        self.sb = tk.Scrollbar(self.rightframe, orient='vertical')
-        self.lb = tk.Listbox(self.rightframe, selectmode='extended', width=39, height=20, relief='ridge')
+        self.sb = tk.Scrollbar(rightframe, orient='vertical')
+        self.lb = tk.Listbox(rightframe, selectmode='extended', width=39, height=20, relief='ridge')
         self.sb['command'] = self.lb.yview
         self.lb['yscroll'] = self.sb.set
         self.sb.pack(side=tk.RIGHT, fill='y')
         self.lb.pack(side=tk.RIGHT, fill='y')
 
-        self.tab_control = ttk.Notebook(self.tabframe)
-        self.tab1 = ttk.Frame(self.tab_control)
-        self.tab2 = ttk.Frame(self.tab_control)
-        self.tab_control.add(self.tab1, text=self.lang['tab_control_1'])
-        self.tab_control.add(self.tab2, text=self.lang['tab_control_2'])
-        self.tab_control.pack(expand=1, fill='both')
+        tab_control = ttk.Notebook(tabframe)
+        tab1 = ttk.Frame(tab_control)
+        tab2 = ttk.Frame(tab_control)
+        tab_control.add(tab1, text=self.lang['tab_control_1'])
+        tab_control.add(tab2, text=self.lang['tab_control_2'])
+        tab_control.pack(expand=1, fill='both')
 
-        self.statusbar = tk.Label(self.statusframe, text=self.lang['statusbar_1'], background="gray80", anchor='w')
+        self.statusbar = tk.Label(statusframe, text=self.lang['statusbar_1'], background="gray80", anchor='w')
         self.statusbar.pack(side='left', fill='x', expand=True)
-        self.statusbar_1 = tk.Label(self.statusframe, text="I T L ©", background="gray80", anchor='e')
+        self.statusbar_1 = tk.Label(statusframe, text="I T L ©", background="gray80", anchor='e')
         self.statusbar_1.pack(side='right', fill='x')
 
-        self.tree = ttk.Treeview(self.tab1, columns=['1', '2', '3', '4'], height=5)
+        self.tree = ttk.Treeview(tab1, columns=['1', '2', '3', '4'], height=5)
         self.tree.heading('#0', text="", anchor='center')
         self.tree.heading('1', text=self.lang['tree_head_1'], anchor='center')
         self.tree.heading('2', text=self.lang['tree_head_2'], anchor='center')
@@ -148,7 +124,7 @@ class MeasControlGUI():
         self.tree.column('4', stretch=False, anchor='center', minwidth=360, width=360)
         self.tree.place(x=5, y=290)
 
-        self.tree2 = ttk.Treeview(self.tab2, columns=['1', '2', '3', '4'], height=11)
+        self.tree2 = ttk.Treeview(tab2, columns=['1', '2', '3', '4'], height=11)
         self.tree2.heading('#0', text="", anchor='center')
         self.tree2.heading('1', text=self.lang['tree2_head_1'], anchor='center')
         self.tree2.heading('2', text=self.lang['tree2_head_2'], anchor='center')
@@ -161,22 +137,22 @@ class MeasControlGUI():
         self.tree2.column('4', stretch=False, anchor='center', minwidth=120, width=120)
         self.tree2.place(x=210, y=140)
 
-        self.lbf1 = tk.LabelFrame(self.tab1, text=self.lang['LabelFrame_1'], width=200, height=200, fg=self.fg_colour, bg=self.bg_colour, font=self.ar10b)
+        self.lbf1 = tk.LabelFrame(tab1, text=self.lang['LabelFrame_1'], width=200, height=200, fg=self.fg_colour, bg=self.bg_colour, font=self.ar10b)
         self.lbf1.place(x=5, y=5)
-        self.lbf2 = tk.LabelFrame(self.tab1, text=self.lang['LabelFrame_2'], width=200, height=200, fg=self.fg_colour, bg=self.bg_colour, font=self.ar10b)
+        self.lbf2 = tk.LabelFrame(tab1, text=self.lang['LabelFrame_2'], width=200, height=200, fg=self.fg_colour, bg=self.bg_colour, font=self.ar10b)
         self.lbf2.place(x=205, y=5)
-        lbf3 = tk.LabelFrame(self.tab1, text=self.lang['LabelFrame_3'], width=200, height=200, fg=self.fg_colour, bg=self.bg_colour, font=self.ar10b)
-        lbf3.place(x=405, y=5)
-        lbf4 = tk.LabelFrame(self.tab2, text=self.lang['LabelFrame_4'], width=200, height=390, fg=self.fg_colour, bg=self.bg_colour, font=self.ar10b)
+        #lbf3 = tk.LabelFrame(tab1, text=self.lang['LabelFrame_3'], width=200, height=200, fg=self.fg_colour, bg=self.bg_colour, font=self.ar10b)
+        #lbf3.place(x=405, y=5)
+        lbf4 = tk.LabelFrame(tab2, text=self.lang['LabelFrame_4'], width=200, height=390, fg=self.fg_colour, bg=self.bg_colour, font=self.ar10b)
         lbf4.place(x=5, y=5)
 
         self.dmm_on = tk.Button(self.lbf1, text=self.lang['Button_1'], width=12, fg='#fff', bg=self.bg_button, font=self.ar12b, command=self.connect_dmm)
         self.dmm_on.place(x=35, y=130)
         self.fluk_on = tk.Button(self.lbf2, text=self.lang['Button_2'], width=12, fg='#fff', bg=self.bg_button, font=self.ar12b, command=self.connect_fluke_5500)
         self.fluk_on.place(x=35, y=130)
-        self.fresh = tk.Button(self.tab1, image=self.img4, fg='#fff', bg=self.bg_button, font=self.ar12b, command=self.pribor)
+        self.fresh = tk.Button(tab1, image=self.img4, fg='#fff', bg=self.bg_button, font=self.ar12b, command=self.pribor)
         self.fresh.place(x=690, y=240)
-        self.start_on = tk.Button(self.tab2, text=self.lang['Button_5'], width=12, fg='#fff', bg=self.bg_button, font=self.ar12b, command=self.start)
+        self.start_on = tk.Button(tab2, text=self.lang['Button_5'], width=12, fg='#fff', bg=self.bg_button, font=self.ar12b, command=self.start)
         self.start_on.place(x=210, y=20)
         #self.paus_on = tk.Button(self.tab2, text=self.lang['Button_6'], width=12, fg='#fff', bg=self.bg_button, font=self.ar12b)
         #self.paus_on.place(x=350, y=20)
@@ -186,40 +162,40 @@ class MeasControlGUI():
         self.combo_flu = ttk.Combobox(self.lbf2, state='readonly', height=5, width=25)
         self.combo_flu.place(x=15, y=10)
 
-        self.lab3 = tk.Label(self.tab2, text=self.lang['Label_3'], bg=self.bg_colour, fg=self.fg_colour, font=self.ar10b)
-        self.lab3.place(x=10,y=30)
-        self.lab4 = tk.Label(self.tab2, text=self.lang['Label_4'], bg=self.bg_colour, fg=self.fg_colour, font=self.ar10b)
-        self.lab4.place(x=10,y=60)
-        self.lab5 = tk.Label(self.tab2, text=self.lang['Label_5'], bg=self.bg_colour, fg=self.fg_colour, font=self.ar10b)
-        self.lab5.place(x=10,y=110)
-        self.lab6 = tk.Label(self.tab2, text=self.lang['Label_6'], bg=self.bg_colour, fg=self.fg_colour, font=self.ar10b)
-        self.lab6.place(x=10,y=140)
-        self.lab7 = tk.Label(self.tab2, text=self.lang['Label_7'], bg=self.bg_colour, fg=self.fg_colour, font=self.ar10b)
-        self.lab7.place(x=10,y=170)
-        self.lab8 = tk.Label(self.tab2, text=self.lang['Label_8'], bg=self.bg_colour, fg=self.fg_colour, font=self.ar10b)
-        self.lab8.place(x=10,y=200)
-        self.lab9 = tk.Label(self.tab2, text=self.lang['Label_9'], bg=self.bg_colour, fg=self.fg_colour, font=self.ar10b)
-        self.lab9.place(x=10,y=230)
-        self.lab10 = tk.Label(self.tab1, text=self.lang['Label_10'], bg=self.bg_colour, fg=self.fg_colour, font=self.ar10b)
+        self.lab3 = tk.Label(lbf4, text=self.lang['Label_3'], bg=self.bg_colour, fg=self.fg_colour, font=self.ar10b)
+        self.lab3.place(x=5,y=5)
+        self.lab4 = tk.Label(lbf4, text=self.lang['Label_4'], bg=self.bg_colour, fg=self.fg_colour, font=self.ar10b)
+        self.lab4.place(x=5,y=35)
+        self.lab5 = tk.Label(lbf4, text=self.lang['Label_5'], bg=self.bg_colour, fg=self.fg_colour, font=self.ar10b)
+        self.lab5.place(x=5,y=85)
+        self.lab6 = tk.Label(lbf4, text=self.lang['Label_6'], bg=self.bg_colour, fg=self.fg_colour, font=self.ar10b)
+        self.lab6.place(x=5,y=115)
+        self.lab7 = tk.Label(lbf4, text=self.lang['Label_7'], bg=self.bg_colour, fg=self.fg_colour, font=self.ar10b)
+        self.lab7.place(x=5,y=145)
+        self.lab8 = tk.Label(lbf4, text=self.lang['Label_8'], bg=self.bg_colour, fg=self.fg_colour, font=self.ar10b)
+        self.lab8.place(x=5,y=175)
+        self.lab9 = tk.Label(lbf4, text=self.lang['Label_9'], bg=self.bg_colour, fg=self.fg_colour, font=self.ar10b)
+        self.lab9.place(x=5,y=205)
+        self.lab10 = tk.Label(tab1, text=self.lang['Label_10'], bg=self.bg_colour, fg=self.fg_colour, font=self.ar10b)
         self.lab10.place(x=20,y=230)
 
-        self.entry1 = ttk.Entry(self.tab1, textvariable=self.name_protokol, width=50, font=self.ar10b)
+        self.entry1 = ttk.Entry(tab1, textvariable=self.vardict_str['name_protokol'], width=50, font=self.ar10b)
         self.entry1.place(x=170, y=230)
-        self.entry2 = ttk.Entry(self.tab2, textvariable=self.temp, width=10, font=self.ar10b)
-        self.entry2.place(x=125, y=110)
-        self.entry3 = ttk.Entry(self.tab2, textvariable=self.humi, width=10, font=self.ar10b)
-        self.entry3.place(x=125, y=140)
-        self.entry4 = ttk.Entry(self.tab2, textvariable=self.press, width=10, font=self.ar10b)
-        self.entry4.place(x=125, y=170)
-        self.entry5 = ttk.Entry(self.tab2, textvariable=self.custom, width=10, font=self.ar10b)
-        self.entry5.place(x=125, y=200)
-        self.entry6 = ttk.Entry(self.tab2, textvariable=self.pover, width=10, font=self.ar10b)
-        self.entry6.place(x=125, y=230)
+        self.entry2 = ttk.Entry(lbf4, textvariable=self.vardict_str['temp'], width=10, font=self.ar10b)
+        self.entry2.place(x=120, y=85)
+        self.entry3 = ttk.Entry(lbf4, textvariable=self.vardict_str['humi'], width=10, font=self.ar10b)
+        self.entry3.place(x=120, y=115)
+        self.entry4 = ttk.Entry(lbf4, textvariable=self.vardict_str['press'], width=10, font=self.ar10b)
+        self.entry4.place(x=120, y=145)
+        self.entry5 = ttk.Entry(lbf4, textvariable=self.vardict_str['custom'], width=10, font=self.ar10b)
+        self.entry5.place(x=120, y=175)
+        self.entry6 = ttk.Entry(lbf4, textvariable=self.vardict_str['pover'], width=10, font=self.ar10b)
+        self.entry6.place(x=120, y=205)
 
-        self.lb2 = tk.Listbox(self.tab2, selectmode='extended', width=47, height=2, relief='ridge', fg='blue', font=("Arial", 15, 'bold'))
+        self.lb2 = tk.Listbox(tab2, selectmode='extended', width=47, height=2, relief='ridge', fg='blue', font=("Arial", 15, 'bold'))
         self.lb2.place(x=210, y=70)
 
-        self.progress1 = ttk.Progressbar(self.tab2, orient='horizontal', mode='determinate', length=730, value=0)
+        self.progress1 = ttk.Progressbar(tab2, orient='horizontal', mode='determinate', length=730, value=0)
         self.progress1.place(x=5, y=395)
 
     def date_time(self):
@@ -297,15 +273,15 @@ class MeasControlGUI():
         self.win_one('Настройки', '220x250+{}+{}')
         try:
             if self.a1[1] == '34420A':
-                self.checkbut_widget(3, ["Заглушка","Постоянное напряжение","Сопротивление 4-провода"], [self.acv_var,self.dcv_var,self.r4_var])
+                self.checkbut_widget(3, ["Заглушка","Постоянное напряжение","Сопротивление 4-провода"], [self.vardict_boo['acv_var'],self.vardict_boo['dcv_var'],self.vardict_boo['r4_var']])
             elif self.a1[1] in ('34401A', '34401A_gost', '34410A', '34411A', '34460A', '34461A', '34465A', '34470A', 'V7-78'):
                 self.checkbut_widget(8, ["Постоянное напряжение","Переменное напряжение","Частота","Постоянный ток",
-                "Переменный ток","Ёмкость","Сопротивление 2-провода","Сопротивление 4-провода"], [self.dcv_var,self.acv_var,
-                self.f_var,self.dci_var,self.aci_var,self.c_var,self.r2_var,self.r4_var])
+                "Переменный ток","Ёмкость","Сопротивление 2-провода","Сопротивление 4-провода"], [self.vardict_boo['dcv_var'],self.vardict_boo['acv_var'],
+                self.vardict_boo['f_var'],self.vardict_boo['dci_var'],self.vardict_boo['aci_var'],self.vardict_boo['c_var'],self.vardict_boo['r2_var'],self.vardict_boo['r4_var']])
             elif self.a1[1] == 'WJ312A':
-                self.checkbut_widget(3, ["Постоянное напряжение","Время нарастания","Период"], [self.dcv_var,self.tr_var,self.per_var])
+                self.checkbut_widget(3, ["Постоянное напряжение","Время нарастания","Период"], [self.vardict_boo['dcv_var'],self.vardict_boo['tr_var'],self.vardict_boo['per_var']])
             elif self.a1[1] in ('TDS 2014B', 'TDS 2014C'):
-                self.checkbut_widget(3, ["Постоянное напряжение","Временной интервал","Время нарастания"], [self.dcv_var,self.per_var,self.tr_var])
+                self.checkbut_widget(3, ["Постоянное напряжение","Временной интервал","Время нарастания"], [self.vardict_boo['dcv_var'],self.vardict_boo['per_var'],self.vardict_boo['tr_var']])
         except AttributeError:
             clab = tk.Label(self.top, text='Прибор не определён', font='arial 13', foreground='deepskyblue4')
             clab.pack(anchor='w')
@@ -360,18 +336,17 @@ class MeasControlGUI():
     def visa_search(self):
         #self.rm = pyvisa.ResourceManager(visa_library='C:/Program Files/IVI Foundation/VISA/Win64/agvisa/agbin/visa32.dll')
         self.rm = pyvisa.ResourceManager()
-        self.rm_tuple = self.rm.list_resources()
-        self.rm_list = list(self.rm_tuple)
+        self.rm_list = list(self.rm.list_resources())
         return self.rm_list
 
     def decay_cycle(self, rm):
-        for j, item in enumerate(self.sign_pribor):
+        for j, _ in enumerate(self.sign_pribor):
             if re.search(list(self.sign_pribor.keys())[j], rm):
                 rm = list(self.sign_pribor.values())[j]
         return rm
 
     def adres_cycle(self, combo_dmm, rm):
-        for j, item in enumerate(self.sign_pribor):
+        for j, _ in enumerate(self.sign_pribor):
             if combo_dmm == list(self.sign_pribor.values())[j]:
                 adres = list(filter(lambda rmt: list(self.sign_pribor.keys())[j] in rmt, rm))
                 if len(adres) > 0:
@@ -391,8 +366,8 @@ class MeasControlGUI():
         #self.combo_dmm.current(0)
         self.combo_flu.configure(values=decay_list)
         #self.combo_flu.current(0)
-        self.var_spb1.set('10')
-        self.var_spb2.set('4')
+        self.vardict_str['var_spb1'].set('10')
+        self.vardict_str['var_spb2'].set('4')
         self.tree.delete(*self.tree.get_children())
         self.tree2.delete(*self.tree2.get_children())
 
@@ -407,7 +382,7 @@ class MeasControlGUI():
             self.data_1 = self.inst_dmm.query("*IDN?")
             self.a1 = self.data_1.split(',')
             if self.a1[1] == '34401A':
-                chkbtn_1 = tk.Checkbutton(self.lbf1, bg="#848a98", activebackground="#848a98", text="МИ 1202-86, ГОСТ 8.366-79", variable=self.gost, onvalue=1, offvalue=0, font=self.ar10b)
+                chkbtn_1 = tk.Checkbutton(self.lbf1, bg="#848a98", activebackground="#848a98", text="МИ 1202-86, ГОСТ 8.366-79", variable=self.vardict_boo['gost'], onvalue=1, offvalue=0, font=self.ar10b)
                 chkbtn_1.place(x=0,y=40)
             if self.a1[1] in ('34401A', '34410A', '34411A', '34420A', '34460A', '34461A', '34465A', '34470A', 'V7-78/1'):
                 self.a10 = f'Мультиметр {self.a1[1]} подключен'
@@ -418,13 +393,13 @@ class MeasControlGUI():
                 self.lab1.place(x=40,y=55)
                 self.lab2 = tk.Label(self.lbf2, text=self.lang['Label_2'], bg=self.bg_colour, fg=self.fg_colour, font=self.ar10b)
                 self.lab2.place(x=15,y=85)
-                self.spinbox1 = tk.Spinbox(self.lbf2, textvariable=self.var_spb1, from_=0, to=30, width=6)
+                self.spinbox1 = tk.Spinbox(self.lbf2, textvariable=self.vardict_str['var_spb1'], from_=0, to=30, width=6)
                 self.spinbox1.place(x=133, y=55)
-                self.spinbox2 = tk.Spinbox(self.lbf2, textvariable=self.var_spb2, from_=0, to=30, width=6)
+                self.spinbox2 = tk.Spinbox(self.lbf2, textvariable=self.vardict_str['var_spb2'], from_=0, to=30, width=6)
                 self.spinbox2.place(x=133, y=85)
             if self.a1[1] == 'V7-78/1':
                 self.a1[1] = self.a1[1][0:5]
-            self.name_protokol.set(f'{self.data_today},{self.a1[1]},{self.a1[2]}.xlsx')
+            self.vardict_str['name_protokol'].set(f'{self.data_today},{self.a1[1]},{self.a1[2]}.xlsx')
             self.lab3['text'] = f'Тип: {self.a1[1]}'
             self.lab4['text'] = f'Зав.№: {self.a1[2]}'
             try:
@@ -451,7 +426,7 @@ class MeasControlGUI():
             self.inst_fluke = self.rm.open_resource(self.combo_flu.get(), baud_rate=9600, data_bits=8, write_termination='\r', read_termination='\r')
             time.sleep(1)
             self.inst_fluke.write('*IDN?')
-            self.data_2 = my_gui.inst_fluke.read()
+            self.data_2 = self.inst_fluke.read()
             self.connect_fluke_set()
             if self.b1[1] == 'N4-56':
                 self.calbr = self.sett_json['N4-56']
@@ -488,9 +463,29 @@ class MeasControlGUI():
         except:
             self.lb.insert('end', 'Формирователь не обнаружен')
 
+    def entry_in_cell(self):
+        for row in self.ws.rows:
+            for cell in row:
+                if cell.value == '_type':
+                    cell.value = self.a1[1].split('_')[0]
+                if cell.value == '_numb':
+                    cell.value = self.a1[2]
+                if cell.value == '_customer':
+                    cell.value = self.vardict_str['custom'].get()
+                if cell.value == '_temp':
+                    cell.value = self.vardict_str['temp'].get()
+                if cell.value == '_hum':
+                    cell.value = self.vardict_str['humi'].get()
+                if cell.value == '_pres':
+                    cell.value = self.vardict_str['press'].get()
+                if cell.value == '_pov':
+                    cell.value = self.vardict_str['pover'].get()
+                if cell.value == '_date':
+                    cell.value = self.data_today[:10]
+
     def start(self):
         try:
-            if self.gost.get() == 1:
+            if self.vardict_boo['gost'].get() == 1:
                 self.a1[1] = '34401A_gost'
             self.progress1.configure(maximum=self.cnt()[self.a1[1]])
             self.lb.insert('end', f'Время начала: {self.data_today[11:]}')
@@ -627,8 +622,9 @@ class Call(Thread):
                             cell.fill = my_gui.colour_cell
                             tree2_img = my_gui.img3
 
+        my_gui.entry_in_cell()
         my_gui.tree2.insert('', 0, text='', image=tree2_img, values=(self.vfluke,round(self.data_true,4),self.data_err,f'±{self.accur}'))
-        my_gui.wb.save(f'{my_gui.folder_1}\\Protocol\\Multimeter\\{my_gui.name_protokol.get()}')
+        my_gui.wb.save('{}\\Protocol\\Multimeter\\{}'.format(my_gui.folder_1,my_gui.vardict_str['name_protokol'].get()))
         my_gui.inst_fluke.write(my_gui.calbr['OFF'])
         time.sleep(1)
         my_gui.progress1.step(1)
@@ -912,7 +908,8 @@ class Call_oscill(Thread):
         elif my_gui.a1[1] in ('MSO-X 3034A', 'MSO-X 3104T'):
             self.call_msox_3()
 
-        my_gui.wb.save(f'{my_gui.folder_1}\\Protocol\\Oscilloscope\\{my_gui.name_protokol.get()}')
+        my_gui.entry_in_cell()
+        my_gui.wb.save('{}\\Protocol\\Oscilloscope\\{}'.format(my_gui.folder_1,my_gui.vardict_str['name_protokol'].get()))
         my_gui.query("OUTP:STAT OFF")
         time.sleep(1)
         my_gui.progress1.step(1)
@@ -929,24 +926,6 @@ class Message(Thread):
     def run(self):
         sem.acquire()
         messagebox.showinfo('ВНИМАНИЕ!', self.text)
-        for row in my_gui.ws.rows:
-            for cell in row:
-                if cell.value == '_type':
-                    cell.value = my_gui.a1[1].split('_')[0]
-                if cell.value == '_numb':
-                    cell.value = my_gui.a1[2]
-                if cell.value == '_customer':
-                    cell.value = my_gui.custom.get()
-                if cell.value == '_temp':
-                    cell.value = my_gui.temp.get()
-                if cell.value == '_hum':
-                    cell.value = my_gui.humi.get()
-                if cell.value == '_pres':
-                    cell.value = my_gui.press.get()
-                if cell.value == '_pov':
-                    cell.value = my_gui.pover.get()
-                if cell.value == '_date':
-                    cell.value = my_gui.data_today[:10]
         sem.release()
 
 class Reset(Thread):
@@ -1017,13 +996,12 @@ class Clear_merge(Thread):
         time.sleep(1)
         self.merged_cells()
         time.sleep(1)
-        my_gui.wb.save(f'{my_gui.folder_1}\\Protocol\\Multimeter\\{my_gui.name_protokol.get()}')
+        my_gui.wb.save('{}\\Protocol\\Multimeter\\{}'.format(my_gui.folder_1,my_gui.vardict_str['name_protokol'].get()))
         my_gui.lb.insert('end', f'Время окончания: {my_gui.data_today[11:]}')
         sem.release()
 
 root = tk.Tk()
 my_gui = MeasControlGUI(root)
-if __name__ == '__main__':
-    my_gui.cnt()
-    my_gui.pribor()
-    root.mainloop()
+my_gui.cnt()
+my_gui.pribor()
+root.mainloop()

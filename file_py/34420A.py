@@ -1,7 +1,7 @@
 #!/usr/bin/python3-32
 # -*- coding: utf-8 -*-
 Reset()
-if self.dcv_var.get() == 1:
+if self.vardict_boo['dcv_var'].get() == 1:
     Message('Соедините провода для измерения постоянного напряжения по КАНАЛУ 1 (красный(+)-черный(-))')
     Call('dcv', '100 mV', 'CONF:VOLT', 'dcv1', 'gdcv1', 'ROUT:TERM FRON1', 'SENS1:VOLT:RANG .1', '4.4 u')
     Call('dcv', '1 V', 'CONF:VOLT', 'dcv2', 'gdcv2', 'ROUT:TERM FRON1', 'SENS1:VOLT:RANG 1', '39 u')
@@ -11,7 +11,7 @@ if self.dcv_var.get() == 1:
     Call('dcv', '100 mV', 'CONF:VOLT', 'dcv5', 'gdcv5', 'ROUT:TERM FRON2', 'SENS2:VOLT:RANG .1', '4.4 u')
     Call('dcv', '1 V', 'CONF:VOLT', 'dcv6', 'gdcv6', 'ROUT:TERM FRON2', 'SENS2:VOLT:RANG 1', '39 u')
     Call('dcv', '10 V', 'CONF:VOLT', 'dcv7', 'gdcv7', 'ROUT:TERM FRON2', 'SENS2:VOLT:RANG 10', '340 u')
-if self.r4_var.get() == 1:
+if self.vardict_boo['r4_var'].get() == 1:
     Message('Соедините провода по четырехпроводной схеме для измерения сопротивления (красный(+)-черный(-); зеленый(+)-белый(-))')
     Call('r', '1.0001291 OHM', 'CONF:FRES', 'r1', 'gr1', 'SENS:FRES:POW:LIM OFF', 'SENS:FRES:RANG 1', '72 u')
     Call('r', '9.999627 OHM', 'CONF:FRES', 'r2', 'gr2', 'SENS:FRES:POW:LIM OFF', 'SENS:FRES:RANG 10', '620 u')
@@ -28,7 +28,7 @@ if self.r4_var.get() == 1:
     Message('Соедините провода по двухпроводной схеме для измерения сопротивления (красный-зеленый(+); черный-белый(-))')
     Call('r', '0.9999655 MOHM; ZCOMP OFF', 'CONF:FRES', 'r7', 'gr7', 'SENS:FRES:POW:LIM OFF', 'SENS:FRES:RANG 1.0E+6', '74 Ohm')
     Call('r', '0.9999655 MOHM; ZCOMP OFF', 'CONF:FRES', 'r14', 'gr14', 'SENS:FRES:POW:LIM ON', 'SENS:FRES:RANG 1.0E+6', '74 Ohm')
-if self.acv_var.get() == 1:
+if self.vardict_boo['acv_var'].get() == 1:
     Message('Подключите заглушку')
     Call('dcv0', '', 'CONF:VOLT', 'dcv0_1', 'gdcv0_1', 'ROUT:TERM FRON1', 'SENS1:VOLT:RANG .001', '120 n')
     Call('dcv0', '', 'CONF:VOLT', 'dcv0_2', 'gdcv0_2', 'ROUT:TERM FRON1', 'SENS1:VOLT:RANG .01', '130 n')
