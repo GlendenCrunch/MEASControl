@@ -1002,6 +1002,7 @@ class Clear_merge(Thread):
 
 root = tk.Tk()
 my_gui = MeasControlGUI(root)
-my_gui.cnt()
-my_gui.pribor()
-root.mainloop()
+if __name__ == '__main__':
+    my_gui.cnt()
+    my_gui.pribor()
+    root.mainloop()
