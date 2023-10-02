@@ -8,6 +8,7 @@
         "dcv": "OUT ",
         "fr": "OUT ",
         "res": "OUT ",
+        "cap": "OUT ",
         "res4": "; ZCOMP WIRE4"
     },
     "N4-56": {
@@ -15,8 +16,8 @@
         "ON": "OUTP:STAT ON",
         "aci": "CONF:CURR:AC ",
         "acv": "CONF:VOLT:AC ",
-        "dci": "CONF:CURR ",
-        "dcv": "CONF:VOLT ",
+        "dci": "CONF:CURR:DC ",
+        "dcv": "CONF:VOLT:DC ",
         "fr": "CONF:VOLT:AC ",
         "res": "CONF:RES ",
         "res4": ""

@@ -1,0 +1,204 @@
+spec: "1.0"
+devices:
+  FLUKE:
+    eom:
+      ASRL INSTR:
+        q: "\r"
+        r: "\r"
+    error: ERROR
+    dialogues:
+      - q: "*IDN?"
+        r: "FLUKE,5522A,5248000,1.2+1.0+1.0+*"
+      - q: "*CLS"
+      - q: "*RST"
+    properties:
+      set_out:
+        default: 1.0
+        getter:
+          q: "OUT?"
+          r: "{:.2f}"
+        setter:
+          q: "OUT {:.2f}"
+          r: OK
+        specs:
+          min: -1000
+          max: 1000
+          type: float
+      output_enabled:
+        default: 0
+        getter:
+          q: "OPER?"
+          r: "{:d}"
+        setter:
+          q: "OPER"
+          r: OK
+      output_disabled:
+        setter:
+          q: "STBY"
+          r: OK
+  Agilent 34401:
+    eom:
+      ASRL INSTR:
+        q: "\r\n"
+        r: "\n"
+    error: ERROR
+    dialogues:
+      - q: "*IDN?"
+        r: "HEWLETT-PACKARD,34401A,0,11-5-2"
+      - q: "READ?"
+        r: 1
+        sources: [{source_name: "ASRL10::INSTR",
+                  source_parameter: amplitude}]
+      - q: "SYST:REM"
+      - q: "*RST"
+      - q: "*CLS"
+    properties: &agilent_34
+      band:
+        default: 20
+        setter:
+          q: "DET:BAND {:d}"
+      dcv:
+        default: 1.0
+        setter:
+          q: "CONF:VOLT:DC {:.1f}"
+        specs: &setio
+          min: 0
+          max: 1000
+          type: float
+      dcv2:
+        default: 1.0
+        setter:
+          q: "CONF:VOLT:DC {:d}"
+        specs: 
+          *setio
+      acv:
+        default: 1.0
+        setter:
+          q: "CONF:VOLT:AC {:.1f}"
+        specs:
+          *setio
+      acv2:
+        default: 1.0
+        setter:
+          q: "CONF:VOLT:AC {:d}"
+        specs:
+          *setio
+      f_var:
+        default: 1.0
+        setter:
+          q: "CONF:FREQ {:d} Hz"
+        specs:
+          *setio
+      f_var2:
+        default: 1.0
+        setter:
+          q: "CONF:FREQ {:d} kHz"
+        specs:
+          *setio
+      r2_var:
+        default: 1.0
+        setter:
+          q: "CONF:RES {:d} MOHM"
+        specs:
+          *setio
+      r2_var2:
+        default: 1.0
+        setter:
+          q: "CONF:RES {:d} KOHM"
+        specs:
+          *setio
+      r3_var2:
+        default: 1.0
+        setter:
+          q: "CONF:RES {:d} GOHM"
+        specs:
+          *setio
+      r4_var:
+        default: 1.0
+        setter:
+          q: "CONF:FRES {:d}"
+        specs:
+          *setio
+      r4_var2:
+        default: 1.0
+        setter:
+          q: "CONF:FRES {:d} KOHM"
+        specs:
+          *setio
+      dci:
+        default: 1.0
+        setter:
+          q: "CONF:CURR:DC {:.1f}"
+        specs:
+          *setio
+      dci2:
+        default: 1.0
+        setter:
+          q: "CONF:CURR:DC {:d}"
+        specs:
+          *setio
+      aci:
+        default: 1.0
+        setter:
+          q: "CONF:CURR:AC {:.1f}"
+        specs:
+          *setio
+      aci2:
+        default: 1.0
+        setter:
+          q: "CONF:CURR:AC {:d}"
+        specs:
+          *setio
+      cap:
+        default: 1.0
+        setter:
+          q: "CONF:CAP {:d} NF"
+        specs:
+          *setio
+      cap2:
+        default: 1.0
+        setter:
+          q: "CONF:CAP {:d} UF"
+        specs:
+          *setio
+      cap3:
+        setter:
+          q: "CONF:CAP"
+  Agilent 34411:
+    eom:
+      ASRL INSTR:
+        q: "\r\n"
+        r: "\n"
+    error: ERROR
+    dialogues:
+      - q: "*IDN?"
+        r: "Keysight Tehnologies,34411A,MY56432975,A.02.17-02.41"
+      - q: "READ?"
+        r: 1
+        sources: [{source_name: "ASRL10::INSTR",
+                  source_parameter: amplitude}]
+      - q: "SYST:REM"
+      - q: "*RST"
+      - q: "*CLS"
+    properties:
+      *agilent_34
+  WJ312A:
+    eom:
+      ASRL INSTR:
+        q: "\r\n"
+        r: "\n"
+    error: ERROR
+    dialogues:
+      - q: "*IDN?"
+        r: "Lecroy,WJ312A,13456444"
+      - q: "SYST:REM"
+
+resources:
+  ASRL10::INSTR:
+    device: FLUKE
+  ASRL9::INSTR:
+    device: Agilent 34401
+  ASRL8::INSTR:
+    device: Agilent 34411
+  ASRL7::INSTR:
+    device: WJ312A

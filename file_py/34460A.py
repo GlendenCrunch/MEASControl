@@ -43,9 +43,9 @@ if self.vardict_boo['f_var'].get() == 1:
     Call('fr', '0.1 V, 10 Hz', 'CONF:FREQ 10 Hz', 'f_1', '', 'DET:BAND 20', 5, 0.003)
     Call('fr', '0.01 V, 300 kHz', 'CONF:FREQ 300 kHz', 'f_2', '', 'DET:BAND 20', 5, 0.36)
 if self.vardict_boo['r2_var'].get() == 1:
-    Call('res', '1 MOHM; ZCOMP WIRE2', 'CONF:RES 1 MOHM', 'r2_1', '', 'DET:BAND 20', 5, 0.00015)
-    Call('res', '10 MOHM; ZCOMP WIRE2', 'CONF:RES 10 MOHM', 'r2_2', '', 'DET:BAND 20', 5, 0.0041)
-    Call('res', '100 MOHM; ZCOMP WIRE2', 'CONF:RES 100 MOHM', 'r2_3', '', 'DET:BAND 20', 8, 0.081)
+    Call('res', '1 MOHM', 'CONF:RES 1 MOHM', 'r2_1', '', 'DET:BAND 20', 5, 0.00015)
+    Call('res', '10 MOHM', 'CONF:RES 10 MOHM', 'r2_2', '', 'DET:BAND 20', 5, 0.0041)
+    Call('res', '100 MOHM', 'CONF:RES 100 MOHM', 'r2_3', '', 'DET:BAND 20', 8, 0.081)
 if self.vardict_boo['r4_var'].get() == 1:
     Message('Подключите провода по четырехпроводной схеме\n для измерения сопротивления')
     Call('res', '100 OHM', 'CONF:FRES 100', 'r4_1', '', 'DET:BAND 20', 5, 0.021)

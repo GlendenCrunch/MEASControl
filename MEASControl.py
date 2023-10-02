@@ -1,6 +1,7 @@
 #!/usr/bin/python3-32
 # -*- coding: utf-8 -*-
 import os
+import sys
 import re
 import time
 from datetime import datetime
@@ -17,23 +18,24 @@ import pyvisa
 import serial
 
 sem = threading.Semaphore()
-VARCAP = 0
-COUNT = 1
-
 
 class MeasControlGUI():
     """class GUI"""
     def __init__(self, parent):
         self.parent = parent
+        self.parent.protocol("WM_DELETE_WINDOW", self.close_app)
         self.folder_1 = os.getcwd()
         self.ser = 0
+        self.count = 1
+        self.varcap = 0
+        self.tdiv_2 = 0
 
         self.varlist_str = ['name_protokol','temp','humi','press','custom','pover','var_spb1','var_spb2']
         self.vardict_str = {self.var: tk.StringVar() for self.var in self.varlist_str}
 
         self.varlist_boo = ['dcv_var','acv_var','f_var','dci_var','aci_var','r2_var','r4_var','tr_var','per_var','c_var','gost']
         self.vardict_boo = {self.var: tk.BooleanVar() for self.var in self.varlist_boo}
-        for self.var in self.varlist_boo[:9]:
+        for self.var in self.varlist_boo[:10]:
             self.vardict_boo[self.var].set(1)
 
         self.ar10b = ('arial', 10, 'bold')
@@ -73,11 +75,12 @@ class MeasControlGUI():
         self.parent.config(menu=main_menu)
         fmenu = tk.Menu(main_menu, tearoff=False)
         fmenu.add_separator()
-        fmenu.add_command(label=self.lang['fmenu_close'], command=self.parent.destroy)
+        fmenu.add_command(label=self.lang['fmenu_close'], command=self.close_app)
 
         fsetting = tk.Menu(main_menu, tearoff=False)
         fsetting.add_command(label=self.lang['fset_1'], command=self.setting_win)
         fsetting.add_command(label=self.lang['fset_2'], command=self.set_style_win)
+        fsetting.add_command(label=self.lang['fset_3'], command=self.virt_dmm)
 
         main_menu.add_cascade(label=self.lang['add_cascade_1'], menu=fmenu)
         main_menu.add_cascade(label=self.lang['add_cascade_2'], command=self.protokol)
@@ -150,7 +153,7 @@ class MeasControlGUI():
         self.dmm_on.place(x=35, y=130)
         self.fluk_on = tk.Button(self.lbf2, text=self.lang['Button_2'], width=12, fg='#fff', bg=self.bg_button, font=self.ar12b, command=self.connect_fluke_5500)
         self.fluk_on.place(x=35, y=130)
-        self.fresh = tk.Button(tab1, image=self.img4, fg='#fff', bg=self.bg_button, font=self.ar12b, command=self.pribor)
+        self.fresh = tk.Button(tab1, image=self.img4, fg='#fff', bg=self.bg_button, font=self.ar12b, command=lambda: self.pribor(''))
         self.fresh.place(x=690, y=240)
         self.start_on = tk.Button(tab2, text=self.lang['Button_5'], width=12, fg='#fff', bg=self.bg_button, font=self.ar12b, command=self.start)
         self.start_on.place(x=210, y=20)
@@ -198,6 +201,11 @@ class MeasControlGUI():
         self.progress1 = ttk.Progressbar(tab2, orient='horizontal', mode='determinate', length=730, value=0)
         self.progress1.place(x=5, y=395)
 
+    def close_app(self):
+        self.parent.quit()
+        self.parent.destroy()
+        sys.exit()
+
     def date_time(self):
         today = datetime.today()
         self.data_today = today.strftime('%d-%m-%Y,%H-%M-%S')
@@ -224,7 +232,7 @@ class MeasControlGUI():
         self.top.geometry(size_win.format(win_width, win_high))
 
     def about_win(self):
-        self.win_one('О программе', '500x300+{}+{}')
+        self.win_one(self.lang['add_cascade_4'], '500x300+{}+{}')
         text1 = ('MEASControl\rVersion: 1.08\rDate: 2022-09-26\rAutor: g1enden (I T L)')
         text2_0 = ('\tМультиметры:')
         text2_1 = ('\t\tОсциллографы:')
@@ -262,7 +270,7 @@ class MeasControlGUI():
         support_6 = tk.Label(top_3, text=text7, font=('arial', 10), foreground='deepskyblue4')
         support_6.grid(row=0, column=4)
 
-        _button = tk.Button(bottom_1, text='OK', width=10, fg='#fff', bg=self.bg_button, font=self.ar12b, command=self.top.destroy)
+        _button = tk.Button(bottom_1, text=self.lang['Button_7'], width=10, fg='#fff', bg=self.bg_button, font=self.ar12b, command=self.top.destroy)
         _button.place(x=200,y=2)
 
     def checkbut_widget(self, rng_i, ch_text, ch_var):
@@ -270,7 +278,7 @@ class MeasControlGUI():
             tk.Checkbutton(self.top, text=ch_text[i], variable=ch_var[i], onvalue=1, offvalue=0).pack(anchor='w')
 
     def setting_win(self):
-        self.win_one('Настройки', '220x250+{}+{}')
+        self.win_one(self.lang['add_cascade_3'], '220x250+{}+{}')
         try:
             if self.a1[1] == '34420A':
                 self.checkbut_widget(3, ["Заглушка","Постоянное напряжение","Сопротивление 4-провода"], [self.vardict_boo['acv_var'],self.vardict_boo['dcv_var'],self.vardict_boo['r4_var']])
@@ -286,38 +294,39 @@ class MeasControlGUI():
             clab = tk.Label(self.top, text='Прибор не определён', font='arial 13', foreground='deepskyblue4')
             clab.pack(anchor='w')
 
-        _button = tk.Button(self.top, text="OK", width=12, fg='#fff', bg=self.bg_button, font=self.ar12b, command=self.top.destroy)
+        _button = tk.Button(self.top, text=self.lang['Button_7'], width=12, fg='#fff', bg=self.bg_button, font=self.ar12b, command=self.top.destroy)
         _button.place(x=40,y=210)
 
     def set_style_win(self):
-        self.win_one('Стили', '350x300+{}+{}')
-        lab_style = tk.Label(self.top, text='Цветовая тема:', font=self.ar10b)
+        self.win_one(self.lang['fset_2'], '350x300+{}+{}')
+        lab_style = tk.Label(self.top, text=self.lang['set_style_win_2'], font=self.ar10b)
         lab_style.place(x=20,y=15)
         combo_style = ttk.Combobox(self.top, state='readonly', values=['Dark', 'Light'], height=5, width=25)
         combo_style.current(0)
         combo_style.place(x=150, y=15)
-        lab_lang = tk.Label(self.top, text='Язык:', font=self.ar10b)
+        lab_lang = tk.Label(self.top, text=self.lang['set_style_win_3'], font=self.ar10b)
         lab_lang.place(x=20,y=45)
         combo_lang = ttk.Combobox(self.top, state='readonly', values=['Russia', 'English'], height=5, width=25)
         combo_lang.current(0)
         combo_lang.place(x=150, y=45)
 
         def set_ok():
-            self.sett_json['language'] = combo_lang.get()
-            self.sett_json['theme'] = combo_style.get()
+            if combo_lang.get() == self.sett_json['language'] and combo_style.get() == self.sett_json['theme']:
+                self.top.destroy()
+            else:
+                self.sett_json['language'] = combo_lang.get()
+                self.sett_json['theme'] = combo_style.get()
+                with open(f'{self.folder_1}\\setting.json', 'w', encoding='utf-8') as file_json:
+                    json.dump(self.sett_json, file_json, ensure_ascii=False, indent=4, sort_keys=True)
+                self.parent.destroy()
+                try:
+                    self.inst_dmm.close()
+                    self.inst_fluke.close()
+                except AttributeError:
+                    print (self.lang['set_style_win_4'])
+                os.system(f'{self.folder_1}\\MEASControl.py')
 
-            with open(f'{self.folder_1}\\setting.json', 'w', encoding='utf-8') as file_json:
-                json.dump(self.sett_json, file_json, ensure_ascii=False, indent=4, sort_keys=True)
-
-            self.parent.destroy()
-            try:
-                self.inst_dmm.close()
-                self.inst_fluke.close()
-            except AttributeError:
-                print ('Стиль изменён')
-            os.system(f'{self.folder_1}\\MEASControl.py')
-
-        _button = tk.Button(self.top, text="Применить", width=12, fg='#fff', bg=self.bg_button, font=self.ar12b, command=set_ok)
+        _button = tk.Button(self.top, text=self.lang['Button_7'], width=12, fg='#fff', bg=self.bg_button, font=self.ar12b, command=set_ok)
         _button.place(x=120,y=250)
 
     def cnt(self):
@@ -333,9 +342,12 @@ class MeasControlGUI():
 
         return cnt_dict
 
-    def visa_search(self):
+    def virt_dmm(self):
+        self.pribor(f'{self.folder_1}\\virt_pribor.yaml@sim')
+
+    def visa_search(self, param):
         #self.rm = pyvisa.ResourceManager(visa_library='C:/Program Files/IVI Foundation/VISA/Win64/agvisa/agbin/visa32.dll')
-        self.rm = pyvisa.ResourceManager()
+        self.rm = pyvisa.ResourceManager(param)
         self.rm_list = list(self.rm.list_resources())
         return self.rm_list
 
@@ -355,11 +367,11 @@ class MeasControlGUI():
         if combo_dmm[:4] in ('ASRL', 'USB0', 'TCPI'):
             return [combo_dmm]
 
-    def pribor(self):
+    def pribor(self, par):
         self.lb.delete(0, 'end')
-        self.lb.insert('end', 'Обнаруженные приборы и порты:')
+        self.lb.insert('end', self.lang['pribor_1'])
         self.lb.itemconfig('end', bg='light cyan')
-        self.visa_search()
+        self.visa_search(par)
         decay_list = list(map(self.decay_cycle, self.rm_list))
         self.lb.insert('end', *decay_list)
         self.combo_dmm.configure(values=decay_list)
@@ -374,7 +386,7 @@ class MeasControlGUI():
     def connect_dmm(self):
         try:
             self.date_time()
-            self.inst_dmm = self.rm.open_resource(self.adres_cycle(self.combo_dmm.get(), self.rm_list)[0])
+            self.inst_dmm = self.rm.open_resource(self.adres_cycle(self.combo_dmm.get(), self.rm_list)[0], timeout=1000)
             if self.combo_dmm.get()[:4] in ('ASRL', 'USB0', 'TCPI'):
                 self.inst_dmm.write('SYST:REM')
                 time.sleep(1)
@@ -409,7 +421,7 @@ class MeasControlGUI():
                 self.lb.insert('end', self.data_1)
             self.lb.see('end')
             self.lb.itemconfig('end', bg='light cyan')
-        except:
+        except TypeError:
             self.lb.insert('end', 'Ошибка! Мультиметр не определён')
             self.lb.itemconfig('end', bg='salmon')
 
@@ -468,23 +480,24 @@ class MeasControlGUI():
             for cell in row:
                 if cell.value == '_type':
                     cell.value = self.a1[1].split('_')[0]
-                if cell.value == '_numb':
+                elif cell.value == '_numb':
                     cell.value = self.a1[2]
-                if cell.value == '_customer':
+                elif cell.value == '_customer':
                     cell.value = self.vardict_str['custom'].get()
-                if cell.value == '_temp':
+                elif cell.value == '_temp':
                     cell.value = self.vardict_str['temp'].get()
-                if cell.value == '_hum':
+                elif cell.value == '_hum':
                     cell.value = self.vardict_str['humi'].get()
-                if cell.value == '_pres':
+                elif cell.value == '_pres':
                     cell.value = self.vardict_str['press'].get()
-                if cell.value == '_pov':
+                elif cell.value == '_pov':
                     cell.value = self.vardict_str['pover'].get()
-                if cell.value == '_date':
+                elif cell.value == '_date':
                     cell.value = self.data_today[:10]
 
     def start(self):
         try:
+            self.start_time = datetime.today()
             if self.vardict_boo['gost'].get() == 1:
                 self.a1[1] = '34401A_gost'
             self.progress1.configure(maximum=self.cnt()[self.a1[1]])
@@ -509,6 +522,10 @@ class Call(Thread):
         self.vary1 = vary1
         self.vary2 = vary2
         self.accur = accur
+        self.set_fluk = None
+        self.data_true = None
+        self.data_err = None
+        self.data_error = None
         self.start()
 
     def v7_78_agilent(self):
@@ -519,6 +536,7 @@ class Call(Thread):
             my_gui.inst_fluke.write(my_gui.calbr[self.name]+self.vfluke+my_gui.calbr['res4'])
         else:
             my_gui.inst_fluke.write(my_gui.calbr[self.name]+self.vfluke)
+        time.sleep(1)
         my_gui.inst_fluke.write(my_gui.calbr['ON'])
         time.sleep(self.vary2)
         my_gui.inst_dmm.write('READ?')
@@ -540,9 +558,9 @@ class Call(Thread):
         elif self.vfluke.split(' ')[1] in ('GOHM', 'GOHM;'):
             self.data_true = data_0 / 1E+9
         elif self.vfluke.split(' ')[1] == 'NF':
-            self.data_true = (data_0 - VARCAP) * 1E+9
+            self.data_true = (data_0 - my_gui.varcap) * 1E+9
         elif self.vfluke.split(' ')[1] == 'UF':
-            self.data_true = (data_0 - VARCAP) * 1E+6
+            self.data_true = (data_0 - my_gui.varcap) * 1E+6
 
         if self.name == 'fr':
             self.set_fluk = float(self.vfluke.split(' ')[2])
@@ -593,8 +611,7 @@ class Call(Thread):
 
     def run(self):
         sem.acquire()
-        global COUNT
-        my_gui.statusbar["text"] = f'Статус: работа   Прогресс: {COUNT} из {my_gui.cnt()[my_gui.a1[1]]}'
+        my_gui.statusbar["text"] = f'Статус: работа   Прогресс: {my_gui.count} из {my_gui.cnt()[my_gui.a1[1]]}'
         my_gui.lb2.delete(0, 'end')
         my_gui.lb2.insert('end', f'Режим измерения: {self.name.upper()}')
         my_gui.lb2.insert('end', 'Установлено: ' + self.vfluke)
@@ -622,13 +639,12 @@ class Call(Thread):
                             cell.fill = my_gui.colour_cell
                             tree2_img = my_gui.img3
 
-        my_gui.entry_in_cell()
         my_gui.tree2.insert('', 0, text='', image=tree2_img, values=(self.vfluke,round(self.data_true,4),self.data_err,f'±{self.accur}'))
         my_gui.wb.save('{}\\Protocol\\Multimeter\\{}'.format(my_gui.folder_1,my_gui.vardict_str['name_protokol'].get()))
         my_gui.inst_fluke.write(my_gui.calbr['OFF'])
         time.sleep(1)
         my_gui.progress1.step(1)
-        COUNT += 1
+        my_gui.count += 1
         sem.release()
 
 # ====================================== Oscilloscop ======================================
@@ -697,7 +713,6 @@ class Param_tds2(Thread):
 
     def run(self):
         sem.acquire()
-        global tdiv_2
         if self.name == '1':
             my_gui.inst_dmm.write('SEL:CH1 ON')
             my_gui.inst_dmm.write('SEL:CH2 OFF')
@@ -726,14 +741,14 @@ class Param_tds2(Thread):
         my_gui.inst_dmm.write('TRIG:MAI:LEV 0')        # уровень запуска
         if self.rezfluke == 'SCOP:SHAP MARK':
             my_gui.query(self.ffluke)
-            tdiv_2 = self.ffluke.split(' ')[1]
+            my_gui.tdiv_2 = self.ffluke.split(' ')[1]
         elif self.rezfluke == 'SCOP:SHAP EDGE':
             my_gui.query("PAR:EDGE:TRAN RIS")
             my_gui.query("PAR:EDGE:SPE 500E-12")
             my_gui.inst_dmm.write(f'CH{self.name}:VOL 0.1')
             my_gui.inst_dmm.write(f'CH{self.name}:POS 2')
             my_gui.inst_dmm.write('TRIG:MAI:LEV -0.2')
-            tdiv_2 = self.tdiv.split(' ')[1]
+            my_gui.tdiv_2 = self.tdiv.split(' ')[1]
         my_gui.inst_dmm.write(self.tdiv)
         my_gui.inst_dmm.write('TRIG:MAI:MOD AUTO')
         my_gui.inst_dmm.write(f'TRIG:MAI:EDGE:SOU CH{self.name}')
@@ -834,10 +849,10 @@ class Call_oscill(Thread):
         if self.vosc2 in ('MEASU:MEAS1:VAL?'):
             data_error = ((data_true - float(self.vfluk.split(' ')[1])) / float(self.vfluk.split(' ')[1])) * 100
         elif self.vosc2 == 'MEASU:MEAS3:VAL?':
-            data_error = data_true - float(tdiv_2)
-            data_true = data_true * float(f'1E+{tdiv_2[-1:]}')
+            data_error = data_true - float(my_gui.tdiv_2)
+            data_true = data_true * float(f'1E+{my_gui.tdiv_2[-1:]}')
         elif self.vosc2 == 'MEASU:MEAS4:VAL?':
-            data_true = data_true * float(f'1E+{tdiv_2[-1:]}')
+            data_true = data_true * float(f'1E+{my_gui.tdiv_2[-1:]}')
             data_error = None
 
         for row in my_gui.ws.rows:
@@ -892,8 +907,7 @@ class Call_oscill(Thread):
 
     def run(self):
         sem.acquire()
-        global COUNT
-        my_gui.statusbar["text"] = f'Статус: работа   Прогресс: {COUNT} из {my_gui.cnt()[my_gui.a1[1]]}'
+        my_gui.statusbar["text"] = f'Статус: работа   Прогресс: {my_gui.count} из {my_gui.cnt()[my_gui.a1[1]]}'
         my_gui.lb2.delete(0, 'end')
         my_gui.lb2.insert('end', '{} канал, напряжение {} Вольт'.format(self.vosc1.split(':')[0][-1],self.vfluk.split(' ')[1]))
         my_gui.lb2.see('end')
@@ -907,13 +921,13 @@ class Call_oscill(Thread):
             self.call_tds2()
         elif my_gui.a1[1] in ('MSO-X 3034A', 'MSO-X 3104T'):
             self.call_msox_3()
-
+        
         my_gui.entry_in_cell()
         my_gui.wb.save('{}\\Protocol\\Oscilloscope\\{}'.format(my_gui.folder_1,my_gui.vardict_str['name_protokol'].get()))
         my_gui.query("OUTP:STAT OFF")
         time.sleep(1)
         my_gui.progress1.step(1)
-        COUNT += 1
+        my_gui.count += 1
         sem.release()
 # ============================================================================
 class Message(Thread):
@@ -960,12 +974,11 @@ class cap(Thread):
 
     def run(self):
         sem.acquire()
-        global VARCAP
         my_gui.inst_dmm.write('CONF:CAP')
         time.sleep(5)
         my_gui.inst_dmm.write('READ?')
         time.sleep(5)
-        VARCAP = float(my_gui.inst_dmm.read())
+        my_gui.varcap = float(my_gui.inst_dmm.read())
         time.sleep(1)
         my_gui.progress1.step(1)
         sem.release()
@@ -991,18 +1004,21 @@ class Clear_merge(Thread):
 
     def run(self):
         sem.acquire()
+        my_gui.entry_in_cell()
         my_gui.date_time()
+        stop_time = datetime.today()
         self.clear_rows()
         time.sleep(1)
         self.merged_cells()
         time.sleep(1)
         my_gui.wb.save('{}\\Protocol\\Multimeter\\{}'.format(my_gui.folder_1,my_gui.vardict_str['name_protokol'].get()))
         my_gui.lb.insert('end', f'Время окончания: {my_gui.data_today[11:]}')
+        my_gui.lb.insert('end', f'Время поверки: {stop_time - my_gui.start_time}')
         sem.release()
 
 root = tk.Tk()
 my_gui = MeasControlGUI(root)
 if __name__ == '__main__':
     my_gui.cnt()
-    my_gui.pribor()
+    my_gui.pribor('')
     root.mainloop()

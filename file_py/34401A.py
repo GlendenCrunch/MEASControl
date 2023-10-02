@@ -42,7 +42,7 @@ if self.vardict_boo['r2_var'].get() == 1:
 if self.vardict_boo['r4_var'].get() == 1:
     Message('Подключите провода по четырехпроводной схеме\n для измерения сопротивления')
     Call('res','100 OHM', 'CONF:FRES 100', 'r4_1', '', 'DET:BAND 20', 4, 0.014)
-    Call('res','1 kOHM4', 'CONF:FRES 1 KOHM', 'r4_2', '', 'DET:BAND 20', 4, 0.0001)
+    Call('res','1 kOHM', 'CONF:FRES 1 KOHM', 'r4_2', '', 'DET:BAND 20', 4, 0.0001)
     Call('res','10 kOHM', 'CONF:FRES 10 KOHM', 'r4_3', '', 'DET:BAND 20', 4, 0.0011)
     Call('res','100 kOHM', 'CONF:FRES 100 KOHM', 'r4_4', '', 'DET:BAND 20', 4, 0.011)
 if self.vardict_boo['dci_var'].get() == 1:
