@@ -1,6 +1,6 @@
 spec: "1.0"
 devices:
-  FLUKE:
+  FLUKE 5522A:
     eom:
       ASRL INSTR:
         q: "\r"
@@ -39,7 +39,7 @@ devices:
   Agilent 34401:
     eom:
       ASRL INSTR:
-        q: "\r\n"
+        q: "\n"
         r: "\n"
     error: ERROR
     dialogues:
@@ -167,7 +167,7 @@ devices:
   Agilent 34411:
     eom:
       ASRL INSTR:
-        q: "\r\n"
+        q: "\n"
         r: "\n"
     error: ERROR
     dialogues:
@@ -175,8 +175,105 @@ devices:
         r: "Keysight Tehnologies,34411A,MY56432975,A.02.17-02.41"
       - q: "READ?"
         r: 1
-        sources: [{source_name: "ASRL10::INSTR",
-                  source_parameter: amplitude}]
+      - q: "SYST:REM"
+      - q: "*RST"
+      - q: "*CLS"
+    properties:
+      *agilent_34
+  Agilent 34410:
+    eom:
+      ASRL INSTR:
+        q: "\n"
+        r: "\n"
+    error: ERROR
+    dialogues:
+      - q: "*IDN?"
+        r: "Keysight Tehnologies,34410A,MY56212871,A.02.17-02.42"
+      - q: "READ?"
+        r: 1
+      - q: "SYST:REM"
+      - q: "*RST"
+      - q: "*CLS"
+    properties:
+      *agilent_34
+  Agilent 34460:
+    eom:
+      ASRL INSTR:
+        q: "\n"
+        r: "\n"
+    error: ERROR
+    dialogues:
+      - q: "*IDN?"
+        r: "Keysight Tehnologies,34460A,MY56242976,A.02.17-02.54"
+      - q: "READ?"
+        r: 1
+      - q: "SYST:REM"
+      - q: "*RST"
+      - q: "*CLS"
+    properties:
+      *agilent_34
+  Agilent 34461:
+    eom:
+      ASRL INSTR:
+        q: "\n"
+        r: "\n"
+    error: ERROR
+    dialogues:
+      - q: "*IDN?"
+        r: "Keysight Tehnologies,34461A,MY56452971,A.02.17-02.32"
+      - q: "READ?"
+        r: 1
+      - q: "SYST:REM"
+      - q: "*RST"
+      - q: "*CLS"
+    properties:
+      *agilent_34
+  Agilent 34465:
+    eom:
+      ASRL INSTR:
+        q: "\n"
+        r: "\n"
+    error: ERROR
+    dialogues:
+      - q: "*IDN?"
+        r: "Keysight Tehnologies,34465A,MY56954977,A.02.17-02.37"
+      - q: "READ?"
+        r: 1
+      - q: "SYST:REM"
+      - q: "*RST"
+      - q: "*CLS"
+    properties:
+      *agilent_34
+  Agilent 34470:
+    eom:
+      ASRL INSTR:
+        q: "\n"
+        r: "\n"
+    error: ERROR
+    dialogues:
+      - q: "*IDN?"
+        r: "Keysight Tehnologies,34470A,MY53564974,A.02.17-02.30"
+      - q: "READ?"
+        r: 1
+      - q: "SYST:REM"
+      - q: "*RST"
+      - q: "*CLS"
+    properties:
+      *agilent_34
+  V7-78/1:
+    eom:
+      ASRL INSTR:
+        q: "\n"
+        r: "\n"
+      USB INSTR:
+        q: "\n"
+        r: "\n"
+    error: ERROR
+    dialogues:
+      - q: "*IDN?"
+        r: "Prist,V7-78/1,1,03.02-01-04"
+      - q: "READ?"
+        r: 1
       - q: "SYST:REM"
       - q: "*RST"
       - q: "*CLS"
@@ -185,20 +282,58 @@ devices:
   WJ312A:
     eom:
       ASRL INSTR:
-        q: "\r\n"
+        q: "\n"
         r: "\n"
     error: ERROR
     dialogues:
       - q: "*IDN?"
         r: "Lecroy,WJ312A,13456444"
       - q: "SYST:REM"
+  DSO9104A:
+    eom:
+      USB INSTR:
+        q: "\n"
+        r: "\n"
+    error: ERROR
+    dialogues:
+      - q: "*IDN?"
+        r: "Agilent Technologies,DSO9104A,MY52460118,04.10.0004"
+      - q: "SYST:REM"
+  AKIP-4131/1A:
+    eom:
+      USB INSTR:
+        q: "\n"
+        r: "\n"
+    error: ERROR
+    dialogues:
+      - q: "*IDN?"
+        r: "Siglent Technologies,AKIP-4131/1A,SDSMMFCX6R5397,8.3.6.1.37R8"
+      - q: "SYST:REM"
 
 resources:
   ASRL10::INSTR:
-    device: FLUKE
+    device: FLUKE 5522A
   ASRL9::INSTR:
     device: Agilent 34401
   ASRL8::INSTR:
     device: Agilent 34411
   ASRL7::INSTR:
+    device: Agilent 34410
+  ASRL6::INSTR:
+    device: Agilent 34460
+  ASRL5::INSTR:
+    device: Agilent 34461
+  ASRL4::INSTR:
+    device: Agilent 34465
+  ASRL3::INSTR:
+    device: Agilent 34470
+  ASRL2::INSTR:
+    device: V7-78/1
+  ASRL1::INSTR:
     device: WJ312A
+  USB0::0x0957::0x900B::MY52460118::INSTR:
+    device: DSO9104A
+  USB0::0xF4EC::0x1006::SDSMMFCX6R5397::INSTR:
+    device: AKIP-4131/1A
+  USB0::0x164E::0x0DAD::TW00005747::INSTR:
+    device: V7-78/1

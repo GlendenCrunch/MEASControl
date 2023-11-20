@@ -62,7 +62,7 @@ if self.vardict_boo['acv_var'].get() == 1:
     Call('acv', '1 V, 100 kHz', 'CONF:VOLT:AC 10', 'acv_33', '', 'DET:BAND 20', 4, 0.014)
     Call('acv', '5 V, 10 Hz', 'CONF:VOLT:AC 10', 'acv_34', '', 'DET:BAND 3', 4, 0.0205)
     Call('acv', '5 V, 1 kHz', 'CONF:VOLT:AC 10', 'acv_35', '', 'DET:BAND 20', 4, 0.006)
-    Call('acv', '5 V, 50 kHz', 'CONF:VOLT:AC 10', 'acv_36', '', 'DET:BAND 20', 4, 05.011)
+    Call('acv', '5 V, 50 kHz', 'CONF:VOLT:AC 10', 'acv_36', '', 'DET:BAND 20', 4, 0.011)
     Call('acv', '5 V, 100 kHz', 'CONF:VOLT:AC 10', 'acv_37', '', 'DET:BAND 20', 4, 0.038)
     Call('acv', '10 V, 10 Hz', 'CONF:VOLT:AC 10', 'acv_38', '', 'DET:BAND 3', 4, 0.038)
     Call('acv', '10 V, 1 kHz', 'CONF:VOLT:AC 10', 'acv_39', '', 'DET:BAND 20', 4, 0.009)
