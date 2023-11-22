@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-for j in range(4,5,1):
+for j in range(1,5,1):
     # dcv
     Message(f'Подключите формирователь без вешней нагрузки на КАНАЛ №{j} осциллографа')
     Reset()

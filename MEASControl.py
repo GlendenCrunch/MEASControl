@@ -255,7 +255,7 @@ class MeasControlGUI():
         text2 = ('Agilent/Keysight:\r34401A\r34410A\r34411A\r34420A\r34460A\r34461A\r34465A\r34470A')
         text3 = ('AKIP:\rV7-78/1\r\r\r\r\r\r\r\r')
         text4 = ('Lecroy:\rWaveJet 312A\rHDO8108A\r\r\r\r\r\r\r')
-        text5 = ('Tektronix:\rTDS2002\rTDS2014\rTDS2014B\rTDS2024C\r\r\r\r\r')
+        text5 = ('Tektronix:\rTDS2002\rTDS2014\rTDS2024\rTDS2014B\rTDS2024C\r\r\r\r')
         text6 = ('Agilent/Keysight:\rMSO-X 3034A\rMSO-X 3054A\rDSO6102A\rDSO9104A\r\r\r\r\r')
         text7 = ('Siglent:\rAKIP-4119/1\rAKIP-4131/1A\r\r\r\r\r\r\r')
 
@@ -349,15 +349,15 @@ class MeasControlGUI():
 
     def cnt(self):
         cnt_dict = {}
-        cnt_list = ['34401A', '34401A_gost', '34420A', '34410A', '34411A', '34460A', '34461A', '34465A', '34470A', 'V7-78-1',
-                    'WJ312A', 'TDS2002', 'TDS2014', 'TDS2014B', 'TDS2024C', 'MSO-X3034A', 'MSO-X3054A', 'MSO-X3104T', 'DSO6102A', 
-                    'DSO9104A', 'AKIP-4119-1', 'AKIP-4131-1A', 'AKIP-4131-2A', 'HDO8108A']
-
+        cnt_dict0 = {'34401A':1, '34401A_gost':1, '34420A':1, '34410A':1, '34411A':1, '34460A':1, '34461A':1, '34465A':1, '34470A':1, 'V7-78-1':1,
+                    'WJ312A':2, 'TDS2002':2, 'TDS2014':4, 'TDS2014B':4, 'TDS2024':4, 'TDS2024C':4, 'MSO-X3034A':4, 'MSO-X3054A':4, 'MSO-X3104T':4, 
+                    'DSO6102A':2, 'DSO9104A':4, 'AKIP-4119-1':4, 'AKIP-4131-1A':4, 'AKIP-4131-2A':4, 'HDO8108A':8}
+        
         for item_0 in ['Call(', 'Call_oscill(', 'Call_DSO9000']:
-            for item_i in cnt_list:
+            for item_i in list(cnt_dict0.keys()):
                 osc_item = sum(1 for line in open(f'{self.folder_1}\\file_py\\{item_i}.py', encoding='utf-8') if line.lstrip().startswith(item_0))
                 if osc_item > 0:
-                    cnt_dict[item_i] = osc_item
+                    cnt_dict[item_i] = osc_item * cnt_dict0[item_i]
 
         return cnt_dict
 
@@ -423,7 +423,7 @@ class MeasControlGUI():
                 self.chkbtn_1.place(x=0,y=40)
             if self.a1[1] in ('34401A', '34410A', '34411A', '34420A', '34460A', '34461A', '34465A', '34470A', 'V7-78-1'):
                 self.a10 = f'Мультиметр {self.a1[1]} подключен'
-            elif self.a1[1] in ('WJ312A', 'TDS2002', 'TDS2014', 'TDS2014B', 'TDS2024C', 'MSO-X3034A', 'MSO-X3104T', 'MSO-X3054A',
+            elif self.a1[1] in ('WJ312A', 'TDS2002', 'TDS2014', 'TDS2014B', 'TDS2024', 'TDS2024C', 'MSO-X3034A', 'MSO-X3104T', 'MSO-X3054A',
                                 'DSO6102A', 'DSO9104A', 'AKIP-4119-1', 'AKIP-4131-1A', 'AKIP-4131-2A', 'HDO8108A'):
                 self.a10 = f'Осциллограф {self.a1[1]} подключен'
                 self.fluk_on.configure(command=self.connect_fluke_9500)
@@ -868,7 +868,7 @@ class Param_osc(Thread):
             self.param_dso6()
         elif my_gui.a1[1] == 'DSO9104A':
             self.param_dso9()
-        elif my_gui.a1[1] in ('TDS2002', 'TDS2014', 'TDS2014B', 'TDS2024C'):
+        elif my_gui.a1[1] in ('TDS2002', 'TDS2014', 'TDS2014B', 'TDS2024', 'TDS2024C'):
             self.param_tds2()
         elif my_gui.a1[1] in ('AKIP-4119-1', 'AKIP-4131-1A', 'AKIP-4131-2A'):
             self.param_akip4131()
@@ -1167,7 +1167,7 @@ class Call_oscill(Thread):
             self.call_wj312()
         elif my_gui.a1[1] == 'HDO8108A':
             self.call_hdo8108()
-        elif my_gui.a1[1] in ('TDS2002', 'TDS2014', 'TDS2014B', 'TDS2024C'):
+        elif my_gui.a1[1] in ('TDS2002', 'TDS2014', 'TDS2014B', 'TDS2024', 'TDS2024C'):
             self.call_tds2()
         elif my_gui.a1[1] in ('MSO-X3034A', 'MSO-X3054A','MSO-X3104T'):
             self.call_msox_3()
@@ -1313,7 +1313,7 @@ class Reset(Thread):
         if my_gui.b1[1] == '9500B':
             my_gui.query('*CLS')
             my_gui.query('*RST')
-            if my_gui.a1[1] in ('TDS2002', 'TDS2014', 'TDS2014B', 'TDS2024C'):
+            if my_gui.a1[1] in ('TDS2002', 'TDS2014', 'TDS2014B', 'TDS2024', 'TDS2024C'):
                 my_gui.inst_dmm.write('ACQuire:STATE RUN')
         else:
             my_gui.inst_fluke.write('*CLS')
