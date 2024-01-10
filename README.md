@@ -9,7 +9,7 @@
   + АКИП: В7-78/1
 + Поддерживаемые осциллографы:
   + Keysight/Agilent: MSO-X 3034A, MSO-X 3054A, MSO-X 3104A, DSO6102A, DSO9104A
-  + Tektronix: TDS2002, TDS2014, TDS2014B, TDS2014C, TDS2024, TDS2024C
+  + Tektronix: TDS2002, TDS2014, TDS2014B, TDS2014C, TDS2024, TDS2024C, TPS2024
   + Siglent: AKIP4119/1, AKIP4131/1A
   + Lecroy: WJ312A, HDO8108A
 + Виртуальные приборы (pyvisa-sim):
