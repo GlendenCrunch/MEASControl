@@ -12,6 +12,7 @@
   + Tektronix: TDS2002, TDS2014, TDS2014B, TDS2014C, TDS2024, TDS2024C, TPS2024
   + Siglent: AKIP4119/1, AKIP4131/1A
   + Lecroy: WJ312A, HDO8108A
+  + R&S: RTO1024
 + Виртуальные приборы (pyvisa-sim):
   + Agilent 34401A (ASRL9::INSTR)
   + Agilent 34411A (ASRL8::INSTR)

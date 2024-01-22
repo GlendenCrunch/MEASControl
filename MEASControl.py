@@ -250,7 +250,7 @@ class MeasControlGUI():
         self.top.geometry(size_win.format(win_width, win_high))
 
     def about_win(self):
-        self.win_one(self.lang['add_cascade_4'], '540x350+{}+{}')
+        self.win_one(self.lang['add_cascade_4'], '600x350+{}+{}')
         text1 = ('MEASControl\rVersion: 1.10\rDate: 2023-10-31\rAutor: g1enden (I T L)')
         text2 = ('Agilent/Keysight:\r34401A\r34410A\r34411A\r34420A\r34460A\r34461A\r34465A\r34470A')
         text3 = ('AKIP:\rV7-78/1\r\r\r\r\r\r\r\r')
@@ -258,6 +258,7 @@ class MeasControlGUI():
         text5 = ('Tektronix:\rTDS2002\rTDS2014(B,C)\rTDS2024(B,C)\rTPS2024\r\r\r\r\r')
         text6 = ('Agilent/Keysight:\rMSO-X 3104A\rMSO-X 3034A\rMSO-X 3054A\rDSO6102A\rDSO9104A\r\r\r\r')
         text7 = ('Siglent:\rAKIP-4119/1\rAKIP-4131/1A\r\r\r\r\r\r\r')
+        text8 = ('R&S:\rRTO1024\r\r\r\r\r\r\r\r')
 
         top_1 = tk.Frame(self.top, height=70, relief="raise")
         top_1.pack(side='top', fill='x')
@@ -285,8 +286,10 @@ class MeasControlGUI():
         support_5.grid(row=0, column=3)
         support_6 = tk.Label(lbf6, text=text6, font=('arial', 10), foreground='deepskyblue4')
         support_6.grid(row=0, column=4)
-        support_6 = tk.Label(lbf6, text=text7, font=('arial', 10), foreground='deepskyblue4')
-        support_6.grid(row=0, column=5)
+        support_7 = tk.Label(lbf6, text=text7, font=('arial', 10), foreground='deepskyblue4')
+        support_7.grid(row=0, column=5)
+        support_8 = tk.Label(lbf6, text=text8, font=('arial', 10), foreground='deepskyblue4')
+        support_8.grid(row=0, column=6)
 
         _button = tk.Button(bottom_1, text=self.lang['Button_7'], width=10, fg='#fff', bg=self.bg_button, font=self.ar12b, command=self.top.destroy)
         _button.place(x=200,y=2)
@@ -351,7 +354,8 @@ class MeasControlGUI():
         cnt_dict = {}
         cnt_dict0 = {'34401A':1, '34401A_gost':1, '34420A':1, '34410A':1, '34411A':1, '34460A':1, '34461A':1, '34465A':1, '34470A':1, 'V7-78-1':1,
                     'WJ312A':2, 'TDS2002':2, 'TDS2014':4, 'TDS2014C':4, 'TDS2014B':4, 'TDS2024':4, 'TDS2024B':4, 'TDS2024C':4, 'TPS2024':4, 'MSO-X3034A':4, 
-                    'MSO-X3054A':4, 'MSO-X3104T':4, 'MSO-X3104A':4, 'DSO6102A':2, 'DSO9104A':4, 'AKIP-4119-1':4, 'AKIP-4131-1A':4, 'AKIP-4131-2A':4, 'HDO8108A':8}
+                    'MSO-X3054A':4, 'MSO-X3104T':4, 'MSO-X3104A':4, 'DSO6102A':2, 'DSO9104A':4, 'AKIP-4119-1':4, 'AKIP-4131-1A':4, 'AKIP-4131-2A':4, 'HDO8108A':8,
+                    'RTO':4}
         
         for item_0 in ['Call(', 'Call_oscill(', 'Call_DSO9000']:
             for item_i in list(cnt_dict0.keys()):
@@ -424,7 +428,8 @@ class MeasControlGUI():
             if self.a1[1] in ('34401A', '34410A', '34411A', '34420A', '34460A', '34461A', '34465A', '34470A', 'V7-78-1'):
                 self.a10 = f'Мультиметр {self.a1[1]} подключен'
             elif self.a1[1] in ('WJ312A', 'TDS2002', 'TDS2014', 'TDS2014C', 'TDS2014B', 'TDS2024', 'TDS2024B', 'TDS2024C', 'TPS2024', 'MSO-X3034A',
-                                'MSO-X3104T', 'MSO-X3054A', 'MSO-X3104A','DSO6102A', 'DSO9104A', 'AKIP-4119-1', 'AKIP-4131-1A', 'AKIP-4131-2A', 'HDO8108A'):
+                                'MSO-X3104T', 'MSO-X3054A', 'MSO-X3104A','DSO6102A', 'DSO9104A', 'AKIP-4119-1', 'AKIP-4131-1A', 'AKIP-4131-2A', 'HDO8108A',
+                                'RTO'):
                 self.a10 = f'Осциллограф {self.a1[1]} подключен'
                 self.fluk_on.configure(command=self.connect_fluke_9500)
                 self.lab1.place(x=40,y=55)
@@ -433,7 +438,8 @@ class MeasControlGUI():
                 self.spinbox2.place(x=133, y=85)
             if self.a1[1] == 'DSO9104A':
                 self.lbf3.place(x=405, y=5)
-
+            if self.a1[1] == 'RTO':
+                self.a1[2] = self.a1[2].split('/')[1]
             self.vardict_str['name_protokol'].set(f'{self.data_today},{self.a1[1]},{self.a1[2]}.xlsx')
             self.lab3['text'] = f'Тип: {self.a1[1]}'
             self.lab4['text'] = f'Зав.№: {self.a1[2]}'
@@ -620,31 +626,34 @@ class Call(Thread):
         my_gui.inst_dmm.write(self.vary2)
         time.sleep(1)
         if len(self.vfluke) > 0:
-            my_gui.inst_fluke.write(self.vfluke)
-            my_gui.inst_fluke.write('OPER')
+            if self.confdmm == 'CONF:FRES':
+                my_gui.inst_fluke.write(my_gui.calbr[self.name]+self.vfluke+my_gui.calbr['res4'])
+            else:
+                my_gui.inst_fluke.write(my_gui.calbr[self.name] + self.vfluke)
+            my_gui.inst_fluke.write(my_gui.calbr['ON'])
         time.sleep(5)
         my_gui.inst_dmm.write('READ?')
         time.sleep(2)
         data_0 = float(my_gui.inst_dmm.read())
         self.data_true = data_0
         if self.name == 'dcv':
-            if self.vfluke.split(' ')[2] == 'mV':
+            if self.vfluke.split(' ')[1] == 'mV':
                 self.data_true = data_0 * 1E+3
-                self.data_error = (self.data_true - float(self.vfluke.split(' ')[1])) * 1E+3
+                self.data_error = (self.data_true - float(self.vfluke.split(' ')[0])) * 1E+3
             else:
                 if self.accur.split(' ')[1] == 'u':
-                    self.data_error = (self.data_true - float(self.vfluke.split(' ')[1])) * 1E+6
+                    self.data_error = (self.data_true - float(self.vfluke.split(' ')[0])) * 1E+6
                 elif self.accur.split(' ')[1] == 'm':
-                    self.data_error = (self.data_true - float(self.vfluke.split(' ')[1])) * 1E+3
+                    self.data_error = (self.data_true - float(self.vfluke.split(' ')[0])) * 1E+3
         elif self.name == 'r':
-            if self.vfluke.split(' ')[2] == 'kOHM;':
+            if self.vfluke.split(' ')[1] == 'kOHM;':
                 self.data_true = data_0 / 1E+3
-            elif self.vfluke.split(' ')[2] == 'MOHM;':
+            elif self.vfluke.split(' ')[1] == 'MOHM;':
                 self.data_true = data_0 / 1E+6
             if self.accur in ('72 u', '620 u', '62 m', '620 m', '74 Ohm'):
-                self.data_error = (self.data_true - float(self.vfluke.split(' ')[1])) * 1E+6
+                self.data_error = (self.data_true - float(self.vfluke.split(' ')[0])) * 1E+6
             elif self.accur in ('6.2 m', '6.4 Ohm'):
-                self.data_error = (self.data_true - float(self.vfluke.split(' ')[1])) * 1E+3
+                self.data_error = (self.data_true - float(self.vfluke.split(' ')[0])) * 1E+3
         elif self.name in ('dcv0', 'r0'):
             if self.accur.split(' ')[1] == 'n':
                 self.data_true = data_0 * 1E+3
@@ -864,6 +873,29 @@ class Param_osc(Thread):
         elif self.rezfluke.split(';')[0] == 'SCOP:SHAP SQU':
             my_gui.query('PAR:SQU:POL SYMM')
 
+    def param_rto(self):
+        self.chanel_select(self.name, 4, 'CHAN_:STAT ON', 'CHAN_:STAT OFF')
+        my_gui.query(self.imp)
+        my_gui.query(self.rezfluke)
+        my_gui.inst_dmm.write(self.ffluke)
+        my_gui.inst_dmm.write(self.tdiv)
+        my_gui.inst_dmm.write(f'TRIG1:SOUR CHAN{self.name}')
+        my_gui.inst_dmm.write(f'CHAN{self.name}:WAV1:TYPE HRES')
+        my_gui.inst_dmm.write(f'CHAN{self.name}:WAV1:ARIT AVER')
+
+        if self.rezfluke == 'SCOP:SHAP EDGE':
+            my_gui.query("PAR:EDGE:TRAN RIS")
+            my_gui.query("PAR:EDGE:SPE 150E-12")
+            my_gui.inst_dmm.write(f'CHAN{self.name}:POS 4')
+            my_gui.inst_dmm.write(f'TRIG1:LEV{self.name} -0.15')
+        
+        my_gui.inst_dmm.write('MEAS1 ON')
+        my_gui.inst_dmm.write(f'MEAS1:SOUR C{self.name}W1')
+        my_gui.inst_dmm.write('MEAS1:MAIN MEAN')
+        my_gui.inst_dmm.write('MEAS2 ON')
+        my_gui.inst_dmm.write(f'MEAS2:SOUR C{self.name}W1')
+        my_gui.inst_dmm.write('MEAS2:MAIN RTIM')
+
     def run(self):
         sem.acquire()
         if my_gui.a1[1] == 'WJ312A':
@@ -880,6 +912,8 @@ class Param_osc(Thread):
             self.param_tds2()
         elif my_gui.a1[1] in ('AKIP-4119-1', 'AKIP-4131-1A', 'AKIP-4131-2A'):
             self.param_akip4131()
+        elif my_gui.a1[1] == 'RTO':
+            self.param_rto()
         sem.release()
 # ========================================================================================
 class Call_oscill(Thread):
@@ -1167,6 +1201,35 @@ class Call_oscill(Thread):
                             cell.fill = my_gui.colour_cell
                             self.tree2_img = my_gui.img3
 
+    def call_rto(self):
+        time.sleep(1)
+        if self.cel1[0:4] == 'odcv':
+            my_gui.inst_dmm.write('{}:OFFS {}'.format(self.vosc1.split(':')[0], self.vfluk.split(' ')[1]))
+            time.sleep(2)
+
+        my_gui.inst_dmm.write('ACQ:COUN 1000')
+        time.sleep(2)
+        self.data_true = float(my_gui.inst_dmm.query(self.vosc2))
+        if self.cel1[0:3] == 'dcv':
+            self.data_error = ((self.data_true - float(self.vfluk.split(' ')[1])) / float(self.vfluk.split(' ')[1])) * 100
+            self.data_true = self.data_true * 1000
+        if self.cel1[0:4] == 'odcv':
+            self.data_error = (self.data_true - float(self.vfluk.split(' ')[1])) * 1000
+        if self.cel1[0:2] == 'tr':
+            self.data_true = self.data_true * 1E+12
+            self.data_error = self.data_true
+
+        for row in my_gui.ws.rows:
+            for cell in row:
+                if cell.value == self.cel1:
+                    cell.value = self.data_true
+                    if self.data_error > self.accur or self.data_error < -self.accur:
+                            cell.fill = my_gui.colour_cell
+                            self.tree2_img = my_gui.img3
+
+        my_gui.inst_dmm.write('ACQ:COUN 1')
+
+
     def run(self):
         sem.acquire()
         my_gui.statusbar["text"] = f'Статус: работа   Прогресс: {my_gui.count} из {my_gui.cnt()[my_gui.a1[1]]}'
@@ -1191,6 +1254,8 @@ class Call_oscill(Thread):
             self.call_dso_6()
         elif my_gui.a1[1] in ('AKIP-4119-1', 'AKIP-4131-1A', 'AKIP-4131-2A'):
             self.call_akip4131()
+        elif my_gui.a1[1] == 'RTO':
+            self.call_rto()
 
         #my_gui.entry_in_cell()
         my_gui.tree2.insert('', 0, text='', image=self.tree2_img, values=(self.vfluk.split(' ')[1],round(self.data_true,4),round(self.data_error,4),f'±{self.accur}'))

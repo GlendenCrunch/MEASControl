@@ -7,6 +7,9 @@
         "cap": "OUT ",
         "dci": "OUT ",
         "dcv": "OUT ",
+        "dcv0": "OUT ",
+        "r0": "OUT ",
+        "r": "OUT ",
         "fr": "OUT ",
         "res": "OUT ",
         "res4": "; ZCOMP WIRE4"

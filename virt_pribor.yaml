@@ -260,6 +260,29 @@ devices:
       - q: "*CLS"
     properties:
       *agilent_34
+  Agilent 34420:
+    eom:
+      ASRL INSTR:
+        q: "\n"
+        r: "\n"
+    error: ERROR
+    dialogues:
+      - q: "*IDN?"
+        r: "Keysight Tehnologies,34420A,MY52584914,A.03.17-02.30"
+      - q: "READ?"
+        r: 1
+      - q: "SYST:REM"
+      - q: "*RST"
+      - q: "*CLS"
+    properties:
+      dcv:
+        default: 1.0
+        setter:
+          q: "CONF:VOLT"
+      r4_var:
+        default: 1.0
+        setter:
+          q: "CONF:FRES"
   V7-78/1:
     eom:
       ASRL INSTR:
@@ -328,8 +351,10 @@ resources:
   ASRL3::INSTR:
     device: Agilent 34470
   ASRL2::INSTR:
-    device: V7-78/1
+    device: Agilent 34420
   ASRL1::INSTR:
+    device: V7-78/1
+  ASRL0::INSTR:
     device: WJ312A
   USB0::0x0957::0x900B::MY52460118::INSTR:
     device: DSO9104A
@@ -337,3 +362,5 @@ resources:
     device: AKIP-4131/1A
   USB0::0x164E::0x0DAD::TW00005747::INSTR:
     device: V7-78/1
+
+#Rohde&Schwarz,RTO,1316.1000k24/200404,2.70.1.0
