@@ -74,7 +74,7 @@ for j in range(1,5,1):
     Call_oscill('VOLT 4.5', f'CHAN{j}:SCAL 1', 'MEAS1:ARES?', f'dcv{j}+_50_17', '', 1.5)
     Call_oscill('VOLT -4.5', f'CHAN{j}:SCAL 1', 'MEAS1:ARES?', f'dcv{j}-_50_17', '', 1.5)
     # ofset
-    '''Param_osc(f'{j}', 'ROUT:SIGN:IMP 1E+06', 'SCOP:SHAP DC', 'TIM:SCAL 0.01', f'CHAN{j}:COUP DCLimit')
+    Param_osc(f'{j}', 'ROUT:SIGN:IMP 1E+06', 'SCOP:SHAP DC', 'TIM:SCAL 0.01', f'CHAN{j}:COUP DCLimit')
     Call_oscill('VOLT 0.0009', f'CHAN{j}:SCAL 0.003', 'MEAS1:ARES?', f'odcv{j}_1_1', '', 2.8)
     Call_oscill('VOLT 1', f'CHAN{j}:SCAL 0.003', 'MEAS1:ARES?', f'odcv{j}_1_2', '', 6.3)
     Call_oscill('VOLT -1', f'CHAN{j}:SCAL 0.003', 'MEAS1:ARES?', f'odcv{j}_1_3', '', 6.3)
@@ -127,7 +127,7 @@ for j in range(1,5,1):
     # trise
     Reset()
     Param_osc(f'{j}', 'ROUT:SIGN:IMP 50', 'SCOP:SHAP EDGE', 'TIM:SCAL 0.00000000005', f'CHAN{j}:COUP DC')
-    Call_oscill('VOLT 0.4', f'CHAN{j}:SCAL 0.05', 'MEAS2:ARES?', f'tr{j}_1', '', 176.78)'''
+    Call_oscill('VOLT 0.4', f'CHAN{j}:SCAL 0.05', 'MEAS2:ARES?', f'tr{j}_1', '', 176.78)
 
 Message('Калибровка завершена')
 Clear_merge()
