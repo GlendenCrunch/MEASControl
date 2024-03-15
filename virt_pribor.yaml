@@ -332,6 +332,16 @@ devices:
       - q: "*IDN?"
         r: "Siglent Technologies,AKIP-4131/1A,SDSMMFCX6R5397,8.3.6.1.37R8"
       - q: "SYST:REM"
+  RTO1024:
+    eom:
+      TCPIP INSTR:
+        q: "\n"
+        r: "\n"
+      error: ERROR
+      dialogues:
+      - q: "*IDN?"
+        r: "Rohde&Schwarz,RTO,1316.1000k24/200404,2.70.1.0"
+      - q: "SYST:REM"
 
 resources:
   ASRL10::INSTR:
@@ -358,9 +368,15 @@ resources:
     device: WJ312A
   USB0::0x0957::0x900B::MY52460118::INSTR:
     device: DSO9104A
+#  USB0::0x0957::0x173D::MY50340343::INSTR:
+#    device: DSO7034B
   USB0::0xF4EC::0x1006::SDSMMFCX6R5397::INSTR:
     device: AKIP-4131/1A
   USB0::0x164E::0x0DAD::TW00005747::INSTR:
     device: V7-78/1
-
-#Rohde&Schwarz,RTO,1316.1000k24/200404,2.70.1.0
+#  TCPIP0::localhost:2222::inst0::INSTR:
+#    device: RTO1024
+#  TCPIP::localhost::1001::SOCKET:
+#    device: RTO1024
+# 169.255.1.0
+# TCPIP::10.2.17.130::2049::SOCKET

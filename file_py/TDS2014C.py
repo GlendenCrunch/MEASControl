@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-for j in range(3,5,1):
+for j in range(1,5,1):
     # dcv
     Message(f'Подключите формирователь без вешней нагрузки на КАНАЛ №{j} осциллографа')
     Reset()
@@ -74,7 +74,7 @@ for j in range(3,5,1):
     Call_oscill('VOLT 2.9', f'CH{j}:VOL 0.5\nTRIG:MAI:LEV -1.6', 'MEASU:MEAS4:VAL?', f'tr{j}_7', '', 3.5)
     Call_oscill('VOLT 3', f'CH{j}:VOL 1\nTRIG:MAI:LEV -1.6', 'MEASU:MEAS4:VAL?', f'tr{j}_8', '', 3.5)
     Call_oscill('VOLT 3', f'CH{j}:VOL 2\nTRIG:MAI:LEV -1.6', 'MEASU:MEAS4:VAL?', f'tr{j}_9', '', 3.5)
-    Call_oscill('VOLT 3', f'CH{j}:VOL 5\nTRIG:MAI:LEV -2.2', 'MEASU:MEAS4:VAL?', f'tr{j}_10', '', 3.5)
+    Call_oscill('VOLT 3', f'CH{j}:VOL 5\nTRIG:MAI:LEV -1.8', 'MEASU:MEAS4:VAL?', f'tr{j}_10', '', 3.5)
 
 Message('Калибровка завершена')
 Clear_merge()
