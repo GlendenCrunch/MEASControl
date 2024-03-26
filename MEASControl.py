@@ -256,7 +256,7 @@ class MeasControlGUI():
         text3 = ('AKIP:\rV7-78/1\r\r\r\r\r\r\r\r')
         text4 = ('Lecroy:\rWaveJet 312A\rHDO8108A\r\r\r\r\r\r\r')
         text5 = ('Tektronix:\rTDS2002\rTDS2014(B,C)\rTDS2024(B,C)\rTPS2024\r\r\r\r\r')
-        text6 = ('Agilent/Keysight:\rMSO-X 3104A\rMSO-X 3034A\rMSO-X 3054A\rDSO6102A\rDSO7034B\rDSO9104A\r\r\r')
+        text6 = ('Agilent/Keysight:\rMSO-X 3104A\rMSO-X 3034A\rMSO-X 3054A\rDSO6102A\rDSO7034B\rMSO7104B\rDSO9104A\r\r')
         text7 = ('Siglent:\rAKIP-4119/1\rAKIP-4131/1A\r\r\r\r\r\r\r')
         text8 = ('R&S:\rRTO1024\r\r\r\r\r\r\r\r')
 
@@ -354,7 +354,7 @@ class MeasControlGUI():
         cnt_dict = {}
         cnt_dict0 = {'34401A':1, '34401A_gost':1, '34420A':1, '34410A':1, '34411A':1, '34460A':1, '34461A':1, '34465A':1, '34470A':1, 'V7-78-1':1,
                     'WJ312A':2, 'TDS2002':2, 'TDS2014':4, 'TDS2014C':4, 'TDS2014B':4, 'TDS2024':4, 'TDS2024B':4, 'TDS2024C':4, 'TPS2024':4, 'MSO-X3034A':4, 
-                    'MSO-X3054A':4, 'MSO-X3104T':4, 'MSO-X3104A':4, 'DSO6102A':2, 'DSO9104A':4, 'DSO7034B':4, 'AKIP-4119-1':4, 'AKIP-4131-1A':4, 'AKIP-4131-2A':4,
+                    'MSO-X3054A':4, 'MSO-X3104T':4, 'MSO-X3104A':4, 'DSO6102A':2, 'DSO9104A':4, 'DSO7034B':4, 'MSO7104B':4, 'AKIP-4119-1':4, 'AKIP-4131-1A':4, 'AKIP-4131-2A':4,
                     'HDO8108A':8, 'RTO':4}
         
         for item_0 in ['Call(', 'Call_oscill(', 'Call_DSO9000']:
@@ -428,7 +428,7 @@ class MeasControlGUI():
             if self.a1[1] in ('34401A', '34410A', '34411A', '34420A', '34460A', '34461A', '34465A', '34470A', 'V7-78-1'):
                 self.a10 = f'Мультиметр {self.a1[1]} подключен'
             elif self.a1[1] in ('WJ312A', 'TDS2002', 'TDS2014', 'TDS2014C', 'TDS2014B', 'TDS2024', 'TDS2024B', 'TDS2024C', 'TPS2024', 'MSO-X3034A',
-                                'MSO-X3104T', 'MSO-X3054A', 'MSO-X3104A','DSO6102A', 'DSO9104A', 'DSO7034B', 'AKIP-4119-1', 'AKIP-4131-1A', 'AKIP-4131-2A',
+                                'MSO-X3104T', 'MSO-X3054A', 'MSO-X3104A','DSO6102A', 'DSO9104A', 'DSO7034B', 'MSO7104B', 'AKIP-4119-1', 'AKIP-4131-1A', 'AKIP-4131-2A',
                                 'HDO8108A', 'RTO'):
                 self.a10 = f'Осциллограф {self.a1[1]} подключен'
                 self.fluk_on.configure(command=self.connect_fluke_9500)
@@ -521,6 +521,22 @@ class MeasControlGUI():
             if self.b1[0] == 'Fluke':
                 self.query(f"ROUT:SIGN:PATH CH{self.spinbox2.get()}")
                 self.active_head = self.query(f"ROUT:FITT? CH{self.spinbox2.get()}")
+                self.lb.insert('end', self.active_head)
+                self.lb.see('end')
+        except:
+            self.lb.insert('end', 'Формирователь не обнаружен')
+
+    def connect_fluke_9500_(self): # протестировать в следующий раз
+        self.inst_fluke_9500 = self.rm.open_resource(self.combo_flu.get(), baud_rate=115200, data_bits=8, timeout=1, write_termination='\r', read_termination='\n')
+        time.sleep(2)
+        self.inst_fluke_9500.write('++auto 1')
+        self.inst_fluke_9500.write(f'++addr {self.spinbox1.get()}')
+        self.data_2 = self.inst_fluke_9500.query('*IDN?')
+        self.connect_fluke_set()
+        try:
+            if self.b1[0] == 'Fluke':
+                self.inst_fluke_9500.write(f"ROUT:SIGN:PATH CH{self.spinbox2.get()}")
+                self.active_head = self.inst_fluke_9500.query(f"ROUT:FITT? CH{self.spinbox2.get()}")
                 self.lb.insert('end', self.active_head)
                 self.lb.see('end')
         except:
@@ -723,7 +739,10 @@ class Param_osc(Thread):
                 my_gui.inst_dmm.write(f'{b[0]}{i}{b[1]}')
 
     def default_agilent(self):
-        my_gui.inst_dmm.write(f':TRIG:SOUR CHAN{self.name}')
+        if my_gui.a1[1] == 'DSO9104A':
+            my_gui.inst_dmm.write(f':TRIG:EDGE1:SOUR CHAN{self.name}')
+        else:
+            my_gui.inst_dmm.write(f':TRIG:SOUR CHAN{self.name}')
         my_gui.inst_dmm.write(f':MEAS:SOUR CHAN{self.name}')
         my_gui.inst_dmm.write(f'CHAN{self.name}:COUP DC')
         my_gui.inst_dmm.write(f'CHAN{self.name}:PROB 1')
@@ -748,7 +767,7 @@ class Param_osc(Thread):
 
     def param_dso6(self):
         global data_band
-        if my_gui.a1[1] == 'DSO7034B':
+        if my_gui.a1[1] in ('DSO7034B', 'MSO7104B'):
             self.chanel_select(self.name, 4, 'CHAN_:DISP 1', 'CHAN_:DISP 0')
         else:
             self.chanel_select(self.name, 2, 'CHAN_:DISP 1', 'CHAN_:DISP 0')
@@ -907,7 +926,7 @@ class Param_osc(Thread):
             self.param_hdo8108()
         elif my_gui.a1[1] in ('MSO-X3034A', 'MSO-X3054A','MSO-X3104A','MSO-X3104T'):
             self.param_msox3()
-        elif my_gui.a1[1] in ('DSO6102A', 'DSO7034B'):
+        elif my_gui.a1[1] in ('DSO6102A', 'DSO7034B', 'MSO7104B'):
             self.param_dso6()
         elif my_gui.a1[1] == 'DSO9104A':
             self.param_dso9()
@@ -1042,7 +1061,7 @@ class Call_oscill(Thread):
         if self.cel1.split('_')[0][:4] == 'vofs':
             my_gui.inst_dmm.write(f'CHAN{self.vosc1[4]}:OFFS {self.vosc2}')
             self.data_true = float(my_gui.inst_dmm.query('MEAS:VMAX?'))
-            self.data_error = self.data_true
+            self.data_error = (float(self.vosc2) - self.data_true) * 1000
             self.data_true = self.data_true * 1000
             time.sleep(1)
 
@@ -1064,6 +1083,10 @@ class Call_oscill(Thread):
                     cell.value = self.data_true
                     if self.vosc2 in (':MEAS:RIS?', ':MEAN:VRMS?'):
                         if self.data_true > self.accur:
+                            cell.fill = my_gui.colour_cell
+                            self.tree2_img = my_gui.img3
+                    if self.vosc2 == ':MEAS:VAV?':
+                        if self.data_error > self.accur or self.data_error < -self.accur:
                             cell.fill = my_gui.colour_cell
                             self.tree2_img = my_gui.img3
                 if cell.value == self.cel2:
@@ -1256,7 +1279,7 @@ class Call_oscill(Thread):
             self.call_tds2()
         elif my_gui.a1[1] in ('MSO-X3034A', 'MSO-X3054A','MSO-X3104A','MSO-X3104T'):
             self.call_msox_3()
-        elif my_gui.a1[1] in ('DSO6102A', 'DSO7034B'):
+        elif my_gui.a1[1] in ('DSO6102A', 'DSO7034B', 'MSO7104B'):
             self.call_dso_6()
         elif my_gui.a1[1] in ('AKIP-4119-1', 'AKIP-4131-1A', 'AKIP-4131-2A'):
             self.call_akip4131()
@@ -1284,68 +1307,63 @@ class Call_DSO9000(Thread):
         self.cel3 = cel3
         self.cel4 = cel4
         self.accur = accur
+        self.data_true_dmm = None
+        self.data_true_dmm0 = None
+        self.data_true0 = None
         self.start()
 
     def call_dso_9(self):
+        time.sleep(1)
+        my_gui.inst_dmm.write(':ACQ:AVER ON; :ACQ:COUN 64')
         time.sleep(2)
-        my_gui.inst_dmm.write(':ACQ:AVER ON; :ACQ:COUN 256')
-        time.sleep(3)
         if self.vosc2 == ':MEAS:VAV?':
-            data_true_dmm0 = None
-            data_true0 = None
             my_gui.inst_dmm2.write(self.vdmm)
             time.sleep(1)
-            my_gui.inst_dmm2.write('READ?')
-            time.sleep(2)
-            data_true_dmm = float(my_gui.inst_dmm2.read()) * 1000
-            time.sleep(1)
+            my_gui.inst_dmm2.write('MEAS:VOLT:DC?')
+            self.data_true_dmm = float(my_gui.inst_dmm2.read()) * 1000
             self.data_true = float(my_gui.inst_dmm.query(self.vosc2)) * 1000
-            self.data_error = ((self.data_true / data_true_dmm) - 1) * 75
+            self.data_error = ((self.data_true / self.data_true_dmm) - 1) * 75
 
         if self.cel1[0:4] == 'vofs':
             my_gui.inst_dmm.write(f'CHAN{self.vosc1[4]}:OFFS {self.vosc2}')
             my_gui.inst_dmm2.write(self.vdmm)
             time.sleep(1)
-            my_gui.inst_dmm2.write('READ?')
-            time.sleep(2)
-            data_true_dmm = float(my_gui.inst_dmm2.read()) * 1000
-            time.sleep(4)
+            my_gui.inst_dmm2.write('MEAS:VOLT:DC?')
+            self.data_true_dmm = float(my_gui.inst_dmm2.read()) * 1000
             self.data_true = float(my_gui.inst_dmm.query(':MEAS:VAV?')) * 1000
             self.data_error = self.data_true
             time.sleep(1)
-            if self.cel3[0:5] == 'vofs0':
-                my_gui.inst_dmm.write(':ACQ:AVER OFF')
-                time.sleep(1)
-                my_gui.inst_dmm.write(f'CHAN{self.vosc1[4]}:OFFS 0')
-                my_gui.query('OUTP:STAT OFF')
-                time.sleep(1)
-                my_gui.inst_dmm.write(':ACQ:AVER ON; :ACQ:COUN 256')
-                time.sleep(2)
-                my_gui.inst_dmm2.write('READ?')
-                time.sleep(2)
-                data_true_dmm0 = float(my_gui.inst_dmm2.read()) * 1000
-                time.sleep(4)
-                data_true0 = float(my_gui.inst_dmm.query(':MEAS:VAV?')) * 1000
+            my_gui.inst_dmm.write(':ACQ:AVER OFF') # измерения с 0 смещением и выкл выходом
+            time.sleep(1)
+            my_gui.inst_dmm.write(f'CHAN{self.vosc1[4]}:OFFS 0')
+            my_gui.query('OUTP:STAT OFF')
+            time.sleep(1)
+            my_gui.inst_dmm.write(':ACQ:AVER ON; :ACQ:COUN 64')
+            time.sleep(2)
+            my_gui.inst_dmm2.write('MEAS:VOLT:DC?')
+            self.data_true_dmm0 = float(my_gui.inst_dmm2.read()) * 1000
+            self.data_true0 = float(my_gui.inst_dmm.query(':MEAS:VAV?')) * 1000
 
         if self.cel2[0:3] == 'nul':
-            data_true_dmm = None
-            data_true_dmm0 = None
-            data_true0 = None
-            time.sleep(4)
             self.data_true = float(my_gui.inst_dmm.query(':MEAS:VAV?')) * 1000
+            self.data_error = self.data_true
+        
+        if self.vosc2[:11] == (':MEAS:VRMS?'):
+            self.data_true_dmm = (float(self.vfluk.split(' ')[1])* 1000) / (2* math.sqrt(2))
+            self.data_true = float(my_gui.inst_dmm.query(self.vosc2)) * 1000
             self.data_error = self.data_true
 
         for row in my_gui.ws.rows:
             for cell in row:
                 self.tree2_img = my_gui.img2
                 if cell.value == self.cel1:
-                    cell.value = data_true_dmm
+                    cell.value = self.data_true_dmm
                 if cell.value == self.cel2:
                     cell.value = self.data_true
                 if cell.value == self.cel3:
-                    cell.value = data_true_dmm0
+                    cell.value = self.data_true_dmm0
                 if cell.value == self.cel4:
-                    cell.value = data_true0
+                    cell.value = self.data_true0
                     #if self.data_error > self.accur or self.data_error < -self.accur:
                     #    cell.fill = my_gui.colour_cell
 
@@ -1359,12 +1377,12 @@ class Call_DSO9000(Thread):
         my_gui.lb2.see('end')
         my_gui.query(self.vfluk)
         my_gui.inst_dmm.write(self.vosc1)
-        if self.vosc2 == ':MEAS:VAV?' or self.cel1[0:4] == 'vofs':
+        if self.vosc2 == ':MEAS:VAV?' or self.cel1[0:4] == 'vofs' or self.vosc2[:11] == (':MEAS:VRMS?'):
             my_gui.query("OUTP:STAT ON")
 
         if my_gui.a1[1] == 'DSO9104A':
             self.call_dso_9()
-        
+
         my_gui.tree2.insert('', 0, text='', image=self.tree2_img, values=(self.vfluk.split(' ')[1],round(self.data_true,4),round(self.data_error,4),f'±{self.accur}'))
         my_gui.wb.save('{}\\Protocol\\{}'.format(my_gui.folder_1,my_gui.vardict_str['name_protokol'].get()))
         my_gui.query("OUTP:STAT OFF")

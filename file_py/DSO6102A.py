@@ -42,7 +42,7 @@ for j in range(1,3,1):
     Call_oscill('VOLT 75', f'CHAN{j}:SCAL 5', '75', f'vofs{j}+_6', f'gvofs{j}+_6', 2507)
     # trise
     Reset()
-    Param_osc(f'{j}', 'ROUT:SIGN:IMP 50', 'SCOP:SHAP EDGE', 'TIM:SCAL 500E-12', '')
+    Param_osc(f'{j}', 'ROUT:SIGN:IMP 50', 'SCOP:SHAP EDGE', 'TIM:SCAL 0.5E-9', '')
     Call_oscill('VOLT 0.25', f'CHAN{j}:SCAL 0.05', ':MEAS:RIS?', f'tr_{j}', '', 350)
     # band
     Reset()
