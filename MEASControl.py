@@ -256,9 +256,9 @@ class MeasControlGUI():
         text3 = ('AKIP:\rV7-78/1\r\r\r\r\r\r\r\r')
         text4 = ('Lecroy:\rWaveJet 312A\rHDO8108A\r\r\r\r\r\r\r')
         text5 = ('Tektronix:\rTDS2002\rTDS2014(B,C)\rTDS2024(B,C)\rTPS2024\r\r\r\r\r')
-        text6 = ('Agilent/Keysight:\rMSO-X 3104A\rMSO-X 3034A\rMSO-X 3054A\rDSO6102A\rDSO7034B\rMSO7104B\rDSO9104A\r\r')
+        text6 = ('Agilent/Keysight:\rMSO-X 3104A\rMSO-X 3034A\rMSO-X 3054A\rDSO6102A\rDSO7034B\rMSO7104B\rDSO9104A\rMSO9404A\r')
         text7 = ('Siglent:\rAKIP-4119/1\rAKIP-4131/1A\r\r\r\r\r\r\r')
-        text8 = ('R&S:\rRTO1024\r\r\r\r\r\r\r\r')
+        text8 = ('R&S:\rRTO1024\rRTO1044\r\r\r\r\r\r\r')
 
         top_1 = tk.Frame(self.top, height=70, relief="raise")
         top_1.pack(side='top', fill='x')
@@ -354,8 +354,8 @@ class MeasControlGUI():
         cnt_dict = {}
         cnt_dict0 = {'34401A':1, '34401A_gost':1, '34420A':1, '34410A':1, '34411A':1, '34460A':1, '34461A':1, '34465A':1, '34470A':1, 'V7-78-1':1,
                     'WJ312A':2, 'TDS2002':2, 'TDS2014':4, 'TDS2014C':4, 'TDS2014B':4, 'TDS2024':4, 'TDS2024B':4, 'TDS2024C':4, 'TPS2024':4, 'MSO-X3034A':4, 
-                    'MSO-X3054A':4, 'MSO-X3104T':4, 'MSO-X3104A':4, 'DSO6102A':2, 'DSO9104A':4, 'DSO7034B':4, 'MSO7104B':4, 'AKIP-4119-1':4, 'AKIP-4131-1A':4, 'AKIP-4131-2A':4,
-                    'HDO8108A':8, 'RTO':4}
+                    'MSO-X3054A':4, 'MSO-X3104T':4, 'MSO-X3104A':4, 'DSO6102A':2, 'DSO9104A':4, 'MSO9404A':4, 'DSO7034B':4, 'MSO7104B':4, 'AKIP-4119-1':4, 'AKIP-4131-1A':4, 'AKIP-4131-2A':4,
+                    'HDO8108A':8, 'RTO1024':4, 'RTO1044':4}
         
         for item_0 in ['Call(', 'Call_oscill(', 'Call_DSO9000']:
             for item_i in list(cnt_dict0.keys()):
@@ -419,7 +419,6 @@ class MeasControlGUI():
             if self.combo_dmm.get()[:4] in ('ASRL', 'USB0'):
                 self.inst_dmm.write('SYST:REM')
                 time.sleep(1)
-
             self.data_1 = self.inst_dmm.query("*IDN?")
             self.a1 = self.data_1.split(',')
             self.a1[1] = self.a1[1].replace('/', '-').replace(' ', '')
@@ -428,7 +427,7 @@ class MeasControlGUI():
             if self.a1[1] in ('34401A', '34410A', '34411A', '34420A', '34460A', '34461A', '34465A', '34470A', 'V7-78-1'):
                 self.a10 = f'Мультиметр {self.a1[1]} подключен'
             elif self.a1[1] in ('WJ312A', 'TDS2002', 'TDS2014', 'TDS2014C', 'TDS2014B', 'TDS2024', 'TDS2024B', 'TDS2024C', 'TPS2024', 'MSO-X3034A',
-                                'MSO-X3104T', 'MSO-X3054A', 'MSO-X3104A','DSO6102A', 'DSO9104A', 'DSO7034B', 'MSO7104B', 'AKIP-4119-1', 'AKIP-4131-1A', 'AKIP-4131-2A',
+                                'MSO-X3104T', 'MSO-X3054A', 'MSO-X3104A','DSO6102A', 'DSO9104A', 'MSO9404A', 'DSO7034B', 'MSO7104B', 'AKIP-4119-1', 'AKIP-4131-1A', 'AKIP-4131-2A',
                                 'HDO8108A', 'RTO'):
                 self.a10 = f'Осциллограф {self.a1[1]} подключен'
                 self.fluk_on.configure(command=self.connect_fluke_9500)
@@ -436,9 +435,10 @@ class MeasControlGUI():
                 self.lab2.place(x=15,y=85)
                 self.spinbox1.place(x=133, y=55)
                 self.spinbox2.place(x=133, y=85)
-            if self.a1[1] == 'DSO9104A':
+            if self.a1[1] in ('DSO9104A', 'MSO9404A'):
                 self.lbf3.place(x=405, y=5)
             if self.a1[1] == 'RTO':
+                self.a1[1] = self.a1[1]+self.data_1.split(',')[2].split('/')[0].split('.')[1].replace('00k','')
                 self.a1[2] = self.a1[2].split('/')[1]
             self.vardict_str['name_protokol'].set(f'{self.data_today},{self.a1[1]},{self.a1[2]}.xlsx')
             self.lab3['text'] = f'Тип: {self.a1[1]}'
@@ -907,10 +907,13 @@ class Param_osc(Thread):
 
         if self.rezfluke == 'SCOP:SHAP EDGE':
             my_gui.query("PAR:EDGE:TRAN RIS")
-            my_gui.query("PAR:EDGE:SPE 150E-12")
+            if my_gui.a1[1] == 'RTO1024':
+                my_gui.query("PAR:EDGE:SPE 150E-12")
+            elif my_gui.a1[1] == 'RTO1044':
+                my_gui.query("PAR:EDGE:SPE 25E-12")
             my_gui.inst_dmm.write(f'CHAN{self.name}:POS 4')
             my_gui.inst_dmm.write(f'TRIG1:LEV{self.name} -0.15')
-        
+
         my_gui.inst_dmm.write('MEAS1 ON')
         my_gui.inst_dmm.write(f'MEAS1:SOUR C{self.name}W1')
         my_gui.inst_dmm.write('MEAS1:MAIN MEAN')
@@ -928,13 +931,13 @@ class Param_osc(Thread):
             self.param_msox3()
         elif my_gui.a1[1] in ('DSO6102A', 'DSO7034B', 'MSO7104B'):
             self.param_dso6()
-        elif my_gui.a1[1] == 'DSO9104A':
+        elif my_gui.a1[1] in ('DSO9104A', 'MSO9404A'):
             self.param_dso9()
         elif my_gui.a1[1] in ('TDS2002', 'TDS2014', 'TDS2014C', 'TDS2014B', 'TDS2024', 'TDS2024B', 'TDS2024C', 'TPS2024'):
             self.param_tds2()
         elif my_gui.a1[1] in ('AKIP-4119-1', 'AKIP-4131-1A', 'AKIP-4131-2A'):
             self.param_akip4131()
-        elif my_gui.a1[1] == 'RTO':
+        elif my_gui.a1[1] in ('RTO1024', 'RTO1044'):
             self.param_rto()
         sem.release()
 # ========================================================================================
@@ -1252,9 +1255,10 @@ class Call_oscill(Thread):
             for cell in row:
                 if cell.value == self.cel1:
                     cell.value = self.data_true
-                    if self.data_error > self.accur or self.data_error < -self.accur:
-                            cell.fill = my_gui.colour_cell
-                            self.tree2_img = my_gui.img3
+                    if self.cel1[0:4] == 'odcv' or self.cel1[0:2] == 'tr':
+                        if self.data_error > self.accur or self.data_error < -self.accur:
+                                cell.fill = my_gui.colour_cell
+                                self.tree2_img = my_gui.img3
 
         my_gui.inst_dmm.write('ACQ:COUN 1')
 
@@ -1283,7 +1287,7 @@ class Call_oscill(Thread):
             self.call_dso_6()
         elif my_gui.a1[1] in ('AKIP-4119-1', 'AKIP-4131-1A', 'AKIP-4131-2A'):
             self.call_akip4131()
-        elif my_gui.a1[1] == 'RTO':
+        elif my_gui.a1[1] in ('RTO1024', 'RTO1044'):
             self.call_rto()
 
         my_gui.tree2.insert('', 0, text='', image=self.tree2_img, values=(self.vfluk.split(' ')[1],round(self.data_true,4),round(self.data_error,4),f'±{self.accur}'))
@@ -1380,7 +1384,7 @@ class Call_DSO9000(Thread):
         if self.vosc2 == ':MEAS:VAV?' or self.cel1[0:4] == 'vofs' or self.vosc2[:11] == (':MEAS:VRMS?'):
             my_gui.query("OUTP:STAT ON")
 
-        if my_gui.a1[1] == 'DSO9104A':
+        if my_gui.a1[1] in ('DSO9104A', 'MSO9404A'):
             self.call_dso_9()
 
         my_gui.tree2.insert('', 0, text='', image=self.tree2_img, values=(self.vfluk.split(' ')[1],round(self.data_true,4),round(self.data_error,4),f'±{self.accur}'))
