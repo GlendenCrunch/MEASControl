@@ -251,12 +251,12 @@ class MeasControlGUI():
 
     def about_win(self):
         self.win_one(self.lang['add_cascade_4'], '600x350+{}+{}')
-        text1 = ('MEASControl\rVersion: 1.11\rDate: 2024-03-15\rAutor: g1enden (I T L)')
-        text2 = ('Agilent/Keysight:\r34401A\r34410A\r34411A\r34420A\r34460A\r34461A\r34465A\r34470A')
-        text3 = ('AKIP:\rV7-78/1\r\r\r\r\r\r\r\r')
+        text1 = ('MEASControl\rVersion: 1.11a\rDate: 2024-05-22\rAutor: g1enden (I T L)')
+        text2 = ('Agilent/Keysight:\r34401A\r34410A\r34411A\r34420A\r34460A\r34461A\r34465A\r34470A\r')
+        text3 = ('AKIP:\rV7-78/1\r\r\r\r\r\r\r\r\r')
         text4 = ('Lecroy:\rWaveJet 312A\rHDO8108A\r\r\r\r\r\r\r')
         text5 = ('Tektronix:\rTDS2002\rTDS2014(B,C)\rTDS2024(B,C)\rTPS2024\r\r\r\r\r')
-        text6 = ('Agilent/Keysight:\rMSO-X 3104A\rMSO-X 3034A\rMSO-X 3054A\rDSO6102A\rDSO7034B\rMSO7104B\rDSO9104A\rMSO9404A\r')
+        text6 = ('Agilent/Keysight:\rMSO-X 3104A\rMSO-X 3034A\rMSO-X 3054A\rDSO6102A\rDSO7034B\rMSO7104B\rDSO9104A\rMSO9404A\rDSO-X92004A\r')
         text7 = ('Siglent:\rAKIP-4119/1\rAKIP-4131/1A\r\r\r\r\r\r\r')
         text8 = ('R&S:\rRTO1024\rRTO1044\r\r\r\r\r\r\r')
 
@@ -272,9 +272,9 @@ class MeasControlGUI():
         img_about.place(x=10,y=10)
         autor = tk.Label(top_1, justify='left', text=text1, font=self.ar10b, foreground='deepskyblue4')
         autor.place(x=260,y=0)
-        lbf5 = tk.LabelFrame(top_2, text='Мультиметры', width=200, height=250, font=self.ar10b, foreground='deepskyblue4')
+        lbf5 = tk.LabelFrame(top_2, text='Мультиметры', width=200, height=300, font=self.ar10b, foreground='deepskyblue4')
         lbf5.grid(row=0, column=0)
-        lbf6 = tk.LabelFrame(top_2, text='Осциллографы', width=500, height=250, font=self.ar10b, foreground='deepskyblue4')
+        lbf6 = tk.LabelFrame(top_2, text='Осциллографы', width=500, height=300, font=self.ar10b, foreground='deepskyblue4')
         lbf6.grid(row=0, column=1)
         support_2 = tk.Label(lbf5, text=text2, font=('arial', 10), foreground='deepskyblue4')
         support_2.grid(row=0, column=0)
@@ -354,8 +354,8 @@ class MeasControlGUI():
         cnt_dict = {}
         cnt_dict0 = {'34401A':1, '34401A_gost':1, '34420A':1, '34410A':1, '34411A':1, '34460A':1, '34461A':1, '34465A':1, '34470A':1, 'V7-78-1':1,
                     'WJ312A':2, 'TDS2002':2, 'TDS2014':4, 'TDS2014C':4, 'TDS2014B':4, 'TDS2024':4, 'TDS2024B':4, 'TDS2024C':4, 'TPS2024':4, 'MSO-X3034A':4, 
-                    'MSO-X3054A':4, 'MSO-X3104T':4, 'MSO-X3104A':4, 'DSO6102A':2, 'DSO9104A':4, 'MSO9404A':4, 'DSO7034B':4, 'MSO7104B':4, 'AKIP-4119-1':4, 'AKIP-4131-1A':4, 'AKIP-4131-2A':4,
-                    'HDO8108A':8, 'RTO1024':4, 'RTO1044':4}
+                    'MSO-X3054A':4, 'MSO-X3104T':4, 'MSO-X3104A':4, 'DSO6102A':2, 'DSO9104A':4, 'MSO9404A':4, 'DSO7034B':4, 'MSO7104B':4, 'AKIP-4119-1':4,
+                    'AKIP-4131-1A':4, 'AKIP-4131-2A':4, 'HDO8108A':8, 'RTO1024':4, 'RTO1044':4, 'DSOX92004A':4}
         
         for item_0 in ['Call(', 'Call_oscill(', 'Call_DSO9000']:
             for item_i in list(cnt_dict0.keys()):
@@ -424,22 +424,23 @@ class MeasControlGUI():
             self.a1[1] = self.a1[1].replace('/', '-').replace(' ', '')
             if self.a1[1] == '34401A':
                 self.chkbtn_1.place(x=0,y=40)
-            if self.a1[1] in ('34401A', '34410A', '34411A', '34420A', '34460A', '34461A', '34465A', '34470A', 'V7-78-1'):
-                self.a10 = f'Мультиметр {self.a1[1]} подключен'
             elif self.a1[1] in ('WJ312A', 'TDS2002', 'TDS2014', 'TDS2014C', 'TDS2014B', 'TDS2024', 'TDS2024B', 'TDS2024C', 'TPS2024', 'MSO-X3034A',
-                                'MSO-X3104T', 'MSO-X3054A', 'MSO-X3104A','DSO6102A', 'DSO9104A', 'MSO9404A', 'DSO7034B', 'MSO7104B', 'AKIP-4119-1', 'AKIP-4131-1A', 'AKIP-4131-2A',
-                                'HDO8108A', 'RTO'):
-                self.a10 = f'Осциллограф {self.a1[1]} подключен'
+                                'MSO-X3104T', 'MSO-X3054A', 'MSO-X3104A','DSO6102A', 'DSO9104A', 'MSO9404A', 'DSO7034B', 'MSO7104B', 'AKIP-4119-1',
+                                'AKIP-4131-1A', 'AKIP-4131-2A','HDO8108A', 'RTO'):
                 self.fluk_on.configure(command=self.connect_fluke_9500)
                 self.lab1.place(x=40,y=55)
                 self.lab2.place(x=15,y=85)
                 self.spinbox1.place(x=133, y=55)
                 self.spinbox2.place(x=133, y=85)
-            if self.a1[1] in ('DSO9104A', 'MSO9404A'):
+            if self.a1[1] in ('DSO9104A', 'MSO9404A', 'DSOX92004A'):
                 self.lbf3.place(x=405, y=5)
+                if self.a1[1] == 'DSOX92004A':
+                    self.lab1.configure(text='Внутренний калибратор\nCal Out')
+                    self.lab1.place(x=10,y=55)
             if self.a1[1] == 'RTO':
                 self.a1[1] = self.a1[1]+self.data_1.split(',')[2].split('/')[0].split('.')[1].replace('00k','')
                 self.a1[2] = self.a1[2].split('/')[1]
+            self.a10 = f'{self.a1[1]} подключен'
             self.vardict_str['name_protokol'].set(f'{self.data_today},{self.a1[1]},{self.a1[2]}.xlsx')
             self.lab3['text'] = f'Тип: {self.a1[1]}'
             self.lab4['text'] = f'Зав.№: {self.a1[2]}'
@@ -796,6 +797,11 @@ class Param_osc(Thread):
         if self.rezfluke == 'SCOP:SHAP DC':
             my_gui.inst_dmm.write(f'CHAN{self.name}:INP {self.ffluke}')
 
+    def param_dsox90000(self):
+        self.chanel_select(self.name, 4, 'CHAN_:DISP 1', 'CHAN_:DISP 0')
+        my_gui.inst_dmm.write(f':TRIG:EDGE1:SOUR CHAN{self.name}')
+        my_gui.inst_dmm.write(f':MEAS:SOUR CHAN{self.name}')
+
     def param_tds2(self):
         self.chanel_select(self.name, 4, 'SEL:CH_ ON', 'SEL:CH_ OFF')
         my_gui.inst_dmm.write(f'CH{self.name}:COUP DC')
@@ -933,6 +939,8 @@ class Param_osc(Thread):
             self.param_dso6()
         elif my_gui.a1[1] in ('DSO9104A', 'MSO9404A'):
             self.param_dso9()
+        elif my_gui.a1[1] == 'DSOX92004A':
+            self.param_dsox90000()
         elif my_gui.a1[1] in ('TDS2002', 'TDS2014', 'TDS2014C', 'TDS2014B', 'TDS2024', 'TDS2024B', 'TDS2024C', 'TPS2024'):
             self.param_tds2()
         elif my_gui.a1[1] in ('AKIP-4119-1', 'AKIP-4131-1A', 'AKIP-4131-2A'):
@@ -1351,7 +1359,7 @@ class Call_DSO9000(Thread):
         if self.cel2[0:3] == 'nul':
             self.data_true = float(my_gui.inst_dmm.query(':MEAS:VAV?')) * 1000
             self.data_error = self.data_true
-        
+
         if self.vosc2[:11] == (':MEAS:VRMS?'):
             self.data_true_dmm = (float(self.vfluk.split(' ')[1])* 1000) / (2* math.sqrt(2))
             self.data_true = float(my_gui.inst_dmm.query(self.vosc2)) * 1000
@@ -1368,8 +1376,6 @@ class Call_DSO9000(Thread):
                     cell.value = self.data_true_dmm0
                 if cell.value == self.cel4:
                     cell.value = self.data_true0
-                    #if self.data_error > self.accur or self.data_error < -self.accur:
-                    #    cell.fill = my_gui.colour_cell
 
         my_gui.inst_dmm.write(':ACQ:AVER OFF')
 
@@ -1390,6 +1396,92 @@ class Call_DSO9000(Thread):
         my_gui.tree2.insert('', 0, text='', image=self.tree2_img, values=(self.vfluk.split(' ')[1],round(self.data_true,4),round(self.data_error,4),f'±{self.accur}'))
         my_gui.wb.save('{}\\Protocol\\{}'.format(my_gui.folder_1,my_gui.vardict_str['name_protokol'].get()))
         my_gui.query("OUTP:STAT OFF")
+        time.sleep(1)
+        my_gui.progress1.step(1)
+        my_gui.count += 1
+        sem.release()
+
+class Call_DSO90000(Thread):
+    """Class callibration oscilloscope"""
+    def __init__(self, vfluk, vosc1, vosc2, vdmm, cel1, cel2, cel3, cel4, accur):
+        Thread.__init__(self)
+        self.vfluk = vfluk
+        self.vosc1 = vosc1
+        self.vosc2 = vosc2
+        self.vdmm = vdmm
+        self.cel1 = cel1
+        self.cel2 = cel2
+        self.cel3 = cel3
+        self.cel4 = cel4
+        self.accur = accur
+        self.data_true_dmm = None
+        self.data_true_dmm0 = None
+        self.data_true0 = None
+        self.start()
+
+    def meas_aver(self):
+        my_gui.inst_dmm2.write(self.vdmm)
+        my_gui.inst_dmm.write(self.vfluk) # выход Cal out
+        time.sleep(1)
+        my_gui.inst_dmm.write(':ACQ:AVER ON; :ACQ:COUN 64')
+        time.sleep(2)
+        my_gui.inst_dmm2.write('MEAS:VOLT:DC?')
+        self.data_true_dmm = float(my_gui.inst_dmm2.read()) * 1000
+        self.data_true = float(my_gui.inst_dmm.query(':MEAS:VAV?')) * 1000
+        self.data_error = self.data_true
+
+    def call_dso_90000(self):
+        time.sleep(1)
+        if self.vosc2 == ':MEAS:VAV?':
+            self.meas_aver()
+
+        if self.cel1[0:4] == 'vofs':
+            my_gui.inst_dmm.write(f'CHAN{self.vosc1[4]}:OFFS {self.vosc2}')
+            self.meas_aver()
+            time.sleep(1)
+            my_gui.inst_dmm.write(':ACQ:AVER OFF') # измерения с 0 смещением и выкл выходом
+            time.sleep(1)
+            my_gui.inst_dmm.write(f'CHAN{self.vosc1[4]}:OFFS 0')
+            my_gui.inst_dmm.write(f':CAL:OUTP DC,0')
+            time.sleep(1)
+            my_gui.inst_dmm.write(':ACQ:AVER ON; :ACQ:COUN 64')
+            time.sleep(2)
+            my_gui.inst_dmm2.write('MEAS:VOLT:DC?')
+            self.data_true_dmm0 = float(my_gui.inst_dmm2.read()) * 1000
+            self.data_true0 = float(my_gui.inst_dmm.query(':MEAS:VAV?')) * 1000
+
+        if self.cel2[0:3] == 'nul':
+            self.data_true = float(my_gui.inst_dmm.query(':MEAS:VAV?')) * 1000
+            self.data_error = self.data_true
+
+        for row in my_gui.ws.rows:
+            for cell in row:
+                self.tree2_img = my_gui.img2
+                if cell.value == self.cel1:
+                    cell.value = self.data_true_dmm
+                if cell.value == self.cel2:
+                    cell.value = self.data_true
+                if cell.value == self.cel3:
+                    cell.value = self.data_true_dmm0
+                if cell.value == self.cel4:
+                    cell.value = self.data_true0
+
+        my_gui.inst_dmm.write(':ACQ:AVER OFF')
+
+    def run(self):
+        sem.acquire()
+        my_gui.statusbar["text"] = f'Статус: работа   Прогресс: {my_gui.count} из {my_gui.cnt()[my_gui.a1[1]]}'
+        my_gui.lb2.delete(0, 'end')
+        my_gui.lb2.insert('end', '{} канал, напряжение {} Вольт'.format(self.vosc1.split(':')[0][-1],self.vfluk.split(' ')[1]))
+        my_gui.lb2.see('end')
+        my_gui.inst_dmm.write(self.vosc1)
+
+        if my_gui.a1[1] == 'DSOX92004A':
+            self.call_dso_90000()
+
+        my_gui.tree2.insert('', 0, text='', image=self.tree2_img, values=(self.vfluk.split(' ')[1],round(self.data_true,4),round(self.data_error,4),f'±{self.accur}'))
+        my_gui.wb.save('{}\\Protocol\\{}'.format(my_gui.folder_1,my_gui.vardict_str['name_protokol'].get()))
+        my_gui.inst_dmm.write(f':CAL:OUTP DC,0')
         time.sleep(1)
         my_gui.progress1.step(1)
         my_gui.count += 1
@@ -1416,18 +1508,22 @@ class Reset(Thread):
     def run(self):
         sem.acquire()
         time.sleep(2)
-        my_gui.inst_dmm.write('*RST')
-        if my_gui.b1[1] == '9500B':
-            my_gui.query('*CLS')
-            my_gui.query('*RST')
-            if my_gui.a1[1] in ('TDS2002', 'TDS2014', 'TDS2014B', 'TDS2024', 'TDS2024C', 'TPS2024'):
-                my_gui.inst_dmm.write('ACQuire:STATE RUN')
+        if my_gui.a1[1] == 'DSOX92004A':
+            my_gui.inst_dmm.write('*RST')
+        
         else:
-            my_gui.inst_fluke.write('*CLS')
-            my_gui.inst_fluke.write('*RST')
-            my_gui.inst_dmm.write('*CLS')
-        if my_gui.b1[1] == 'N4-56':
-            my_gui.inst_fluke.write('RES:MODE:HD ON')
+            my_gui.inst_dmm.write('*RST')
+            if my_gui.b1[1] == '9500B':
+                my_gui.query('*CLS')
+                my_gui.query('*RST')
+                if my_gui.a1[1] in ('TDS2002', 'TDS2014', 'TDS2014B', 'TDS2024', 'TDS2024C', 'TPS2024'):
+                    my_gui.inst_dmm.write('ACQuire:STATE RUN')
+            else:
+                my_gui.inst_fluke.write('*CLS')
+                my_gui.inst_fluke.write('*RST')
+                my_gui.inst_dmm.write('*CLS')
+            if my_gui.b1[1] == 'N4-56':
+                my_gui.inst_fluke.write('RES:MODE:HD ON')
         time.sleep(2)
         sem.release()
 

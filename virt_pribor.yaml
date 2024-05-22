@@ -374,8 +374,8 @@ resources:
     device: AKIP-4131/1A
   USB0::0x164E::0x0DAD::TW00005747::INSTR:
     device: V7-78/1
-  TCPIP0::169.254.183.142::inst0::INSTR:
-    device: RTO1024
+#  TCPIP0::169.254.183.142::inst0::INSTR:
+#    device: RTO1024
 
 #  TCPIP0::localhost:2222::inst0::INSTR:
 #    device: RTO1024
