@@ -226,7 +226,7 @@ class MeasControlGUI():
 
     def date_time(self):
         today = datetime.today()
-        self.data_today = today.strftime('%d-%m-%Y,%H-%M-%S')
+        self.data_today = today.strftime('%Y-%m-%d,%H-%M-%S')
 
     def protokol(self):
         rep = filedialog.askopenfilenames(parent=self.parent, initialdir=f'{self.folder_1}\\Protocol\\', initialfile='',
@@ -985,7 +985,10 @@ class Call_oscill(Thread):
         time.sleep(1)
         my_gui.inst_dmm.write('ACQ:MOD AVE; NUMAV 16')
         time.sleep(3)
-        self.data_true = float(my_gui.inst_dmm.query(self.vosc2))
+        if my_gui.a1[1] == 'TDS2014':
+            self.data_true = float(my_gui.inst_dmm.query(self.vosc2).split(' ')[1]) # :MEASUREMENT:MEAS1:VALUE 9.9E37 TDS2014?
+        else:
+            self.data_true = float(my_gui.inst_dmm.query(self.vosc2))
         if self.vosc2 in ('MEASU:MEAS1:VAL?'):
             if my_gui.a1[1] == 'TPS2024':
                 self.data_error = (self.data_true - float(self.vfluk.split(' ')[1])) * 1000
@@ -1024,17 +1027,14 @@ class Call_oscill(Thread):
         time.sleep(2)
         self.data_true = float(my_gui.inst_dmm.query(self.vosc2))
         if self.vosc2 == ':MEAS:VAV?':
-            self.data_true = float(self.vfluk.split(' ')[1])
             self.data_error = (self.data_true - float(self.vfluk.split(' ')[1]))
             if abs(float(self.vfluk.split(' ')[1])) < 1:
-                self.data_error = (self.data_true - float(self.vfluk.split(' ')[1])) * 1000
+                self.data_error = self.data_true - float(self.vfluk.split(' ')[1])
                 self.data_true = self.data_true * 1000
         elif self.vosc2 == ':MEAS:RIS?':
             self.data_true_1 = self.data_true / 1E-9
             self.data_true = (0.35 / self.data_true) * 1E-6
             self.data_error = self.data_true
-        elif self.vosc2 == ':MEAS:VPP':
-            self.data_true = self.data_true
 
         for row in my_gui.ws.rows:
             for cell in row:
@@ -1052,9 +1052,6 @@ class Call_oscill(Thread):
                 if self.vosc2 == ':MEAS:RIS?':
                     if cell.value == self.cel2:
                         cell.value = self.data_true_1
-                    if self.data_error < self.accur:
-                        cell.fill = my_gui.colour_cell
-                        self.tree2_img = my_gui.img3
 
         my_gui.inst_dmm.write(':ACQ:TYPE NORM')
 
@@ -1485,6 +1482,60 @@ class Call_DSO90000(Thread):
         time.sleep(1)
         my_gui.progress1.step(1)
         my_gui.count += 1
+        sem.release()
+# ====================== future change =========================================
+class Supportfunc(Thread):
+    def __init__(self, name):
+        Thread.__init__(self)
+        self.name = name
+        self.start()
+
+    def message(self):
+        messagebox.showinfo('ВНИМАНИЕ!', self.name.split('-')[1])
+
+    def resetdmm(self):
+        self.resetdsox92004()
+        my_gui.inst_fluke.write('*RST')
+        my_gui.inst_fluke.write('*CLS')
+        if my_gui.b1[1] == 'N4-56':
+            my_gui.inst_fluke.write('RES:MODE:HD ON')
+
+    def resetoscil(self):
+        my_gui.query('*RST')
+        my_gui.query('*CLS')
+        if my_gui.a1[1][:3] == 'TDS':
+            my_gui.inst_dmm.write('ACQuire:STATE RUN')
+
+    def resetdsox92004(self):
+        my_gui.inst_dmm.write('*RST')
+        my_gui.inst_dmm.write('*CLS')
+
+    def capacitorcomp(self):
+        my_gui.inst_dmm.write('CONF:CAP')
+        time.sleep(5)
+        my_gui.inst_dmm.write('READ?')
+        time.sleep(5)
+        my_gui.varcap = float(my_gui.inst_dmm.read())
+        time.sleep(1)
+        my_gui.progress1.step(1)
+
+    def return_support(self, name):
+        if name.split('-')[0] == 'message':
+            self.message
+        elif name.split('-')[0] == 'resetdmm':
+            self.resetdmm
+        elif name.split('-')[0] == 'resetoscil':
+            self.resetoscil
+        elif name.split('-')[0] == 'resetdsox92004':
+            self.resetdsox92004
+        elif name.split('-')[0] == 'capacitorcomp':
+            self.capacitorcomp
+
+    def run(self):
+        sem.acquire()
+        time.sleep(2)
+        self.return_support(self.name)
+        time.sleep(2)
         sem.release()
 # ============================================================================
 class Message(Thread):

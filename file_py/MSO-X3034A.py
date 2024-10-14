@@ -18,7 +18,7 @@ for j in range(1,5,1):
     # trise
     Reset()
     Param_osc(f'{j}', 'ROUT:SIGN:IMP 50', 'SCOP:SHAP EDGE', f'TIM:SCAL 5.0E-9\nCHAN{j}:IMP FIFT', '')
-    Call_oscill('VOLT 0.25', f'CHAN{j}:SCAL 0.05', ':MEAS:RIS?', f'fr_{j}', f'tr_{j}', 350)
+    Call_oscill('VOLT 0.25', f'CHAN{j}:SCAL 0.05', ':MEAS:RIS?', f'fr_{j}', f'tr_{j}', 349.9)
 
 Message('Калибровка завершена')
 Clear_merge()

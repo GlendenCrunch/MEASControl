@@ -51,7 +51,6 @@ for j in range(1,5,1):
     Call_oscill('VOLT 0.06', f'CH{j}:VOL 0.01\nTRIG:MAI:LEV -0.03', 'MEASU:MEAS4:VAL?', f'tr{j}_9', '', 3.5)
     Call_oscill('VOLT 0.03', f'CH{j}:VOL 0.005\nTRIG:MAI:LEV -0.015', 'MEASU:MEAS4:VAL?', f'tr{j}_10', '', 3.5)
 
-
 Message('Калибровка завершена')
 Clear_merge()
 Reset()
