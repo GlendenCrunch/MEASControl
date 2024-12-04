@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-Message(f'Отключите все кабели от входов осциллографа')
-Reset()
+Supportfunc('message-Отключите все кабели от входов осциллографа')
+Supportfunc('resetoscil')
 for j in range(1,5,1):
     # null
     Param_osc(f'{j}', '', '', 'TIM:SCAL 100E-6', '')
@@ -13,7 +13,7 @@ for j in range(1,5,1):
     Call_DSO90000('VOLT 0', f'CHAN{j}:SCAL 1', '', '', '', f'nul{j}_7', '', '', 81)
 
 for j in range(1,5,1):
-    Message(f'Подключите выход Cal Out через тройник к мультиметру и осциллографу КАНАЛ №{j}')
+    Supportfunc(f'message-Подключите выход Cal Out через тройник к мультиметру и осциллографу КАНАЛ №{j}')
     # offset
     Param_osc(f'{j}', '', '', 'TIM:SCAL 100E-6', '')
     Call_DSO90000(':CAL:OUTP DC,2.4', f'CHAN{j}:SCAL 1', '2.4', 'CONF:VOLT:DC 10', f'vofs{j}+1', f'ovofs{j}+1', f'vofs0{j}_1', f'ovofs0{j}_1', 2)
@@ -47,6 +47,6 @@ for j in range(1,5,1):
     Call_DSO90000(':CAL:OUTP DC,2.4', f'CHAN{j}:SCAL 1', ':MEAS:VAV?', 'CONF:VOLT:DC 10', f'dcv{j}+7', f'odcv{j}+7', '', '', 2)
     Call_DSO90000(':CAL:OUTP DC,-2.4', f'CHAN{j}:SCAL 1', ':MEAS:VAV?', 'CONF:VOLT:DC 10', f'dcv{j}-7', f'odcv{j}-7', '', '', 2)
 
-Message('Калибровка завершена')
+Supportfunc(f'message-Калибровка завершена')
 Clear_merge()
-Reset()
+Supportfunc('resetoscil')

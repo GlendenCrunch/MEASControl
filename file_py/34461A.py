@@ -1,10 +1,10 @@
 #!/usr/bin/python3-32
 # -*- coding: utf-8 -*-
-Reset()
+Supportfunc('resetdmm')
 if self.vardict_boo['dcv_var'].get() == 1 or self.vardict_boo['acv_var'].get() == 1 or self.vardict_boo['f_var'].get() == 1 or self.vardict_boo['r2_var'].get() == 1:
-    Message('Подключите провода к клеммам измерения напряжения, частоты или сопротивления')
+    Supportfunc('message-Подключите провода к клеммам измерения напряжения, частоты или сопротивления')
 elif self.vardict_boo['aci_var'].get() == 1:
-    Message('Подключите провода для измерения тока')
+    Supportfunc('message-Подключите провода для измерения тока')
 if self.vardict_boo['dcv_var'].get() == 1:
     Call('dcv', '100 mV', 'CONF:VOLT:DC 0.1', 'dcv_1', '', 'DET:BAND 20', 3, 0.0085)
     Call('dcv', '-100 mV', 'CONF:VOLT:DC 0.1', 'dcv_2', '', 'DET:BAND 20', 3, 00.0085)
@@ -47,13 +47,13 @@ if self.vardict_boo['r2_var'].get() == 1:
     Call('res', '10 MOHM', 'CONF:RES 10 MOHM', 'r2_2', '', 'DET:BAND 20', 5, 0.0041)
     Call('res', '100 MOHM', 'CONF:RES 100 MOHM', 'r2_3', '', 'DET:BAND 20', 8, 0.081)
 if self.vardict_boo['r4_var'].get() == 1:
-    Message('Подключите провода по четырехпроводной схеме\n для измерения сопротивления')
+    Supportfunc('message-Подключите провода по четырехпроводной схеме\n для измерения сопротивления')
     Call('res', '100 OHM', 'CONF:FRES 100', 'r4_1', '', 'DET:BAND 20', 5, 0.014)
     Call('res', '1 kOHM', 'CONF:FRES 1 KOHM', 'r4_2', '', 'DET:BAND 20', 5, 0.00011)
     Call('res', '10 kOHM', 'CONF:FRES 10 KOHM', 'r4_3', '', 'DET:BAND 20', 5, 0.0011)
     Call('res', '100 kOHM', 'CONF:FRES 100 KOHM', 'r4_4', '', 'DET:BAND 20', 5, 0.011)
 if self.vardict_boo['dci_var'].get() == 1:
-    Message('Подключите провода\n для измерения тока до 3 Ампер')
+    Supportfunc('message-Подключите провода\n для измерения тока до 3 Ампер')
     Call('dci', '100 uA', 'CONF:CURR:DC 0.0001', 'dci_1', '', 'DET:BAND 20', 5, 0.075)
     Call('dci', '1 mA', 'CONF:CURR:DC 0.001', 'dci_2', '', 'DET:BAND 20', 5, 0.00056)
     Call('dci', '10 mA', 'CONF:CURR:DC 0.01', 'dci_3', '', 'DET:BAND 20', 5, 0.007)
@@ -77,13 +77,13 @@ if self.vardict_boo['aci_var'].get() == 1:
     Call('aci', '2 A, 1 kHz', 'CONF:CURR:AC 3', 'aci_14', '', 'DET:BAND 20', 5, 0.0058)
     Call('aci', '2 A, 5 kHz', 'CONF:CURR:AC 3', 'aci_15', '', 'DET:BAND 20', 5, 0.0058)
 if self.vardict_boo['dci_var'].get() and self.vardict_boo['aci_var'].get() == 1:
-    Message('Подключите провода\n для измерения тока больше 3 Ампер')
-    Reset()
+    Supportfunc('message-Подключите провода\n для измерения тока больше 3 Ампер')
+    Supportfunc('resetdmm')
     Call('dci', '5 A', 'CONF:CURR:DC 10', 'dci_7', '', 'DET:BAND 20', 5, 0.012)
     Call('dci', '10 A', 'CONF:CURR:DC 10', 'dci_8', '', 'DET:BAND 20', 5, 0.022)
     if self.b1[1] == '5522A':
         Call('aci', '10 A, 5 kHz', 'CONF:CURR:AC 10', 'aci_16', '', 'DET:BAND 20', 5, 0.19)
 
-Message('Калибровка завершена')
+Supportfunc('message-Калибровка завершена')
 Clear_merge()
-Reset()
+Supportfunc('resetdmm')

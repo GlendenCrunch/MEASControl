@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 for j in range(1,5,1):
     # dcv
-    Message(f'Подключите формирователь без вешней нагрузки на КАНАЛ №{j} осциллографа')
-    Reset()
+    Supportfunc(f'message-Подключите формирователь без вешней нагрузки на КАНАЛ №{j} осциллографа')
+    Supportfunc('resetoscil')
     Param_osc(f'{j}', 'ROUT:SIGN:IMP 1E+06', 'SCOP:SHAP DC', 'TDIV 1MS', '')
     Call_oscill('VOLT 0.006', f'C{j}:VDIV 0.002', f'C{j}:PAVA? MEAN', f'dcv{j}_1', '', 2.42)
     Call_oscill('VOLT -0.006', f'C{j}:VDIV 0.002', f'C{j}:PAVA? MEAN', f'dcv{j}_2', '', 2.42)
@@ -29,7 +29,7 @@ for j in range(1,5,1):
     Call_oscill('VOLT 30.0', f'C{j}:VDIV 10', f'C{j}:PAVA? MEAN', f'dcv{j}_23', '', 2.102)
     Call_oscill('VOLT -30.0', f'C{j}:VDIV 10', f'C{j}:PAVA? MEAN', f'dcv{j}_24', '', 2.102)
     # ofset
-    Reset()
+    Supportfunc('resetoscil')
     Param_osc(f'{j}', 'ROUT:SIGN:IMP 1E+06', 'SCOP:SHAP DC', 'TDIV 1MS', '')
     Call_oscill('VOLT 0.5', f'C{j}:VDIV 0.002', f'C{j}:PAVA? MEAN', f'odcv{j}_1', '-0.5', 0.0372)
     Call_oscill('VOLT -0.5', f'C{j}:VDIV 0.002', f'C{j}:PAVA? MEAN', f'odcv{j}_2', '0.5', 0.0372)
@@ -46,7 +46,7 @@ for j in range(1,5,1):
     Call_oscill('VOLT 160', f'C{j}:VDIV 10', f'C{j}:PAVA? MEAN', f'odcv{j}_13', '-160', 12.4)
     Call_oscill('VOLT -160', f'C{j}:VDIV 10', f'C{j}:PAVA? MEAN', f'odcv{j}_14', '160', 12.4)
     # band
-    Reset()
+    Supportfunc('resetoscil')
     Param_osc(f'{j}', 'ROUT:SIGN:IMP 1E+06', 'SCOP:SHAP SIN', 'TDIV 10US', '')
     Call_oscill('VOLT 0.01', f'C{j}:VDIV 0.002', f'C{j}:PAVA? RMS', f'bw{j}_1', 'FREQ:FIX 50E+03', 200)
     Call_oscill('VOLT 0.03', f'C{j}:VDIV 0.005', f'C{j}:PAVA? RMS', f'bw{j}_2', 'FREQ:FIX 50E+03', 200)
@@ -60,8 +60,8 @@ for j in range(1,5,1):
     Call_oscill('VOLT 5.5', f'C{j}:VDIV 2', f'C{j}:PAVA? RMS', f'bw{j}_10', 'FREQ:FIX 50E+03', 200)
     Call_oscill('VOLT 5.5', f'C{j}:VDIV 5', f'C{j}:PAVA? RMS', f'bw{j}_11', 'FREQ:FIX 50E+03', 200)
     # trise
-    Message(f'Подключите внешнию нагрузку 50 Ом на КАНАЛ №{j} осциллографа')
-    Reset()
+    Supportfunc(f'message-Подключите внешнию нагрузку 50 Ом на КАНАЛ №{j} осциллографа')
+    Supportfunc('resetoscil')
     Param_osc(f'{j}', 'ROUT:SIGN:IMP 50', 'SCOP:SHAP EDGE', 'TDIV 2.5E-9', '')
     Call_oscill('VOLT 0.01', f'C{j}:VDIV 0.002', f'C{j}:PAVA? RISE', f'tr{j}_1', '0.005', 1.8)
     Call_oscill('VOLT 0.03', f'C{j}:VDIV 0.005', f'C{j}:PAVA? RISE', f'tr{j}_2', '0.014', 1.8)
@@ -73,6 +73,6 @@ for j in range(1,5,1):
     Call_oscill('VOLT 2.7', f'C{j}:VDIV 0.5', f'C{j}:PAVA? RISE', f'tr{j}_8', '1.5', 1.8)
     Call_oscill('VOLT 3.1', f'C{j}:VDIV 1', f'C{j}:PAVA? RISE', f'tr{j}_9', '3', 1.8)
 
-Message('Калибровка завершена')
+Supportfunc('message-Калибровка завершена')
 Clear_merge()
-Reset()
+Supportfunc('resetoscil')

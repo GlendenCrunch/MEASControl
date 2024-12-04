@@ -1,10 +1,10 @@
 #!/usr/bin/python3-32
 # -*- coding: utf-8 -*-
-Reset()
+Supportfunc('resetdmm')
 if self.vardict_boo['dcv_var'].get() == 1 or self.vardict_boo['acv_var'].get() == 1 or self.vardict_boo['f_var'].get() == 1 or self.vardict_boo['r2_var'].get() == 1:
-    Message('Подключите провода к клеммам измерения напряжения, частоты или сопротивления')
+    Supportfunc('message-Подключите провода к клеммам измерения напряжения, частоты или сопротивления')
 elif self.vardict_boo['aci_var'].get() == 1:
-    Message('Подключите провода для измерения тока')
+    Supportfunc('message-Подключите провода для измерения тока')
 if self.vardict_boo['dcv_var'].get() == 1:
     Call('dcv', '10 mV', 'CONF:VOLT:DC 0.1', 'dcv_1', '', 'DET:BAND 20', 3, 0.004)
     Call('dcv', '30 mV', 'CONF:VOLT:DC 0.1', 'dcv_2', '', 'DET:BAND 20', 3, 0.005)
@@ -163,9 +163,9 @@ if self.vardict_boo['f_var'].get() == 1:
     Call('fr', '1 V, 100 kHz', 'CONF:FREQ 100 kHz', 'f_8', '', 'DET:BAND 20', 5, 0.007)
 if self.vardict_boo['c_var'].get() == 1:
     if self.b1[1] in ('5522A', '5500E'):
-        Message('Измерение ёмкости.\nВытащите красный провод из каллибратора\nдля компенсации проводов')
-        cap()
-        Message('Верните провод на место')
+        Supportfunc('message-Измерение ёмкости.\nВытащите красный провод из каллибратора\nдля компенсации проводов')
+        Supportfunc('capacitorcomp')
+        Supportfunc('message-Верните провод на место')
         Call('cap', '1 NF', 'CONF:CAP 1 NF', 'c_1', '', 'DET:BAND 20', 5, 0.01)
         Call('cap', '10 NF', 'CONF:CAP 10 NF', 'c_2', '', 'DET:BAND 20', 5, 0.05)
         Call('cap', '100 NF', 'CONF:CAP 100 NF', 'c_3', '', 'DET:BAND 20', 5, 0.5)
@@ -177,13 +177,13 @@ if self.vardict_boo['r2_var'].get() == 1:
     if self.b1[1] == '5522A':
         Call('res', '1 GOHM', 'CONF:RES 1 GOHM', 'r2_4', '', 'DET:BAND 20', 5, 0.00301)
 if self.vardict_boo['r4_var'].get() == 1:
-    Message('Подключите провода по четырехпроводной схеме\n для измерения сопротивления')
+    Supportfunc('message-Подключите провода по четырехпроводной схеме\n для измерения сопротивления')
     Call('res', '100 OHM', 'CONF:FRES 100', 'r4_1', '', 'DET:BAND 20', 5, 0.01)
     Call('res', '1 KOHM', 'CONF:FRES 1 KOHM', 'r4_2', '', 'DET:BAND 20', 5, 0.000045)
     Call('res', '10 KOHM', 'CONF:FRES 10 KOHM', 'r4_3', '', 'DET:BAND 20', 5, 0.00045)
     Call('res', '100 KOHM', 'CONF:FRES 100 KOHM', 'r4_4', '', 'DET:BAND 20', 5, 0.0045)
 if self.vardict_boo['dci_var'].get() == 1:
-    Message('Подключите провода\n для измерения тока до 3А')
+    Supportfunc('message-Подключите провода\n для измерения тока до 3А')
     Call('dci', '100 uA', 'CONF:CURR:DC 0.001', 'dci_1', '', 'DET:BAND 20', 5, 0.1)
     Call('dci', '300 uA', 'CONF:CURR:DC 0.001', 'dci_2', '', 'DET:BAND 20', 5, 0.2)
     Call('dci', '500 uA', 'CONF:CURR:DC 0.001', 'dci_3', '', 'DET:BAND 20', 5, 0.3)
@@ -210,21 +210,21 @@ if self.vardict_boo['dci_var'].get() == 1:
     if self.b1[1] in ('5522A', '5500E'):
         Call('dci', '2.1 A', 'CONF:CURR:DC 3', 'dci_24', '', 'DET:BAND 20', 5, 0.0048)
         Call('dci', '2.85 A', 'CONF:CURR:DC 3', 'dci_25', '', 'DET:BAND 20', 5, 0.1566)
-        Message('Переключите красный провод на контакт 10А МУЛЬТИМЕТРА')
+        Supportfunc('message-Переключите красный провод на контакт 10А МУЛЬТИМЕТРА')
         Call('dci', '1 A', 'CONF:CURR:DC 10', 'dci_26', '', 'DET:BAND 20', 5, 0.0022)
     if self.b1[1] == '5500E':
         Call('dci', '3 A', 'CONF:CURR:DC 10', 'dci_27', '', 'DET:BAND 20', 5, 0.0046)
         Call('dci', '5 A', 'CONF:CURR:DC 10', 'dci_28', '', 'DET:BAND 20', 5, 0.007)
         Call('dci', '7 A', 'CONF:CURR:DC 10', 'dci_29', '', 'DET:BAND 20', 5, 0.0134)
         Call('dci', '10 A', 'CONF:CURR:DC 10', 'dci_30', '', 'DET:BAND 20', 5, 0.023)
-        Message('Верните красный провод на контакт 3А МУЛЬТИМЕТРА')
+        Supportfunc('message-Верните красный провод на контакт 3А МУЛЬТИМЕТРА')
     elif self.b1[1] == '5522A':
-        Message('Переключите красный провод на КАЛИБРАТОРЕ в разъем больше 3 А')
+        Supportfunc('message-Переключите красный провод на КАЛИБРАТОРЕ в разъем больше 3 А')
         Call('dci', '3 A', 'CONF:CURR:DC 10', 'dci_27', '', 'DET:BAND 20', 5, 0.0046)
         Call('dci', '5 A', 'CONF:CURR:DC 10', 'dci_28', '', 'DET:BAND 20', 5, 0.007)
         Call('dci', '7 A', 'CONF:CURR:DC 10', 'dci_29', '', 'DET:BAND 20', 5, 0.0134)
         Call('dci', '10 A', 'CONF:CURR:DC 10', 'dci_30', '', 'DET:BAND 20', 5, 0.023)
-        Message('Верните красный провод на контакт 3А МУЛЬТИМЕТРА и КАЛИБРАТОРА')
+        Supportfunc('message-Верните красный провод на контакт 3А МУЛЬТИМЕТРА и КАЛИБРАТОРА')
 if self.vardict_boo['aci_var'].get() == 1:
     Call('aci', '100 uA, 20 Hz', 'CONF:CURR:AC 0.0001', 'aci_1', '', 'DET:BAND 3', 8, 0.14)
     Call('aci', '100 uA, 1 kHz', 'CONF:CURR:AC 0.0001', 'aci_2', '', 'DET:BAND 20', 5, 0.14)
@@ -299,7 +299,7 @@ if self.vardict_boo['aci_var'].get() == 1:
     Call('aci', '2.1 A, 5 kHz', 'CONF:CURR:AC 3', 'aci_71', '', 'DET:BAND 20', 5, 0.00603)
     if self.b1[1] == '5500E':
         Call('aci', '3 A, 1 kHz', 'CONF:CURR:AC 3', 'aci_72', '', 'DET:BAND 20', 5, 0.00801)
-    Message('Переключите красный провод на контакт 10А МУЛЬТИМЕТРА')
+    Supportfunc('message-Переключите красный провод на контакт 10А МУЛЬТИМЕТРА')
     if self.b1[1] == '5500E':
         Call('aci', '1 A, 1 kHz', 'CONF:CURR:AC 10', 'aci_74', '', 'DET:BAND 20', 5, 0.005)
         Call('aci', '3 A, 1 kHz', 'CONF:CURR:AC 10', 'aci_76', '', 'DET:BAND 20', 5, 0.007)
@@ -309,7 +309,7 @@ if self.vardict_boo['aci_var'].get() == 1:
     elif self.b1[1] == '5522A':
         Call('aci', '1 A, 1 kHz', 'CONF:CURR:AC 10', 'aci_74', '', 'DET:BAND 20', 5, 0.005)
         Call('aci', '1 A, 5 kHz', 'CONF:CURR:AC 10', 'aci_75', '', 'DET:BAND 20', 5, 0.005)
-        Message('Переключите красный провод на КАЛИБРАТОРЕ в разъем больше 3 А')
+        Supportfunc('message-Переключите красный провод на КАЛИБРАТОРЕ в разъем больше 3 А')
         Call('aci', '3 A, 1 kHz', 'CONF:CURR:AC 10', 'aci_76', '', 'DET:BAND 20', 5, 0.007)
         Call('aci', '3 A, 5 kHz', 'CONF:CURR:AC 10', 'aci_77', '', 'DET:BAND 20', 5, 0.007)
         Call('aci', '5 A, 1 kHz', 'CONF:CURR:AC 10', 'aci_78', '', 'DET:BAND 20', 5, 0.009)
@@ -318,10 +318,10 @@ if self.vardict_boo['aci_var'].get() == 1:
         Call('aci', '7 A, 5 kHz', 'CONF:CURR:AC 10', 'aci_81', '', 'DET:BAND 20', 5, 0.015)
         Call('aci', '10 A, 1 kHz', 'CONF:CURR:AC 10', 'aci_82', '', 'DET:BAND 20', 5, 0.024)
         Call('aci', '10 A, 5 kHz', 'CONF:CURR:AC 10', 'aci_83', '', 'DET:BAND 20', 5, 0.024)
-        Message('Верните красный провод на контакт до 3А МУЛЬТИМЕТРА')
+        Supportfunc('message-Верните красный провод на контакт до 3А МУЛЬТИМЕТРА')
         Call('aci', '3 A, 1 kHz', 'CONF:CURR:AC 3', 'aci_72', '', 'DET:BAND 20', 5, 0.00801)
         Call('aci', '3 A, 5 kHz', 'CONF:CURR:AC 3', 'aci_73', '', 'DET:BAND 20', 5, 0.00801)
 
-Message('Калибровка завершена')
+Supportfunc('message-Калибровка завершена')
 Clear_merge()
-Reset()
+Supportfunc('resetdmm')

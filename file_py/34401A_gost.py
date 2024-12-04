@@ -1,10 +1,10 @@
 #!/usr/bin/python3-32
 # -*- coding: utf-8 -*-
-Reset()
+Supportfunc('resetdmm')
 if self.vardict_boo['dcv_var'].get() == 1 or self.vardict_boo['acv_var'].get() == 1 or self.vardict_boo['f_var'].get() == 1 or self.vardict_boo['r2_var'].get() == 1:
-    Message('Подключите провода к клеммам измерения напряжения, частоты или сопротивления')
+    Supportfunc('message-Подключите провода к клеммам измерения напряжения, частоты или сопротивления')
 elif self.vardict_boo['aci_var'].get() == 1:
-    Message('Подключите провода для измерения тока')
+    Supportfunc('message-Подключите провода для измерения токая')
 if self.vardict_boo['dcv_var'].get() == 1:
     Call('dcv', '10 mV', 'CONF:VOLT:DC 0.1', 'dcv_1', '', 'DET:BAND 20', 3, 0.004)
     Call('dcv', '50 mV', 'CONF:VOLT:DC 0.1', 'dcv_2', '', 'DET:BAND 20', 3, 0.006)
@@ -114,7 +114,7 @@ if self.vardict_boo['r2_var'].get() == 1:
     Call('res', '50 MOHM', 'CONF:RES 100 MOHM', 'r2_14', '', 'DET:BAND 20', 4, 0.41)
     Call('res', '100 MOHM', 'CONF:RES 100 MOHM', 'r2_15', '', 'DET:BAND 20', 4, 0.81)
 if self.vardict_boo['r4_var'].get() == 1:
-    Message('Подключите провода по четырехпроводной схеме\n для измерения сопротивления')
+    Supportfunc('message-Подключите провода по четырехпроводной схеме\n для измерения сопротивления')
     Call('res', '10 OHM', 'CONF:FRES 100', 'r4_1', '', 'DET:BAND 20', 4, 0.005)
     Call('res', '50 OHM', 'CONF:FRES 100', 'r4_2', '', 'DET:BAND 20', 4, 0.009)
     Call('res', '100 OHM', 'CONF:FRES 100', 'r4_3', '', 'DET:BAND 20', 4, 0.014)
@@ -122,7 +122,7 @@ if self.vardict_boo['r4_var'].get() == 1:
     Call('res', '0.5 kOHM', 'CONF:FRES 1 KOHM', 'r4_5', '', 'DET:BAND 20', 4, 0.00006)
     Call('res', '1 kOHM', 'CONF:FRES 1 KOHM', 'r4_6', '', 'DET:BAND 20', 4, 0.00011)
 if self.vardict_boo['dci_var'].get() == 1:
-    Message('Подключите провода для измерения тока')
+    Supportfunc('message-Подключите провода для измерения тока')
     Call('dci', '1 mA', 'CONF:CURR:DC 0.01', 'dci_1', '', 'DET:BAND 20', 4, 0.0025)
     Call('dci', '5 mA', 'CONF:CURR:DC 0.01', 'dci_2', '', 'DET:BAND 20', 4, 0.0045)
     Call('dci', '10 mA', 'CONF:CURR:DC 0.01', 'dci_3', '', 'DET:BAND 20', 4, 0.007)
@@ -156,6 +156,6 @@ if self.vardict_boo['aci_var'].get() == 1:
         Call('aci', '2.5 A, 10 Hz', 'CONF:CURR:AC 3', 'aci_16', '', 'DET:BAND 3', 5, 0.01055)
         Call('aci', '2.5 A, 5 kHz', 'CONF:CURR:AC 3', 'aci_18', '', 'DET:BAND 20', 5, 0.00555)
 
-Message('Калибровка завершена')
+Supportfunc('message-Калибровка завершена')
 Clear_merge()
-Reset()
+Supportfunc('resetdmm')

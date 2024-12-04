@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 for j in range(1,5,1):
     # dcv
-    Message(f'Подключите формирователь на КАНАЛ №{j} осциллографа')
-    Reset()
+    Supportfunc(f'message-Подключите формирователь на КАНАЛ №{j} осциллографа')
+    Supportfunc('resetoscil')
     Param_osc(f'{j}', 'ROUT:SIGN:IMP 1E+06', 'SCOP:SHAP DC', 'TIM:SCAL 100E-6', '')
     Call_oscill('VOLT 35', f'CHAN{j}:SCAL 5', ':MEAS:VAV?', f'dcv{j}_1', '', 0.8)
     Call_oscill('VOLT 14', f'CHAN{j}:SCAL 2', ':MEAS:VAV?', f'dcv{j}_2', '', 0.32)
@@ -16,10 +16,10 @@ for j in range(1,5,1):
     Call_oscill('VOLT 0.035', f'CHAN{j}:SCAL 0.005', ':MEAS:VAV?', f'dcv{j}_10', '', 0.0008)
     Call_oscill('VOLT 0.014', f'CHAN{j}:SCAL 0.002', ':MEAS:VAV?', f'dcv{j}_11', '', 0.00064)
     # trise
-    Reset()
+    Supportfunc('resetoscil')
     Param_osc(f'{j}', 'ROUT:SIGN:IMP 50', 'SCOP:SHAP EDGE', f'TIM:SCAL 5.0E-9\nCHAN{j}:IMP FIFT', '')
     Call_oscill('VOLT 0.25', f'CHAN{j}:SCAL 0.05', ':MEAS:RIS?', f'fr_{j}', f'tr_{j}', 349.9)
 
-Message('Калибровка завершена')
+Supportfunc(f'message-Калибровка завершена')
 Clear_merge()
-Reset()
+Supportfunc('resetoscil')

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 for j in range(1,5,1):
     # dcv
-    Message(f'Подключите формирователь без вешней нагрузки на КАНАЛ №{j} осциллографа')
-    Reset()
+    Supportfunc(f'message-одключите формирователь без вешней нагрузки на КАНАЛ №{j} осциллографа')
+    Supportfunc('resetoscil')
     Param_osc(f'{j}', 'ROUT:SIGN:IMP 1E+06', 'SCOP:SHAP DC', 'HOR:SEC 500E-6', '')
     Call_oscill('VOLT 0.006', f'CH{j}:VOL 0.002', 'MEASU:MEAS1:VAL?', f'dcv{j}+_1', f'gdcv{j}+_1', 4)
     Call_oscill('VOLT -0.006', f'CH{j}:VOL 0.002', 'MEASU:MEAS1:VAL?', f'dcv{j}-_1', f'gdcv{j}-_1', 4)
@@ -38,7 +38,7 @@ for j in range(1,5,1):
     Param_osc(f'{j}', 'ROUT:SIGN:IMP 1E+06', 'SCOP:SHAP MARK', 'HOR:SEC 2.5E-3', 'PER:FIX 5E-03')
     Call_oscill('VOLT 1', f'CH{j}:VOL 0.2', 'MEASU:MEAS3:VAL?', f'ti{j}_5', f'gti{j}_5', 10.25)
     # trise
-    Message(f'Подключите внешнию нагрузку 50 Ом на КАНАЛ №{j} осциллографа')
+    Supportfunc(f'message-Подключите внешнию нагрузку 50 Ом на КАНАЛ №{j} осциллографа')
     Param_osc(f'{j}', 'ROUT:SIGN:IMP 50', 'SCOP:SHAP EDGE', 'HOR:SEC 5E-9', '')
     Call_oscill('VOLT 3.1', f'CH{j}:VOL 5\nTRIG:MAI:LEV -1.8', 'MEASU:MEAS4:VAL?', f'tr{j}_1', '', 3.5)
     Call_oscill('VOLT 3.1', f'CH{j}:VOL 2\nTRIG:MAI:LEV -1.5', 'MEASU:MEAS4:VAL?', f'tr{j}_2', '', 3.5)
@@ -51,6 +51,6 @@ for j in range(1,5,1):
     Call_oscill('VOLT 0.06', f'CH{j}:VOL 0.01\nTRIG:MAI:LEV -0.03', 'MEASU:MEAS4:VAL?', f'tr{j}_9', '', 3.5)
     Call_oscill('VOLT 0.03', f'CH{j}:VOL 0.005\nTRIG:MAI:LEV -0.015', 'MEASU:MEAS4:VAL?', f'tr{j}_10', '', 3.5)
 
-Message('Калибровка завершена')
+Supportfunc(f'message-Калибровка завершена')
 Clear_merge()
-Reset()
+Supportfunc('resetoscil')

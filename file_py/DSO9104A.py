@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 for j in range(1,5,1):
     # dcv
-    Message(f'Подключите формирователь и мультиметр через тройник на КАНАЛ №{j} осциллографа')
-    Reset()
+    Supportfunc(f'message-Подключите формирователь и мультиметр через тройник на КАНАЛ №{j} осциллографа')
+    Supportfunc('resetoscil')
     Param_osc(f'{j}', 'ROUT:SIGN:IMP 1E+06', 'SCOP:SHAP DC', 'TIM:SCAL 100E-6', 'DC')
     Call_DSO9000('VOLT 0.015', f'CHAN{j}:SCAL 0.005', ':MEAS:VAV?', 'CONF:VOLT:DC 0.1', f'dcv{j}+1', f'odcv{j}+1', '', '', 2)
     Call_DSO9000('VOLT -0.015', f'CHAN{j}:SCAL 0.005', ':MEAS:VAV?', 'CONF:VOLT:DC 0.1', f'dcv{j}-1', f'odcv{j}-1', '', '', 2)
@@ -40,7 +40,7 @@ for j in range(1,5,1):
     Call_DSO9000('VOLT 3', f'CHAN{j}:SCAL 1', ':MEAS:VAV?', 'CONF:VOLT:DC 10', f'dcv{j}+17', f'odcv{j}+17', '', '', 2)
     Call_DSO9000('VOLT -3', f'CHAN{j}:SCAL 1', ':MEAS:VAV?', 'CONF:VOLT:DC 10', f'dcv{j}-17', f'odcv{j}-17', '', '', 2)
     # offset
-    Reset()
+    Supportfunc('resetoscil')
     Param_osc(f'{j}', 'ROUT:SIGN:IMP 1E+06', 'SCOP:SHAP DC', 'TIM:SCAL 100E-6', 'DC')
     Call_DSO9000('VOLT 0.06', f'CHAN{j}:SCAL 0.005', '0.06', 'CONF:VOLT:DC 0.1', f'vofs{j}+1', f'ovofs{j}+1', f'vofs0{j}_1', f'ovofs0{j}_1', 1.25)
     Call_DSO9000('VOLT -0.06', f'CHAN{j}:SCAL 0.005', '-0.06', 'CONF:VOLT:DC 0.1', f'vofs{j}-1', f'ovofs{j}-1', f'vofs0{j}_1', f'ovofs0{j}_1', 1.25)
@@ -59,7 +59,7 @@ for j in range(1,5,1):
     Call_DSO9000('VOLT 4', f'CHAN{j}:SCAL 1', '4', 'CONF:VOLT:DC 10', f'vofs{j}+8', f'ovofs{j}+8', f'vofs0{j}_8', f'ovofs0{j}_8', 1.25)
     Call_DSO9000('VOLT -4', f'CHAN{j}:SCAL 1', '-4', 'CONF:VOLT:DC 10', f'vofs{j}-8', f'ovofs{j}-8', f'vofs0{j}_8', f'ovofs0{j}_8', 1.25)
     # null
-    Reset()
+    Supportfunc('resetoscil')
     Param_osc(f'{j}', 'ROUT:SIGN:IMP 1E+06', 'SCOP:SHAP DC', 'TIM:SCAL 100E-6', 'DC')
     Call_DSO9000('VOLT 0.01', f'CHAN{j}:SCAL 0.005', '', '', '', f'nul{j}_1', '', '', 1.8)
     Call_DSO9000('VOLT 0.01', f'CHAN{j}:SCAL 0.01', '', '', '', f'nul{j}_2', '', '', 1.8)
@@ -70,7 +70,7 @@ for j in range(1,5,1):
     Call_DSO9000('VOLT 0.01', f'CHAN{j}:SCAL 0.5', '', '', '', f'nul{j}_7', '', '', 41)
     Call_DSO9000('VOLT 0.01', f'CHAN{j}:SCAL 1', '', '', '', f'nul{j}_8', '', '', 81)
     # band
-    Reset()
+    Supportfunc('resetoscil')
     Param_osc(f'{j}', 'ROUT:SIGN:IMP 50', 'SCOP:SHAP SIN;, FREQ:FIX 50E+06', 'TIM:SCAL 20E-9', '')
     Call_DSO9000('VOLT 0.03', f'CHAN{j}:SCAL 0.005', f':MEAS:VRMS? CYCL,AC,CHAN{j}', '', f'pin{j}_50_1', f'pdb{j}_50_1', '', '', 3)
     Param_osc(f'{j}', 'ROUT:SIGN:IMP 50', 'SCOP:SHAP SIN;, FREQ:FIX 1E+09', 'TIM:SCAL 1E-9', '')
@@ -104,6 +104,6 @@ for j in range(1,5,1):
     Param_osc(f'{j}', 'ROUT:SIGN:IMP 50', 'SCOP:SHAP SIN;, FREQ:FIX 1E+09', 'TIM:SCAL 1E-9', '')
     Call_DSO9000('VOLT 3.3', f'CHAN{j}:SCAL 1', f':MEAS:VRMS? CYCL,AC,CHAN{j}', '', f'pin{j}_1_8', f'pdb{j}_1_8', '', '', 3)
 
-Message('Калибровка завершена')
+Supportfunc(f'message-Калибровка завершена')
 Clear_merge()
-Reset()
+Supportfunc('resetoscil')

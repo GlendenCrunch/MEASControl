@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 for j in range(1,9,1):
-    Message(f'Подключите формирователь на КАНАЛ №{j} осциллографа')
     # res
-    Reset()
+    Supportfunc(f'message-Подключите формирователь на КАНАЛ №{j} осциллографа')
+    Supportfunc('resetoscil')
     Param_osc(f'{j}', '', 'CONF:RES', 'TDIV 1ms', f'C{j}:CPL DC50')
     Call_oscill('ROUT:SIGN:IMP 50', f'C{j}:VDIV 50mv', 'READ?', f'r{j}_1', '', 1)
     Call_oscill('ROUT:SIGN:IMP 50', f'C{j}:VDIV 200mv', 'READ?', f'r{j}_2', '', 1)
@@ -10,7 +10,7 @@ for j in range(1,9,1):
     Call_oscill('ROUT:SIGN:IMP 1E+06', f'C{j}:VDIV 50mv', 'READ?', f'r{j}_3', '', 20000)
     Call_oscill('ROUT:SIGN:IMP 1E+06', f'C{j}:VDIV 200mv', 'READ?', f'r{j}_4', '', 20000)
     # dcv
-    Reset()
+    Supportfunc('resetoscil')
     Param_osc(f'{j}', 'ROUT:SIGN:IMP 1E+06', 'SCOP:SHAP DC', 'TDIV 1ms', f'C{j}:CPL DC50')
     Call_oscill('VOLT 0.006', f'C{j}:VDIV 2mv', f'C{j}:PAVA? MEAN', f'dcv{j}_50_1', '', 0.00108)
     Call_oscill('VOLT -0.006', f'C{j}:VDIV 2mv', f'C{j}:PAVA? MEAN', f'dcv{j}_50_2', '', 0.00108)
@@ -79,7 +79,7 @@ for j in range(1,9,1):
     Call_oscill('VOLT 160', f'C{j}:VDIV 10v', f'C{j}:PAVA? MEAN', f'odcv{j}_1_11', '-160', 3.201)
     Call_oscill('VOLT -160', f'C{j}:VDIV 10v', f'C{j}:PAVA? MEAN', f'odcv{j}_1_12', '160', 3.201)
     # band
-    Reset()
+    Supportfunc('resetoscil')
     Param_osc(f'{j}', 'ROUT:SIGN:IMP 50', 'SCOP:SHAP SIN', 'TDIV 100US', f'C{j}:CPL DC50')
     Call_oscill('VOLT 0.01', f'C{j}:VDIV 2mv', f'C{j}:PAVA? PKPK', f'bw{j}_50_1', 'FREQ:FIX 50E+03', 1000)
     Call_oscill('VOLT 0.03', f'C{j}:VDIV 5mv', f'C{j}:PAVA? PKPK', f'bw{j}_50_2', 'FREQ:FIX 50E+03', 1000)
@@ -104,7 +104,7 @@ for j in range(1,9,1):
     Call_oscill('VOLT 5.5', f'C{j}:VDIV 5', f'C{j}:PAVA? PKPK', f'bw{j}_1_11', 'FREQ:FIX 50E+03', 1000)
     Call_oscill('VOLT 5.5', f'C{j}:VDIV 10', f'C{j}:PAVA? PKPK', f'bw{j}_1_12', 'FREQ:FIX 50E+03', 1000)
     # trise
-    Reset()
+    Supportfunc('resetoscil')
     Param_osc(f'{j}', 'ROUT:SIGN:IMP 50', 'SCOP:SHAP EDGE', 'TDIV 2ns', f'C{j}:CPL DC50')
     Call_oscill('VOLT 0.06', f'C{j}:VDIV 0.01', f'C{j}:PAVA? RISE', f'tr{j}_1', '0.03', 450)
     Call_oscill('VOLT 0.12', f'C{j}:VDIV 0.02', f'C{j}:PAVA? RISE', f'tr{j}_2', '0.06', 450)
@@ -114,16 +114,16 @@ for j in range(1,9,1):
     Call_oscill('VOLT 3', f'C{j}:VDIV 0.5', f'C{j}:PAVA? RISE', f'tr{j}_6', '1.5', 450)
     Call_oscill('VOLT 3', f'C{j}:VDIV 1', f'C{j}:PAVA? RISE', f'tr{j}_7', '1.5', 450)
     # period
-    Reset()
+    Supportfunc('resetoscil')
     Param_osc(f'{j}', 'ROUT:SIGN:IMP 50', 'SCOP:SHAP SQU;, FREQ:FIX 0.01E+3', 'TDIV 100ms', f'C{j}:CPL DC50')
-    Call_oscill('VOLT 0.6', f'C{j}:VDIV 0.1', f'C{j}:PAVA? PERIOD', f'ti{j}_1', '0.01E+3', 0.00000025)
+    Call_oscill('VOLT 0.6', f'C{j}:VDIV 0.1', f'C{j}:PAVA? PERIOD', f'ti{j}_1', '0.01E+3', 250E-9)
     Param_osc(f'{j}', 'ROUT:SIGN:IMP 50', 'SCOP:SHAP SQU;, FREQ:FIX 1E+3', 'TDIV 1ms', f'C{j}:CPL DC50')
-    Call_oscill('VOLT 0.6', f'C{j}:VDIV 0.1', f'C{j}:PAVA? PERIOD', f'ti{j}_2', '1E+3', 0.0000000025)
+    Call_oscill('VOLT 0.6', f'C{j}:VDIV 0.1', f'C{j}:PAVA? PERIOD', f'ti{j}_2', '1E+3', 2.5E-9)
     Param_osc(f'{j}', 'ROUT:SIGN:IMP 50', 'SCOP:SHAP SIN;, FREQ:FIX 1E+6', 'TDIV 1us', f'C{j}:CPL DC50')
-    Call_oscill('VOLT 0.6', f'C{j}:VDIV 0.1', f'C{j}:PAVA? PERIOD', f'ti{j}_3', '1E+6', 0.0000000000025)
+    Call_oscill('VOLT 0.6', f'C{j}:VDIV 0.1', f'C{j}:PAVA? PERIOD', f'ti{j}_3', '1E+6', 8.5E-12)
     Param_osc(f'{j}', 'ROUT:SIGN:IMP 50', 'SCOP:SHAP SIN;, FREQ:FIX 0.01E+9', 'TDIV 100ns', f'C{j}:CPL DC50')
-    Call_oscill('VOLT 0.6', f'C{j}:VDIV 0.1', f'C{j}:PAVA? PERIOD', f'ti{j}_4', '0.01E+9', 0.00000000000025)
+    Call_oscill('VOLT 0.6', f'C{j}:VDIV 0.1', f'C{j}:PAVA? PERIOD', f'ti{j}_4', '0.01E+9', 6.25E-12)
 
-Message('Калибровка завершена')
+Supportfunc(f'message-Калибровка завершена')
 Clear_merge()
-Reset()
+Supportfunc('resetoscil')
