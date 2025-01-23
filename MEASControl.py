@@ -254,7 +254,7 @@ class MeasControlGUI():
         text1 = ('MEASControl\rVersion: 1.11a\rDate: 2024-05-22\rAutor: g1enden (I T L)')
         text2 = ('Agilent/Keysight:\r34401A\r34410A\r34411A\r34420A\r34460A\r34461A\r34465A\r34470A\r\r\r\r\r')
         text3 = ('AKIP:\rV7-78/1\r\r\r\r\r\r\r\r\r\r\r\r')
-        text4 = ('Lecroy:\rWaveJet 312A\rHDO8108A\r\r\r\r\r\r\r\r\r\r\r')
+        text4 = ('Lecroy:\rWaveJet 312A\rWaveJet 324A\rHDO8108A\r\r\r\r\r\r\r\r\r\r')
         text5 = ('Tektronix:\rTDS2002\rTDS2014(B,C)\rTDS2024(B,C)\rTPS2024\r\r\r\r\r\r\r\r\r')
         text6 = ('Agilent/Keysight:\rMSO-X 3104A\rMSO-X 3034A\rMSO-X 3054A\rMSO-X 4104A\rDSO-X 4034A\rDSO6102A\rMSO6012A\rDSO7034B\rMSO7104B\rDSO9104A\rMSO9404A\rDSO-X92004A\r')
         text7 = ('Siglent:\rAKIP-4119/1\rAKIP-4131/1A\rAKIP-4131/2A\r\r\r\r\r\r\r\r\r\r')
@@ -353,7 +353,7 @@ class MeasControlGUI():
     def cnt(self):
         cnt_dict = {}
         cnt_dict0 = {'34401A':1, '34401A_gost':1, '34420A':1, '34410A':1, '34411A':1, '34460A':1, '34461A':1, '34465A':1, '34470A':1, 'V7-78-1':1,
-                    'WJ312A':2, 'TDS2002':2, 'TDS2014':4, 'TDS2014C':4, 'TDS2014B':4, 'TDS2024':4, 'TDS2024B':4, 'TDS2024C':4, 'TPS2024':4, 'MSO-X3034A':4, 
+                    'WJ312A':2, 'WJ324A':4, 'TDS2002':2, 'TDS2014':4, 'TDS2014C':4, 'TDS2014B':4, 'TDS2024':4, 'TDS2024B':4, 'TDS2024C':4, 'TPS2024':4, 'MSO-X3034A':4, 
                     'MSO-X3054A':4, 'MSO-X3104T':4, 'MSO-X3104A':4, 'DSO-X4034A':4, 'MSO-X4104A':4, 'DSO6102A':2, 'MSO6012A':2, 'DSO9104A':4, 'MSO9404A':4,
                     'DSO7034B':4, 'MSO7104B':4, 'AKIP-4119-1':4, 'AKIP-4131-1A':4, 'AKIP-4131-2A':4, 'HDO8108A':8, 'RTO1024':4, 'RTO1044':4, 'DSOX92004A':4}
         
@@ -424,7 +424,7 @@ class MeasControlGUI():
             self.a1[1] = self.a1[1].replace('/', '-').replace(' ', '')
             if self.a1[1] == '34401A':
                 self.chkbtn_1.place(x=0,y=40)
-            elif self.a1[1] in ('WJ312A', 'TDS2002', 'TDS2014', 'TDS2014C', 'TDS2014B', 'TDS2024', 'TDS2024B', 'TDS2024C', 'TPS2024', 'MSO-X3034A', 'DSO-X4034A',
+            elif self.a1[1] in ('WJ312A', 'WJ324A', 'TDS2002', 'TDS2014', 'TDS2014C', 'TDS2014B', 'TDS2024', 'TDS2024B', 'TDS2024C', 'TPS2024', 'MSO-X3034A', 'DSO-X4034A',
                                 'MSO-X3104T', 'MSO-X3054A', 'MSO-X3104A', 'MSO-X4104A', 'DSO6102A', 'MSO6012A', 'DSO9104A', 'MSO9404A', 'DSO7034B', 'MSO7104B', 'AKIP-4119-1',
                                 'AKIP-4131-1A', 'AKIP-4131-2A','HDO8108A', 'RTO'):
                 self.fluk_on.configure(command=self.connect_fluke_9500)
@@ -859,7 +859,7 @@ class Param_osc(Thread):
         my_gui.inst_dmm.write(f'PACU RISE, C{self.name}')
 
     def param_wj312(self):
-        self.chanel_select(self.name, 2, 'C_:TRA ON', 'C_:TRA OFF')
+        self.chanel_select(self.name, int(my_gui.a1[1][4]), 'C_:TRA ON', 'C_:TRA OFF')
         my_gui.inst_dmm.write('TRMD AUTO')
         my_gui.inst_dmm.write(f'C{self.name}:CPL DC1M')
         my_gui.query(self.imp)
@@ -934,7 +934,7 @@ class Param_osc(Thread):
 
     def run(self):
         sem.acquire()
-        if my_gui.a1[1] == 'WJ312A':
+        if my_gui.a1[1] in ('WJ312A', 'WJ324A'):
             self.param_wj312()
         elif my_gui.a1[1] == 'HDO8108A':
             self.param_hdo8108()
@@ -967,7 +967,9 @@ class Call_oscill(Thread):
         self.start()
 
     def call_wj312(self):
-        time.sleep(3)
+        time.sleep(1)
+        my_gui.inst_dmm.write('ACQ AVERAGE; AVGCNT 4')
+        time.sleep(2)
         self.data_true = float(my_gui.inst_dmm.query(self.vosc2))
         if self.vosc2 == 'MSRC?':
             self.data_true = self.data_true * 1E+9
@@ -986,14 +988,16 @@ class Call_oscill(Thread):
                         cell.fill = my_gui.colour_cell
                         self.tree2_img = my_gui.img3
 
+        my_gui.inst_dmm.write('ACQ NORMAL')
+
     def call_tds2(self):
         time.sleep(1)
         my_gui.inst_dmm.write('ACQ:MOD AVE; NUMAV 16')
         time.sleep(3)
-        if my_gui.a1[1] == 'TDS2014':
-            self.data_true = float(my_gui.inst_dmm.query(self.vosc2).split(' ')[1]) # :MEASUREMENT:MEAS1:VALUE 9.9E37 TDS2014?
-        else:
-            self.data_true = float(my_gui.inst_dmm.query(self.vosc2))
+        #if my_gui.a1[1] == 'TDS2014':
+        #    self.data_true = float(my_gui.inst_dmm.query(self.vosc2).split(' ')[1]) # :MEASUREMENT:MEAS1:VALUE 9.9E37 TDS2014?
+        #else:
+        self.data_true = float(my_gui.inst_dmm.query(self.vosc2))
         if self.vosc2 in ('MEASU:MEAS1:VAL?'):
             if my_gui.a1[1] == 'TPS2024':
                 self.data_error = (self.data_true - float(self.vfluk.split(' ')[1])) * 1000
@@ -1030,6 +1034,9 @@ class Call_oscill(Thread):
         time.sleep(1)
         my_gui.inst_dmm.write(':ACQ:TYPE AVER; :ACQ:COUN 64')
         time.sleep(2)
+        if my_gui.a1[1] == 'MSO-X3104A':
+            my_gui.inst_dmm.write(self.cel2) # offset for view signal
+            time.sleep(1)
         if self.vosc2 == ':MARK:Y1P?':
             my_gui.inst_dmm.write(':MARK:MODE WAV') # курсоры-слежение
             time.sleep(1)
@@ -1278,7 +1285,6 @@ class Call_oscill(Thread):
 
         my_gui.inst_dmm.write('ACQ:COUN 1')
 
-
     def run(self):
         sem.acquire()
         my_gui.statusbar["text"] = f'Статус: работа   Прогресс: {my_gui.count} из {my_gui.cnt()[my_gui.a1[1]]}'
@@ -1291,7 +1297,7 @@ class Call_oscill(Thread):
         my_gui.inst_dmm.write(self.vosc1)
         my_gui.query("OUTP:STAT ON")
 
-        if my_gui.a1[1] == 'WJ312A':
+        if my_gui.a1[1] in ('WJ312A', 'WJ324A'):
             self.call_wj312()
         elif my_gui.a1[1] == 'HDO8108A':
             self.call_hdo8108()

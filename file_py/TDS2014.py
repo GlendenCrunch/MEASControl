@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 for j in range(1,5,1):
     # dcv
-    Supportfunc(f'message-Подключите формирователь на КАНАЛ №{j} осциллографа')
+    Supportfunc(f'message-Подключите формирователь без вешней нагрузки на КАНАЛ №{j} осциллографа')
     Supportfunc('resetoscil')
     Param_osc(f'{j}', 'ROUT:SIGN:IMP 1E+06', 'SCOP:SHAP DC', 'HOR:SEC 500E-6', '')
     Call_oscill('VOLT 0.006', f'CH{j}:VOL 0.002', 'MEASU:MEAS1:VAL?', f'dcv{j}+_1', f'gdcv{j}+_1', 4)
