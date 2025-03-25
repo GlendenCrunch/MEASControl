@@ -60,21 +60,25 @@ for j in range(1,5,1):
     Call_oscill('VOLT 1', f'CH{j}:VOL 0.2', 'MEASU:MEAS3:VAL?', f'ti{j}_2', '', 0.085)
     Param_osc(f'{j}', 'ROUT:SIGN:IMP 1E+06', 'SCOP:SHAP MARK', 'HOR:SEC 50E-3', 'PER:FIX 50E-03')
     Call_oscill('VOLT 1', f'CH{j}:VOL 0.2', 'MEASU:MEAS3:VAL?', f'ti{j}_1', '', 0.205)
+    # band
+    volt_calibration = [0.03, 0.06, 0.12, 0.3, 0.6, 1.2, 3, 5.5, 5.5, 5.5]
+    vertical_deviation = [0.005, 0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1, 2, 5]
+    for k in range(10):
+        Param_osc(f'{j}', 'ROUT:SIGN:IMP 1E+06', 'SCOP:SHAP SIN;, FREQ:FIX 5E+06', 'HOR:SEC 1E-6', '')
+        Call_oscill(f'VOLT {volt_calibration[k]}', f'CH{j}:VOL {vertical_deviation[k]}', 'MEASU:MEAS2:VAL?', f'uout5_{j}_{k}', f'uin5_{j}_{k}', 1E+4)
+        Param_osc(f'{j}', 'ROUT:SIGN:IMP 1E+06', 'SCOP:SHAP SIN;, FREQ:FIX 100E+06', 'HOR:SEC 10E-9', '')
+        Call_oscill(f'VOLT {volt_calibration[k]}', f'CH{j}:VOL {vertical_deviation[k]}', 'MEASU:MEAS2:VAL?', f'uoutgr{j}_{k}', f'uingr{j}_{k}', 1E+4)
+    k = 0
     # trise
     Supportfunc(f'message-Подключите внешнию нагрузку 50 Ом на КАНАЛ №{j} осциллографа')
     Param_osc(f'{j}', 'ROUT:SIGN:IMP 50', 'SCOP:SHAP EDGE', 'HOR:SEC 2.5E-9', '')
-    Call_oscill('VOLT 0.03', f'CH{j}:VOL 0.005\nTRIG:MAI:LEV -0.02', 'MEASU:MEAS4:VAL?', f'tr{j}_1', '', 3.5)
-    Call_oscill('VOLT 0.06', f'CH{j}:VOL 0.01\nTRIG:MAI:LEV -0.02', 'MEASU:MEAS4:VAL?', f'tr{j}_2', '', 3.5)
-    Call_oscill('VOLT 0.12', f'CH{j}:VOL 0.02\nTRIG:MAI:LEV -0.02', 'MEASU:MEAS4:VAL?', f'tr{j}_3', '', 3.5)
-    Call_oscill('VOLT 0.3', f'CH{j}:VOL 0.05\nTRIG:MAI:LEV -0.02', 'MEASU:MEAS4:VAL?', f'tr{j}_4', '', 3.5)
-    Param_osc(f'{j}', 'ROUT:SIGN:IMP 50', 'SCOP:SHAP EDGE', 'HOR:SEC 2.5E-9', '')
-    Call_oscill('VOLT 0.6', f'CH{j}:VOL 0.1\nTRIG:MAI:LEV -0.1', 'MEASU:MEAS4:VAL?', f'tr{j}_5', '', 3.5)
-    Call_oscill('VOLT 1.2', f'CH{j}:VOL 0.2\nTRIG:MAI:LEV -0.1', 'MEASU:MEAS4:VAL?', f'tr{j}_6', '', 3.5)
-    Param_osc(f'{j}', 'ROUT:SIGN:IMP 50', 'SCOP:SHAP EDGE', 'HOR:SEC 2.5E-9', '')
-    Call_oscill('VOLT 2.9', f'CH{j}:VOL 0.5\nTRIG:MAI:LEV -1.6', 'MEASU:MEAS4:VAL?', f'tr{j}_7', '', 3.5)
-    Call_oscill('VOLT 3', f'CH{j}:VOL 1\nTRIG:MAI:LEV -1.6', 'MEASU:MEAS4:VAL?', f'tr{j}_8', '', 3.5)
-    Call_oscill('VOLT 3', f'CH{j}:VOL 2\nTRIG:MAI:LEV -1.6', 'MEASU:MEAS4:VAL?', f'tr{j}_9', '', 3.5)
-    Call_oscill('VOLT 3', f'CH{j}:VOL 5\nTRIG:MAI:LEV -1.8', 'MEASU:MEAS4:VAL?', f'tr{j}_10', '', 3.5)
+    volt_calibration = [0.03, 0.06, 0.12, 0.3, 0.6, 1.2, 2.9, 3, 3, 3]
+    vertical_deviation = [0.005, 0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1, 2, 5]
+    vertical_offset = [-0.02, -0.02, -0.02, -0.02, -0.1, -0.1, -1.6, -1.6, -1.6, -1.8]
+    for l in range(10):
+        Call_oscill(f'VOLT {volt_calibration[l]}', f'CH{j}:VOL {vertical_deviation[l]}\nTRIG:MAI:LEV {vertical_offset[l]}',
+                    'MEASU:MEAS4:VAL?', f'tr{j}_{l}', '', 3.5)
+    l = 0
 
 Supportfunc(f'message-Калибровка завершена')
 Clear_merge()
