@@ -12,10 +12,12 @@
 + Suported osciloscope:
   + Keysight/Agilent: MSO-X 3034A, MSO-X 3054A, MSO-X 3104A, MSO-X 4104A, DSO-X 4034A, 
                       MSO6012A, DSO6102A, DSO7034B, DSO9104A, MSO9404A, DSO-X 92004A
-  + Tektronix: TDS2002, TDS2014, TDS2014B, TDS2014C, TDS2024, TDS2024C, TPS2024
+  + Tektronix: TDS2002, TDS2012B, TDS2014, TDS2014B, TDS2014C, TDS2024, TDS2024C, TPS2024
   + Siglent: AKIP4119/1, AKIP4131/1A
   + Lecroy: WJ312A, WJ324A, HDO8108A
   + R&S: RTO1024, RTO1044
++ Suported generators:
+  + Keysight/Agilent: 33622A
 + Virtual pribors (pyvisa-sim):
   + Agilent 34401A (ASRL9::INSTR)
   + Agilent 34411A (ASRL8::INSTR)

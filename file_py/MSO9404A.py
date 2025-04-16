@@ -1,74 +1,49 @@
 # -*- coding: utf-8 -*-
+num_step = 76
 for j in range(1,5,1):
     # dcv
     Supportfunc(f'message-Подключите формирователь и мультиметр через тройник на КАНАЛ №{j} осциллографа')
     Supportfunc('resetoscil')
     Param_osc(f'{j}', 'ROUT:SIGN:IMP 1E+06', 'SCOP:SHAP DC', 'TIM:SCAL 100E-6', 'DC')
-    Call_DSO9000('VOLT 0.015', f'CHAN{j}:SCAL 0.005', ':MEAS:VAV?', 'CONF:VOLT:DC 0.1', f'dcv{j}+1', f'odcv{j}+1', '', '', 2)
-    Call_DSO9000('VOLT -0.015', f'CHAN{j}:SCAL 0.005', ':MEAS:VAV?', 'CONF:VOLT:DC 0.1', f'dcv{j}-1', f'odcv{j}-1', '', '', 2)
-    Call_DSO9000('VOLT 0.03', f'CHAN{j}:SCAL 0.01', ':MEAS:VAV?', 'CONF:VOLT:DC 0.1', f'dcv{j}+2', f'odcv{j}+2', '', '', 2)
-    Call_DSO9000('VOLT -0.03', f'CHAN{j}:SCAL 0.01', ':MEAS:VAV?', 'CONF:VOLT:DC 0.1', f'dcv{j}-2', f'odcv{j}-2', '', '', 2)
-    Call_DSO9000('VOLT 0.06', f'CHAN{j}:SCAL 0.02', ':MEAS:VAV?', 'CONF:VOLT:DC 0.1', f'dcv{j}+3', f'odcv{j}+3', '', '', 2)
-    Call_DSO9000('VOLT -0.06', f'CHAN{j}:SCAL 0.02', ':MEAS:VAV?', 'CONF:VOLT:DC 0.1', f'dcv{j}-3', f'odcv{j}-3', '', '', 2)
-    Call_DSO9000('VOLT 0.15', f'CHAN{j}:SCAL 0.05', ':MEAS:VAV?', 'CONF:VOLT:DC 1', f'dcv{j}+4', f'odcv{j}+4', '', '', 2)
-    Call_DSO9000('VOLT -0.15', f'CHAN{j}:SCAL 0.05', ':MEAS:VAV?', 'CONF:VOLT:DC 1', f'dcv{j}-4', f'odcv{j}-4', '', '', 2)
-    Call_DSO9000('VOLT 0.3', f'CHAN{j}:SCAL 0.1', ':MEAS:VAV?', 'CONF:VOLT:DC 1', f'dcv{j}+5', f'odcv{j}+5', '', '', 2)
-    Call_DSO9000('VOLT -0.3', f'CHAN{j}:SCAL 0.1', ':MEAS:VAV?', 'CONF:VOLT:DC 1', f'dcv{j}-5', f'odcv{j}-5', '', '', 2)
-    Call_DSO9000('VOLT 0.6', f'CHAN{j}:SCAL 0.2', ':MEAS:VAV?', 'CONF:VOLT:DC 1', f'dcv{j}+6', f'odcv{j}+6', '', '', 2)
-    Call_DSO9000('VOLT -0.6', f'CHAN{j}:SCAL 0.2', ':MEAS:VAV?', 'CONF:VOLT:DC 1', f'dcv{j}-6', f'odcv{j}-6', '', '', 2)
-    Call_DSO9000('VOLT 1.5', f'CHAN{j}:SCAL 0.5', ':MEAS:VAV?', 'CONF:VOLT:DC 10', f'dcv{j}+7', f'odcv{j}+7', '', '', 2)
-    Call_DSO9000('VOLT -1.5', f'CHAN{j}:SCAL 0.5', ':MEAS:VAV?', 'CONF:VOLT:DC 10', f'dcv{j}-7', f'odcv{j}-7', '', '', 2)
-    Call_DSO9000('VOLT 3', f'CHAN{j}:SCAL 1', ':MEAS:VAV?', 'CONF:VOLT:DC 10', f'dcv{j}+8', f'odcv{j}+8', '', '', 2)
-    Call_DSO9000('VOLT -3', f'CHAN{j}:SCAL 1', ':MEAS:VAV?', 'CONF:VOLT:DC 10', f'dcv{j}-8', f'odcv{j}-8', '', '', 2)
-    Call_DSO9000('VOLT 6', f'CHAN{j}:SCAL 2', ':MEAS:VAV?', 'CONF:VOLT:DC 10', f'dcv{j}+9', f'odcv{j}+9', '', '', 2)
-    Call_DSO9000('VOLT -6', f'CHAN{j}:SCAL 2', ':MEAS:VAV?', 'CONF:VOLT:DC 10', f'dcv{j}-9', f'odcv{j}-9', '', '', 2)
-    Call_DSO9000('VOLT 15', f'CHAN{j}:SCAL 5', ':MEAS:VAV?', 'CONF:VOLT:DC 100', f'dcv{j}+10', f'odcv{j}+10', '', '', 2)
-    Call_DSO9000('VOLT -15', f'CHAN{j}:SCAL 5', ':MEAS:VAV?', 'CONF:VOLT:DC 100', f'dcv{j}-10', f'odcv{j}-10', '', '', 2)
+    volt_cal1 = [0.015, 0.03, 0.06, 0.15, 0.3, 0.6, 1.5, 3, 6, 15]
+    vert_dev = [0.005, 0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1, 2, 5]
+    dmm_ran = [0.1, 0.1, 0.1, 1, 1, 1, 10, 10, 10, 100]
+    for g in range(10):
+        Call_DSO9000(f'VOLT {volt_cal1[g]}', f'CHAN{j}:SCAL {vert_dev[g]}', ':MEAS:VAV?', f'CONF:VOLT:DC {dmm_ran[g]}', f'dcv{j}+{g}', f'odcv{j}+{g}', '', '', 2)
+        Call_DSO9000(f'VOLT -{volt_cal1[g]}', f'CHAN{j}:SCAL {vert_dev[g]}', ':MEAS:VAV?', f'CONF:VOLT:DC {dmm_ran[g]}', f'dcv{j}-{g}', f'odcv{j}-{g}', '', '', 2)
+    
+    dmm_ran = [0.1, 0.1, 1, 1, 1, 10, 10]
     Param_osc(f'{j}', 'ROUT:SIGN:IMP 1E+06', 'SCOP:SHAP DC', 'TIM:SCAL 100E-6', 'DC50')
-    Call_DSO9000('VOLT 0.03', f'CHAN{j}:SCAL 0.01', ':MEAS:VAV?', 'CONF:VOLT:DC 0.1', f'dcv{j}+11', f'odcv{j}+11', '', '', 2)
-    Call_DSO9000('VOLT -0.03', f'CHAN{j}:SCAL 0.01', ':MEAS:VAV?', 'CONF:VOLT:DC 0.1', f'dcv{j}-11', f'odcv{j}-11', '', '', 2)
-    Call_DSO9000('VOLT 0.06', f'CHAN{j}:SCAL 0.02', ':MEAS:VAV?', 'CONF:VOLT:DC 0.1', f'dcv{j}+12', f'odcv{j}+12', '', '', 2)
-    Call_DSO9000('VOLT -0.06', f'CHAN{j}:SCAL 0.02', ':MEAS:VAV?', 'CONF:VOLT:DC 0.1', f'dcv{j}-12', f'odcv{j}-12', '', '', 2)
-    Call_DSO9000('VOLT 0.15', f'CHAN{j}:SCAL 0.05', ':MEAS:VAV?', 'CONF:VOLT:DC 1', f'dcv{j}+13', f'odcv{j}+13', '', '', 2)
-    Call_DSO9000('VOLT -0.15', f'CHAN{j}:SCAL 0.05', ':MEAS:VAV?', 'CONF:VOLT:DC 1', f'dcv{j}-13', f'odcv{j}-13', '', '', 2)
-    Call_DSO9000('VOLT 0.3', f'CHAN{j}:SCAL 0.1', ':MEAS:VAV?', 'CONF:VOLT:DC 1', f'dcv{j}+14', f'odcv{j}+14', '', '', 2)
-    Call_DSO9000('VOLT -0.3', f'CHAN{j}:SCAL 0.1', ':MEAS:VAV?', 'CONF:VOLT:DC 1', f'dcv{j}-14', f'odcv{j}-14', '', '', 2)
-    Call_DSO9000('VOLT 0.6', f'CHAN{j}:SCAL 0.2', ':MEAS:VAV?', 'CONF:VOLT:DC 1', f'dcv{j}+15', f'odcv{j}+15', '', '', 2)
-    Call_DSO9000('VOLT -0.6', f'CHAN{j}:SCAL 0.2', ':MEAS:VAV?', 'CONF:VOLT:DC 1', f'dcv{j}-15', f'odcv{j}-15', '', '', 2)
-    Call_DSO9000('VOLT 1.5', f'CHAN{j}:SCAL 0.5', ':MEAS:VAV?', 'CONF:VOLT:DC 10', f'dcv{j}+16', f'odcv{j}+16', '', '', 2)
-    Call_DSO9000('VOLT -1.5', f'CHAN{j}:SCAL 0.5', ':MEAS:VAV?', 'CONF:VOLT:DC 10', f'dcv{j}-16', f'odcv{j}-16', '', '', 2)
-    Call_DSO9000('VOLT 3', f'CHAN{j}:SCAL 1', ':MEAS:VAV?', 'CONF:VOLT:DC 10', f'dcv{j}+17', f'odcv{j}+17', '', '', 2)
-    Call_DSO9000('VOLT -3', f'CHAN{j}:SCAL 1', ':MEAS:VAV?', 'CONF:VOLT:DC 10', f'dcv{j}-17', f'odcv{j}-17', '', '', 2)
+    for h in range(7):
+        Call_DSO9000(f'VOLT {volt_cal1[h+1]}', f'CHAN{j}:SCAL {vert_dev[h+1]}', ':MEAS:VAV?', f'CONF:VOLT:DC {dmm_ran[h]}', f'dcv{j}_50+{h}', f'odcv{j}_50+{h}', '', '', 2)
+        Call_DSO9000(f'VOLT -{volt_cal1[h+1]}', f'CHAN{j}:SCAL {vert_dev[h+1]}', ':MEAS:VAV?', f'CONF:VOLT:DC {dmm_ran[h]}', f'dcv{j}_50-{h}', f'odcv{j}_50-{h}', '', '', 2)
+    
     # offset
     Supportfunc('resetoscil')
     Param_osc(f'{j}', 'ROUT:SIGN:IMP 1E+06', 'SCOP:SHAP DC', 'TIM:SCAL 100E-6', 'DC')
-    Call_DSO9000('VOLT 0.06', f'CHAN{j}:SCAL 0.005', '0.06', 'CONF:VOLT:DC 0.1', f'vofs{j}+1', f'ovofs{j}+1', f'vofs0{j}_1', f'ovofs0{j}_1', 1.25)
-    Call_DSO9000('VOLT -0.06', f'CHAN{j}:SCAL 0.005', '-0.06', 'CONF:VOLT:DC 0.1', f'vofs{j}-1', f'ovofs{j}-1', f'vofs0{j}_1', f'ovofs0{j}_1', 1.25)
-    Call_DSO9000('VOLT 0.12', f'CHAN{j}:SCAL 0.01', '0.12', 'CONF:VOLT:DC 1', f'vofs{j}+2', f'ovofs{j}+2', f'vofs0{j}_2', f'ovofs0{j}_2', 1.25)
-    Call_DSO9000('VOLT -0.12', f'CHAN{j}:SCAL 0.01', '-0.12', 'CONF:VOLT:DC 1', f'vofs{j}-2', f'ovofs{j}-2', f'vofs0{j}_2', f'ovofs0{j}_2', 1.25)
-    Call_DSO9000('VOLT 0.24', f'CHAN{j}:SCAL 0.02', '0.24', 'CONF:VOLT:DC 1', f'vofs{j}+3', f'ovofs{j}+3', f'vofs0{j}_3', f'ovofs0{j}_3', 1.25)
-    Call_DSO9000('VOLT -0.24', f'CHAN{j}:SCAL 0.02', '-0.24', 'CONF:VOLT:DC 1', f'vofs{j}-3', f'ovofs{j}-3', f'vofs0{j}_3', f'ovofs0{j}_3', 1.25)
-    Call_DSO9000('VOLT 0.6', f'CHAN{j}:SCAL 0.05', '0.6', 'CONF:VOLT:DC 1', f'vofs{j}+4', f'ovofs{j}+4', f'vofs0{j}_4', f'ovofs0{j}_4', 1.25)
-    Call_DSO9000('VOLT -0.6', f'CHAN{j}:SCAL 0.05', '-0.6', 'CONF:VOLT:DC 1', f'vofs{j}-4', f'ovofs{j}-4', f'vofs0{j}_4', f'ovofs0{j}_4', 1.25)
-    Call_DSO9000('VOLT 1.2', f'CHAN{j}:SCAL 0.1', '1.2', 'CONF:VOLT:DC 10', f'vofs{j}+5', f'ovofs{j}+5', f'vofs0{j}_5', f'ovofs0{j}_5', 1.25)
-    Call_DSO9000('VOLT -1.2', f'CHAN{j}:SCAL 0.1', '-1.2', 'CONF:VOLT:DC 10', f'vofs{j}-5', f'ovofs{j}-5', f'vofs0{j}_5', f'ovofs0{j}_5', 1.25)
-    Call_DSO9000('VOLT 2.4', f'CHAN{j}:SCAL 0.2', '2.4', 'CONF:VOLT:DC 10', f'vofs{j}+6', f'ovofs{j}+6', f'vofs0{j}_6', f'ovofs0{j}_6', 1.25)
-    Call_DSO9000('VOLT -2.4', f'CHAN{j}:SCAL 0.2', '-2.4', 'CONF:VOLT:DC 10', f'vofs{j}-6', f'ovofs{j}-6', f'vofs0{j}_6', f'ovofs0{j}_6', 1.25)
-    Call_DSO9000('VOLT 4', f'CHAN{j}:SCAL 0.5', '4', 'CONF:VOLT:DC 10', f'vofs{j}+7', f'ovofs{j}+7', f'vofs0{j}_7', f'ovofs0{j}_7', 1.25)
-    Call_DSO9000('VOLT -4', f'CHAN{j}:SCAL 0.5', '-4', 'CONF:VOLT:DC 10', f'vofs{j}-7', f'ovofs{j}-7', f'vofs0{j}_7', f'ovofs0{j}_7', 1.25)
-    Call_DSO9000('VOLT 4', f'CHAN{j}:SCAL 1', '4', 'CONF:VOLT:DC 10', f'vofs{j}+8', f'ovofs{j}+8', f'vofs0{j}_8', f'ovofs0{j}_8', 1.25)
-    Call_DSO9000('VOLT -4', f'CHAN{j}:SCAL 1', '-4', 'CONF:VOLT:DC 10', f'vofs{j}-8', f'ovofs{j}-8', f'vofs0{j}_8', f'ovofs0{j}_8', 1.25)
+    volt_cal2 = [0.06, 0.12, 0.24, 0.6, 1.2, 2.4, 4, 4]
+    dmm_ran = [0.1, 1, 1, 1, 10, 10, 10, 10]
+    for i in range(8):
+        Call_DSO9000(f'VOLT {volt_cal2[i]}', f'CHAN{j}:SCAL {vert_dev[i]}', f'{volt_cal2[i]}', f'CONF:VOLT:DC {dmm_ran[i]}', f'vofs{j}+{i}', f'ovofs{j}+{i}', f'vofs0{j}_{i}', f'ovofs0{j}_{i}', 1.25)
+        Call_DSO9000(f'VOLT -{volt_cal2[i]}', f'CHAN{j}:SCAL {vert_dev[i]}', f'-{volt_cal2[i]}', f'CONF:VOLT:DC {dmm_ran[i]}', f'vofs{j}-{i}', f'ovofs{j}-{i}', f'vofs0{j}_{i}', f'ovofs0{j}_{i}', 1.25)
+    
     # null
     Supportfunc('resetoscil')
+    nul_acc = [1.8, 1.8, 2.6, 5, 9, 17, 41, 81]
     Param_osc(f'{j}', 'ROUT:SIGN:IMP 1E+06', 'SCOP:SHAP DC', 'TIM:SCAL 100E-6', 'DC')
-    Call_DSO9000('VOLT 0.01', f'CHAN{j}:SCAL 0.005', '', '', '', f'nul{j}_1', '', '', 1.8)
-    Call_DSO9000('VOLT 0.01', f'CHAN{j}:SCAL 0.01', '', '', '', f'nul{j}_2', '', '', 1.8)
-    Call_DSO9000('VOLT 0.01', f'CHAN{j}:SCAL 0.02', '', '', '', f'nul{j}_3', '', '', 2.6)
-    Call_DSO9000('VOLT 0.01', f'CHAN{j}:SCAL 0.05', '', '', '', f'nul{j}_4', '', '', 5)
-    Call_DSO9000('VOLT 0.01', f'CHAN{j}:SCAL 0.1', '', '', '', f'nul{j}_5', '', '', 9)
-    Call_DSO9000('VOLT 0.01', f'CHAN{j}:SCAL 0.2', '', '', '', f'nul{j}_6', '', '', 17)
-    Call_DSO9000('VOLT 0.01', f'CHAN{j}:SCAL 0.5', '', '', '', f'nul{j}_7', '', '', 41)
-    Call_DSO9000('VOLT 0.01', f'CHAN{j}:SCAL 1', '', '', '', f'nul{j}_8', '', '', 81)
+    for k in range(8):
+        Call_DSO9000('VOLT 0.01', f'CHAN{j}:SCAL {vert_dev[k]}', '', '', '', f'nul{j}_{k}', '', '', nul_acc[k])
+
+    # band
+    Supportfunc('resetoscil')
+    volt_cal3 = [0.03, 0.06, 0.12, 0.3, 0.6, 1.2, 2.2, 2.2]
+    for l in range(8):
+        Param_osc(f'{j}', 'ROUT:SIGN:IMP 50', 'SCOP:SHAP SIN;, FREQ:FIX 50E+06', 'TIM:SCAL 20E-9', '')
+        Call_DSO9000(f'VOLT {volt_cal3[l]}', f'CHAN{j}:SCAL {vert_dev[l]}', f':MEAS:VRMS? CYCL,AC,CHAN{j}', '', f'pin{j}_50_{l}', f'pdb{j}_50_{l}', '', '', 3)
+        Param_osc(f'{j}', 'ROUT:SIGN:IMP 50', 'SCOP:SHAP SIN;, FREQ:FIX 3.2E+09', 'TIM:SCAL 1E-9', '')
+        Call_DSO9000(f'VOLT {volt_cal3[l]}', f'CHAN{j}:SCAL {vert_dev[l]}', f':MEAS:VRMS? CYCL,AC,CHAN{j}', '', f'pin{j}_1_{l}', f'pdb{j}_1_{l}', '', '', 3)
+    
+    g,h,i,k,l = [0,0,0,0,0]
 
 Supportfunc(f'message-Калибровка завершена')
 Clear_merge()

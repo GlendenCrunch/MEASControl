@@ -147,8 +147,10 @@ class MeasControlGUI():
         self.lbf1.place(x=5, y=5)
         self.lbf2 = tk.LabelFrame(self.tab1, text=self.lang['LabelFrame_2'], width=200, height=200, fg=self.fg_colour, bg=self.bg_colour, font=self.ar10b)
         self.lbf2.place(x=205, y=5)
-        self.lbf3 = tk.LabelFrame(self.tab1, text=self.lang['LabelFrame_3'], width=200, height=200, fg=self.fg_colour, bg=self.bg_colour, font=self.ar10b)
+        self.lbf3 = tk.LabelFrame(self.tab1, text=self.lang['LabelFrame_3'], width=200, height=100, fg=self.fg_colour, bg=self.bg_colour, font=self.ar10b)
         #self.lbf3.place(x=405, y=505)
+        self.lbf33 = tk.LabelFrame(self.tab1, text=self.lang['LabelFrame_33'], width=200, height=100, fg=self.fg_colour, bg=self.bg_colour, font=self.ar10b)
+        #self.lbf33.place(x=405, y=105)
         lbf4 = tk.LabelFrame(self.tab2, text=self.lang['LabelFrame_4'], width=200, height=390, fg=self.fg_colour, bg=self.bg_colour, font=self.ar10b)
         lbf4.place(x=5, y=5)
 
@@ -157,7 +159,9 @@ class MeasControlGUI():
         self.fluk_on = tk.Button(self.lbf2, image=self.img6, fg='#fff', bg=self.bg_button, font=self.ar12b, command=self.connect_fluke_5500)
         self.fluk_on.place(x=150, y=135)
         self.dmm_on2 = tk.Button(self.lbf3, image=self.img6, fg='#fff', bg=self.bg_button, font=self.ar12b, command=self.connect_dmm2)
-        self.dmm_on2.place(x=150, y=135)
+        self.dmm_on2.place(x=150, y=35)
+        self.power_on = tk.Button(self.lbf33, image=self.img6, fg='#fff', bg=self.bg_button, font=self.ar12b, command=self.connect_power)
+        self.power_on.place(x=150, y=35)
         self.fresh = tk.Button(self.tab1, image=self.img4, fg='#fff', bg=self.bg_button, font=self.ar12b, command=lambda: self.pribor(''))
         self.fresh.place(x=690, y=240)
         self.start_on = tk.Button(self.tab2, text=self.lang['Button_5'], width=12, fg='#fff', bg=self.bg_button, font=self.ar12b, command=self.start)
@@ -173,6 +177,8 @@ class MeasControlGUI():
         self.combo_flu.place(x=15, y=10)
         self.combo_dmm2 = ttk.Combobox(self.lbf3, state='readonly', height=5, width=25)
         self.combo_dmm2.place(x=15, y=10)
+        self.combo_power = ttk.Combobox(self.lbf33, state='readonly', height=5, width=25)
+        self.combo_power.place(x=15, y=10)
 
         self.lab1 = tk.Label(self.lbf2, text=self.lang['Label_1'], bg=self.bg_colour, fg=self.fg_colour, font=self.ar10b)
         self.lab2 = tk.Label(self.lbf2, text=self.lang['Label_2'], bg=self.bg_colour, fg=self.fg_colour, font=self.ar10b)
@@ -250,15 +256,16 @@ class MeasControlGUI():
         self.top.geometry(size_win.format(win_width, win_high))
 
     def about_win(self):
-        self.win_one(self.lang['add_cascade_4'], '600x450+{}+{}')
-        text1 = ('MEASControl\rVersion: 1.11a\rDate: 2024-05-22\rAutor: g1enden (I T L)')
+        self.win_one(self.lang['add_cascade_4'], '700x450+{}+{}')
+        text1 = ('MEASControl\rVersion: 1.12a\rDate: 2025-04-15\rAutor: g1enden (I T L)')
         text2 = ('Agilent/Keysight:\r34401A\r34410A\r34411A\r34420A\r34460A\r34461A\r34465A\r34470A\r\r\r\r\r')
         text3 = ('AKIP:\rV7-78/1\r\r\r\r\r\r\r\r\r\r\r\r')
-        text4 = ('Lecroy:\rWaveJet 312A\rWaveJet 324A\rHDO8108A\r\r\r\r\r\r\r\r\r\r')
-        text5 = ('Tektronix:\rTDS2002\rTDS2014(B,C)\rTDS2024(B,C)\rTPS2024\r\r\r\r\r\r\r\r\r')
-        text6 = ('Agilent/Keysight:\rMSO-X 3104A\rMSO-X 3034A\rMSO-X 3054A\rMSO-X 4104A\rDSO-X 4034A\rDSO6102A\rMSO6012A\rDSO7034B\rMSO7104B\rDSO9104A\rMSO9404A\rDSO-X92004A\r')
+        text4 = ('Lecroy:\rWJ312A\rWJ324A\rHDO8108A\r\r\r\r\r\r\r\r\r\r')
+        text5 = ('Tektronix:\rTDS2002\rTDS2012B\rTDS2014(B,C)\rTDS2024(B,C)\rTPS2024\r\r\r\r\r\r\r\r')
+        text6 = ('Agilent/Keysight:\rMSO-X 3104A\rMSO-X 3034A\rMSO-X 3054A\rMSO-X 4104A\rDSO-X 4034A\rDSO-X 92004A\rDSO6102A\rMSO6012A\rDSO7034B\rMSO7104B\rDSO9104A\rMSO9404A\r')
         text7 = ('Siglent:\rAKIP-4119/1\rAKIP-4131/1A\rAKIP-4131/2A\r\r\r\r\r\r\r\r\r\r')
         text8 = ('R&S:\rRTO1024\rRTO1044\r\r\r\r\r\r\r\r\r\r\r')
+        text9 = ('Agilent/Keysight:\r33622A\r\r\r\r\r\r\r\r\r\r\r\r')
 
         top_1 = tk.Frame(self.top, height=70, relief="raise")
         top_1.pack(side='top', fill='x')
@@ -276,20 +283,24 @@ class MeasControlGUI():
         lbf5.grid(row=0, column=0)
         lbf6 = tk.LabelFrame(top_2, text='Осциллографы', width=500, height=300, font=self.ar10b, foreground='deepskyblue4')
         lbf6.grid(row=0, column=1)
+        lbf7 = tk.LabelFrame(top_2, text='Генераторы', width=500, height=300, font=self.ar10b, foreground='deepskyblue4')
+        lbf7.grid(row=0, column=2)
         support_2 = tk.Label(lbf5, text=text2, font=('arial', 10), foreground='deepskyblue4')
         support_2.grid(row=0, column=0)
         support_3 = tk.Label(lbf5, text=text3, font=('arial', 10), foreground='deepskyblue4')
         support_3.grid(row=0, column=1)
         support_4 = tk.Label(lbf6, text=text4, font=('arial', 10), foreground='deepskyblue4')
-        support_4.grid(row=0, column=2)
+        support_4.grid(row=0, column=0)
         support_5 = tk.Label(lbf6, text=text5, font=('arial', 10), foreground='deepskyblue4')
-        support_5.grid(row=0, column=3)
+        support_5.grid(row=0, column=1)
         support_6 = tk.Label(lbf6, text=text6, font=('arial', 10), foreground='deepskyblue4')
-        support_6.grid(row=0, column=4)
+        support_6.grid(row=0, column=2)
         support_7 = tk.Label(lbf6, text=text7, font=('arial', 10), foreground='deepskyblue4')
-        support_7.grid(row=0, column=5)
+        support_7.grid(row=0, column=3)
         support_8 = tk.Label(lbf6, text=text8, font=('arial', 10), foreground='deepskyblue4')
-        support_8.grid(row=0, column=6)
+        support_8.grid(row=0, column=4)
+        support_9 = tk.Label(lbf7, text=text9, font=('arial', 10), foreground='deepskyblue4')
+        support_9.grid(row=0, column=1)
 
         _button = tk.Button(bottom_1, text=self.lang['Button_7'], width=10, fg='#fff', bg=self.bg_button, font=self.ar12b, command=self.top.destroy)
         _button.place(x=250,y=2)
@@ -352,12 +363,12 @@ class MeasControlGUI():
 
     def cnt(self):
         cnt_dict = {}
-        cnt_dict0 = {'34401A':1, '34401A_gost':1, '34420A':1, '34410A':1, '34411A':1, '34460A':1, '34461A':1, '34465A':1, '34470A':1, 'V7-78-1':1,
-                    'WJ312A':2, 'WJ324A':4, 'TDS2002':2, 'TDS2014':4, 'TDS2014C':4, 'TDS2014B':4, 'TDS2024':4, 'TDS2024B':4, 'TDS2024C':4, 'TPS2024':4, 'MSO-X3034A':4, 
+        cnt_dict0 = {'34401A':1, '34401A_gost':1, '34420A':1, '34410A':1, '34411A':1, '34460A':1, '34461A':1, '34465A':1, '34470A':1, 'V7-78-1':1, '33622A':2,
+                    'WJ312A':2, 'WJ324A':4, 'TDS2002':2, 'TDS2012B':2, 'TDS2014':4, 'TDS2014C':4, 'TDS2014B':4, 'TDS2024':4, 'TDS2024B':4, 'TDS2024C':4, 'TPS2024':4, 'MSO-X3034A':4, 
                     'MSO-X3054A':4, 'MSO-X3104T':4, 'MSO-X3104A':4, 'DSO-X4034A':4, 'MSO-X4104A':4, 'DSO6102A':2, 'MSO6012A':2, 'DSO9104A':4, 'MSO9404A':4,
                     'DSO7034B':4, 'MSO7104B':4, 'AKIP-4119-1':4, 'AKIP-4131-1A':4, 'AKIP-4131-2A':4, 'HDO8108A':8, 'RTO1024':4, 'RTO1044':4, 'DSOX92004A':4}
         
-        for item_0 in ['Call(', 'Call_oscill(', 'Call_DSO9000']:
+        for item_0 in ['Call(', 'Call_oscill(', 'Call_DSO9000', 'Call_generator(']:
             for item_i in list(cnt_dict0.keys()):
                 osc_item = sum(1 for line in open(f'{self.folder_1}\\file_py\\{item_i}.py', encoding='utf-8') if line.lstrip().startswith(item_0))
                 if osc_item > 0:
@@ -400,12 +411,14 @@ class MeasControlGUI():
         self.combo_dmm.configure(values=decay_list)
         self.combo_flu.configure(values=decay_list)
         self.combo_dmm2.configure(values=decay_list)
+        self.combo_power.configure(values=decay_list)
         self.vardict_str['var_spb1'].set('10')
-        self.vardict_str['var_spb2'].set('4')
+        self.vardict_str['var_spb2'].set('3')
         self.tree.delete(*self.tree.get_children())
         self.tree2.delete(*self.tree2.get_children())
         self.fluk_on.configure(command=self.connect_fluke_5500)
         self.lbf3.place(x=405, y=505)
+        self.lbf33.place(x=405, y=505)
         self.lab1.place(x=40,y=255)
         self.lab2.place(x=15,y=285)
         self.spinbox1.place(x=133, y=255)
@@ -424,22 +437,27 @@ class MeasControlGUI():
             self.a1[1] = self.a1[1].replace('/', '-').replace(' ', '')
             if self.a1[1] == '34401A':
                 self.chkbtn_1.place(x=0,y=40)
-            elif self.a1[1] in ('WJ312A', 'WJ324A', 'TDS2002', 'TDS2014', 'TDS2014C', 'TDS2014B', 'TDS2024', 'TDS2024B', 'TDS2024C', 'TPS2024', 'MSO-X3034A', 'DSO-X4034A',
-                                'MSO-X3104T', 'MSO-X3054A', 'MSO-X3104A', 'MSO-X4104A', 'DSO6102A', 'MSO6012A', 'DSO9104A', 'MSO9404A', 'DSO7034B', 'MSO7104B', 'AKIP-4119-1',
-                                'AKIP-4131-1A', 'AKIP-4131-2A','HDO8108A', 'RTO'):
+            elif self.a1[1] in ('WJ312A', 'WJ324A', 'TDS2002', 'TDS2012B', 'TDS2014', 'TDS2014C', 'TDS2014B', 'TDS2024', 'TDS2024B', 'TDS2024C', 'TPS2024',
+                                'MSO-X3034A', 'DSO-X4034A', 'MSO-X3104T', 'MSO-X3054A', 'MSO-X3104A', 'MSO-X4104A', 'DSO6102A', 'MSO6012A', 'DSO9104A',
+                                'MSO9404A', 'DSO7034B', 'MSO7104B', 'AKIP-4119-1', 'AKIP-4131-1A', 'AKIP-4131-2A','HDO8108A', 'RTO'):
                 self.fluk_on.configure(command=self.connect_fluke_9500)
                 self.lab1.place(x=40,y=55)
                 self.lab2.place(x=15,y=85)
                 self.spinbox1.place(x=133, y=55)
                 self.spinbox2.place(x=133, y=85)
-            if self.a1[1] in ('DSO9104A', 'MSO9404A', 'DSOX92004A'):
+            if self.a1[1] in ('DSO9104A', 'MSO9404A', 'DSOX92004A', '33622A'):
                 self.lbf3.place(x=405, y=5)
                 if self.a1[1] == 'DSOX92004A':
                     self.lab1.configure(text='Внутренний калибратор\nCal Out')
                     self.lab1.place(x=10,y=55)
+                elif self.a1[1] == '33622A':
+                    self.lbf33.place(x=405, y=105)
+                    self.lbf2.configure(text='Частотомер')
+                    self.fluk_on.configure(command=self.connect_counter)
             if self.a1[1] == 'RTO':
                 self.a1[1] = self.a1[1]+self.data_1.split(',')[2].split('/')[0].split('.')[1].replace('00k','')
                 self.a1[2] = self.a1[2].split('/')[1]
+
             self.a10 = f'{self.a1[1]} подключен'
             self.vardict_str['name_protokol'].set(f'{self.data_today},{self.a1[1]},{self.a1[2]}.xlsx')
             self.lab3['text'] = f'Тип: {self.a1[1]}'
@@ -464,13 +482,33 @@ class MeasControlGUI():
 
             self.data_3 = self.inst_dmm2.query("*IDN?")
             self.c1 = self.data_3.split(',')
-            if self.c1[1] in ('34401A', '34410A', '34411A', '34420A', '34460A', '34461A', '34465A', '34470A', 'V7-78/1'):
-                self.c10 = f'Мультиметр {self.c1[1]} подключен'
+            self.c10 = f'Мультиметр {self.c1[1]} подключен'
             try:
                 self.lb.insert('end', self.c10)
                 self.tree.insert('', 'end', text='', image=self.img2, values=(self.c10.split(' ')[0], self.c1[1], self.c1[2], self.data_3))
             except AttributeError:
                 self.lb.insert('end', self.data_3)
+            self.lb.see('end')
+            self.lb.itemconfig('end', bg='light cyan')
+        except TypeError:
+            self.lb.insert('end', 'Ошибка! Мультиметр не определён')
+            self.lb.itemconfig('end', bg='salmon')
+
+    def connect_power(self):
+        try:
+            self.inst_power = self.rm.open_resource(self.adres_cycle(self.combo_power.get(), self.rm_list)[0], timeout=1000)
+            if self.combo_power.get()[:4] in ('ASRL', 'USB0', 'TCPI'):
+                self.inst_power.write('SYST:REM')
+                time.sleep(1)
+
+            self.data_p = self.inst_power.query("*IDN?")
+            self.cp = self.data_p.split(',')
+            self.c10_p = f'{self.cp[1]} подключен'
+            try:
+                self.lb.insert('end', self.c10_p)
+                self.tree.insert('', 'end', text='', image=self.img2, values=(self.c10_p.split(' ')[0], self.cp[1], self.cp[2], self.data_p))
+            except AttributeError:
+                self.lb.insert('end', self.data_p)
             self.lb.see('end')
             self.lb.itemconfig('end', bg='light cyan')
         except TypeError:
@@ -542,6 +580,27 @@ class MeasControlGUI():
                 self.lb.see('end')
         except:
             self.lb.insert('end', 'Формирователь не обнаружен')
+
+    def connect_counter(self):
+        try:
+            self.inst_count = self.rm.open_resource(self.adres_cycle(self.combo_flu.get(), self.rm_list)[0], timeout=1000, write_termination='\n', read_termination='\n')
+            if self.combo_flu.get()[:4] in ('ASRL', 'USB0'):
+                self.inst_count.write('SYST:REM')
+                time.sleep(1)
+            self.data_4 = self.inst_count.query("*IDN?")
+            self.c1 = self.data_4.split(',')
+            self.c1[1] = self.c1[1].replace('/', '-').replace(' ', '')
+            self.c11 = f'{self.c1[1]} подключен'
+            try:
+                self.lb.insert('end', self.c11)
+                self.tree.insert('', 'end', text='', image=self.img2, values=(self.c11.split(' ')[0], self.c1[1], self.c1[2], self.data_4))
+            except AttributeError:
+                self.lb.insert('end', self.data_4)
+                self.lb.see('end')
+                self.lb.itemconfig('end', bg='light cyan')
+        except TypeError:
+            self.lb.insert('end', 'Ошибка! Прибор не определён')
+            self.lb.itemconfig('end', bg='salmon')
 
     def entry_in_cell(self):
         for row in self.ws.rows:
@@ -740,7 +799,7 @@ class Param_osc(Thread):
                 my_gui.inst_dmm.write(f'{b[0]}{i}{b[1]}')
 
     def default_agilent(self):
-        if my_gui.a1[1] == 'DSO9104A':
+        if my_gui.a1[1] in ('DSO9104A', 'MSO9404A'):
             my_gui.inst_dmm.write(f':TRIG:EDGE1:SOUR CHAN{self.name}')
         else:
             my_gui.inst_dmm.write(f':TRIG:SOUR CHAN{self.name}')
@@ -948,7 +1007,7 @@ class Param_osc(Thread):
             self.param_dso9()
         elif my_gui.a1[1] == 'DSOX92004A':
             self.param_dsox90000()
-        elif my_gui.a1[1] in ('TDS2002', 'TDS2014', 'TDS2014C', 'TDS2014B', 'TDS2024', 'TDS2024B', 'TDS2024C', 'TPS2024'):
+        elif my_gui.a1[1] in ('TDS2002', 'TDS2012B', 'TDS2014', 'TDS2014C', 'TDS2014B', 'TDS2024', 'TDS2024B', 'TDS2024C', 'TPS2024'):
             self.param_tds2()
         elif my_gui.a1[1] in ('AKIP-4119-1', 'AKIP-4131-1A', 'AKIP-4131-2A'):
             self.param_akip4131()
@@ -1202,7 +1261,7 @@ class Call_oscill(Thread):
             self.data_error = (self.data_true - float(self.vfluk.split(' ')[1]))
 
         if self.vosc2.split(' ')[-1] == 'RISE':
-            my_gui.inst_dmm.write('PARM CUST,STAT') #для устреднения
+            my_gui.inst_dmm.write('PARM CUST,STAT') #для усреднения
             my_gui.inst_dmm.write(f'PACU 1,RISE,{self.vosc2[0:2]}')
             self.data_true = float(my_gui.inst_dmm.query('PAST? CUST,AVG').split(',')[2].split('S')[0]) * 1E+12
             self.data_true = math.sqrt(self.data_true**2 - 140**2)
@@ -1308,7 +1367,7 @@ class Call_oscill(Thread):
             self.call_wj312()
         elif my_gui.a1[1] == 'HDO8108A':
             self.call_hdo8108()
-        elif my_gui.a1[1] in ('TDS2002', 'TDS2014', 'TDS2014C', 'TDS2014B', 'TDS2024', 'TDS2024B', 'TDS2024C', 'TPS2024'):
+        elif my_gui.a1[1] in ('TDS2002', 'TDS2012B', 'TDS2014', 'TDS2014C', 'TDS2014B', 'TDS2024', 'TDS2024B', 'TDS2024C', 'TPS2024'):
             self.call_tds2()
         elif my_gui.a1[1] in ('DSO-X4034A', 'MSO-X4104A', 'MSO-X3034A', 'MSO-X3054A','MSO-X3104A','MSO-X3104T'):
             self.call_msox_3()
@@ -1429,6 +1488,70 @@ class Call_DSO9000(Thread):
         my_gui.count += 1
         sem.release()
 
+class Call_generator(Thread):
+    """Class callibration generators"""
+    def __init__(self, form, load, cel, accur):
+        Thread.__init__(self)
+        self.form = form
+        self.load = load
+        self.cel = cel
+        self.accur = accur
+        self.start()
+
+    def call_33622a(self):
+        my_gui.inst_dmm.write('OUTP{}:LOAD {}'.format(self.form.split(':')[0][-1], self.load))
+        my_gui.inst_dmm.write(self.form)
+        my_gui.inst_dmm.write('OUTP{} ON'.format(self.form.split(':')[0][-1]))
+        time.sleep(2)
+        if self.cel[0] == 'f':
+            my_gui.inst_count.write(':MEAS:FREQ?')
+            time.sleep(3)
+            self.data_true = float(my_gui.inst_count.read())
+            self.data_error = self.data_true - float(self.form.split(',')[0].split(' ')[-1])
+        elif self.cel[:3] == 'vac':
+            my_gui.inst_dmm2.write('MEAS:VOLT:AC?')
+            time.sleep(1)
+            self.data_true = float(my_gui.inst_dmm2.read())
+            self.data_error = self.data_true - float(self.form.split(',')[1].split(' ')[0])
+            if self.cel[:7] == 'vac_dbm':
+                self.data_true = 10* math.log(20*self.data_true**2, 10)
+                self.data_error = self.data_true
+        elif self.cel[:3] == 'vdc':
+            my_gui.inst_dmm2.write('MEAS:VOLT:DC?')
+            time.sleep(1)
+            self.data_true = float(my_gui.inst_dmm2.read())
+            self.data_error = self.data_true - float(self.form.split(',')[2].split(' ')[0])
+        elif self.cel[:3] == 'dbm':
+            self.data_true = float(my_gui.inst_power.query('MEAS1:POW:AC?'))
+            self.data_error = self.data_true
+
+        for row in my_gui.ws.rows:
+            for cell in row:
+                if cell.value == self.cel:
+                    cell.value = self.data_true
+                    if self.data_error > self.accur or self.data_error < -self.accur:
+                            cell.fill = my_gui.colour_cell
+                            self.tree2_img = my_gui.img3
+
+    def run(self):
+        sem.acquire()
+        my_gui.statusbar["text"] = f'Статус: работа   Прогресс: {my_gui.count} из {my_gui.cnt()[my_gui.a1[1]]}'
+        my_gui.lb2.delete(0, 'end')
+        my_gui.lb2.insert('end', 'Канал №{}'.format(self.form.split(':')[0][-1]))
+        my_gui.lb2.insert('end', 'Установлено: {}'.format(self.form.split(',')[-2]))
+        my_gui.lb2.see('end')
+        self.tree2_img = my_gui.img2
+
+        if my_gui.a1[1] == '33622A':
+            self.call_33622a()
+
+        my_gui.tree2.insert('', 0, text='', image=self.tree2_img, values=(self.form.split(',')[-2],round(self.data_true,4),round(self.data_error,4),f'±{self.accur}'))
+        my_gui.wb.save('{}\\Protocol\\{}'.format(my_gui.folder_1,my_gui.vardict_str['name_protokol'].get()))
+        time.sleep(1)
+        my_gui.progress1.step(1)
+        my_gui.count += 1
+        sem.release()
+
 '''class Call_DSO90000(Thread):
     """Class callibration oscilloscope DSOX92004A"""
     def __init__(self, vfluk, vosc1, vosc2, vdmm, cel1, cel2, cel3, cel4, accur):
@@ -1523,24 +1646,29 @@ class Supportfunc(Thread):
     def message(self):
         messagebox.showinfo('ВНИМАНИЕ!', self.name.split('-')[1])
 
+    def reset_common(self):
+        my_gui.inst_dmm.write('*RST')
+        my_gui.inst_dmm.write('*CLS')
+
     def resetdmm(self):
-        self.resetdsox92004()
+        self.reset_common()
         my_gui.inst_fluke.write('*RST')
         my_gui.inst_fluke.write('*CLS')
         if my_gui.b1[1] == 'N4-56':
             my_gui.inst_fluke.write('RES:MODE:HD ON')
 
     def resetoscil(self):
-        self.resetdsox92004()
+        self.reset_common()
         my_gui.query('*RST')
         my_gui.query('*CLS')
         if my_gui.a1[1][:3] == 'TDS':
             my_gui.inst_dmm.write('ACQuire:STATE RUN')
         time.sleep(5)
-
-    def resetdsox92004(self):
-        my_gui.inst_dmm.write('*RST')
-        my_gui.inst_dmm.write('*CLS')
+    
+    def reset_gener(self):
+        self.reset_common()
+        my_gui.inst_power.write('*RST')
+        my_gui.inst_power.write('*CLS')
 
     def capacitorcomp(self):
         my_gui.inst_dmm.write('CONF:CAP')
@@ -1554,12 +1682,14 @@ class Supportfunc(Thread):
     def return_support(self):
         if self.name.split('-')[0] == 'message':
             self.message()
+        elif self.name.split('-')[0] == 'reset_common':
+            self.reset_common()
         elif self.name.split('-')[0] == 'resetdmm':
             self.resetdmm()
         elif self.name.split('-')[0] == 'resetoscil':
             self.resetoscil()
-        elif self.name.split('-')[0] == 'resetdsox92004':
-            self.resetdsox92004()
+        elif self.name.split('-')[0] == 'reset_gener':
+            self.reset_gener()
         elif self.name.split('-')[0] == 'capacitorcomp':
             self.capacitorcomp()
 

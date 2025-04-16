@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-for j in range(1,5,1):
+for j in range(1,3,1):
     # dcv
     Supportfunc(f'message-Подключите формирователь без вешней нагрузки на КАНАЛ №{j} осциллографа')
     Supportfunc('resetoscil')

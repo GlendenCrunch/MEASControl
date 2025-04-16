@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 Supportfunc('message-Отключите все кабели от входов осциллографа')
-Supportfunc('resetoscil')
+Supportfunc('reset_common')
 for j in range(1,5,1):
     # null
     Param_osc(f'{j}', '', '', 'TIM:SCAL 100E-6', '')
@@ -49,4 +49,4 @@ for j in range(1,5,1):
 
 Supportfunc(f'message-Калибровка завершена')
 Clear_merge()
-Supportfunc('resetoscil')
+Supportfunc('reset_common')
