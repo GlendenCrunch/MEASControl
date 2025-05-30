@@ -258,14 +258,14 @@ class MeasControlGUI():
     def about_win(self):
         self.win_one(self.lang['add_cascade_4'], '700x450+{}+{}')
         text1 = ('MEASControl\rVersion: 1.12a\rDate: 2025-04-15\rAutor: g1enden (I T L)')
-        text2 = ('Agilent/Keysight:\r34401A\r34410A\r34411A\r34420A\r34460A\r34461A\r34465A\r34470A\r\r\r\r\r')
-        text3 = ('AKIP:\rV7-78/1\r\r\r\r\r\r\r\r\r\r\r\r')
-        text4 = ('Lecroy:\rWJ312A\rWJ324A\rHDO8108A\r\r\r\r\r\r\r\r\r\r')
-        text5 = ('Tektronix:\rTDS2002\rTDS2012B\rTDS2014(B,C)\rTDS2024(B,C)\rTPS2024\r\r\r\r\r\r\r\r')
-        text6 = ('Agilent/Keysight:\rMSO-X 3104A\rMSO-X 3034A\rMSO-X 3054A\rMSO-X 4104A\rDSO-X 4034A\rDSO-X 92004A\rDSO6102A\rMSO6012A\rDSO7034B\rMSO7104B\rDSO9104A\rMSO9404A\r')
-        text7 = ('Siglent:\rAKIP-4119/1\rAKIP-4131/1A\rAKIP-4131/2A\r\r\r\r\r\r\r\r\r\r')
-        text8 = ('R&S:\rRTO1024\rRTO1044\r\r\r\r\r\r\r\r\r\r\r')
-        text9 = ('Agilent/Keysight:\r33622A\r\r\r\r\r\r\r\r\r\r\r\r')
+        text2 = ('Agilent/Keysight:\r34401A\r34410A\r34411A\r34420A\r34460A\r34461A\r34465A\r34470A\r\r\r\r\r\r')
+        text3 = ('AKIP:\rV7-78/1\r\r\r\r\r\r\r\r\r\r\r\r\r')
+        text4 = ('Lecroy:\rWJ312A\rWJ324A\rHDO8108A\r\r\r\r\r\r\r\r\r\r\r')
+        text5 = ('Tektronix:\rTDS2002\rTDS2012B\rTDS2014(B,C)\rTDS2024(B,C)\rTPS2024\r\r\r\r\r\r\r\r\r')
+        text6 = ('Agilent/Keysight:\rMSO-X 3104A\rMSO-X 3034A\rMSO-X 3054A\rMSO-X 4104A\rMSO-X 4154A\rDSO-X 4034A\rDSO-X 92004A\rDSO6102A\rMSO6012A\rDSO7034B\rMSO7104B\rDSO9104A\rMSO9404A\r')
+        text7 = ('Siglent:\rAKIP-4119/1\rAKIP-4131/1A\rAKIP-4131/2A\r\r\r\r\r\r\r\r\r\r\r')
+        text8 = ('R&S:\rRTO1024\rRTO1044\r\r\r\r\r\r\r\r\r\r\r\r')
+        text9 = ('Agilent/Keysight:\r33622A\r\r\r\r\r\r\r\r\r\r\r\r\r')
 
         top_1 = tk.Frame(self.top, height=70, relief="raise")
         top_1.pack(side='top', fill='x')
@@ -365,7 +365,7 @@ class MeasControlGUI():
         cnt_dict = {}
         cnt_dict0 = {'34401A':1, '34401A_gost':1, '34420A':1, '34410A':1, '34411A':1, '34460A':1, '34461A':1, '34465A':1, '34470A':1, 'V7-78-1':1, '33622A':2,
                     'WJ312A':2, 'WJ324A':4, 'TDS2002':2, 'TDS2012B':2, 'TDS2014':4, 'TDS2014C':4, 'TDS2014B':4, 'TDS2024':4, 'TDS2024B':4, 'TDS2024C':4, 'TPS2024':4, 'MSO-X3034A':4, 
-                    'MSO-X3054A':4, 'MSO-X3104T':4, 'MSO-X3104A':4, 'DSO-X4034A':4, 'MSO-X4104A':4, 'DSO6102A':2, 'MSO6012A':2, 'DSO9104A':4, 'MSO9404A':4,
+                    'MSO-X3054A':4, 'MSO-X3104T':4, 'MSO-X3104A':4, 'DSO-X4034A':4, 'MSO-X4104A':4, 'MSO-X4154A':4, 'DSO6102A':2, 'MSO6012A':2, 'DSO9104A':4, 'MSO9404A':4,
                     'DSO7034B':4, 'MSO7104B':4, 'AKIP-4119-1':4, 'AKIP-4131-1A':4, 'AKIP-4131-2A':4, 'HDO8108A':8, 'RTO1024':4, 'RTO1044':4, 'DSOX92004A':4}
         
         for item_0 in ['Call(', 'Call_oscill(', 'Call_DSO9000', 'Call_generator(']:
@@ -438,7 +438,7 @@ class MeasControlGUI():
             if self.a1[1] == '34401A':
                 self.chkbtn_1.place(x=0,y=40)
             elif self.a1[1] in ('WJ312A', 'WJ324A', 'TDS2002', 'TDS2012B', 'TDS2014', 'TDS2014C', 'TDS2014B', 'TDS2024', 'TDS2024B', 'TDS2024C', 'TPS2024',
-                                'MSO-X3034A', 'DSO-X4034A', 'MSO-X3104T', 'MSO-X3054A', 'MSO-X3104A', 'MSO-X4104A', 'DSO6102A', 'MSO6012A', 'DSO9104A',
+                                'MSO-X3034A', 'DSO-X4034A', 'MSO-X3104T', 'MSO-X3054A', 'MSO-X3104A', 'MSO-X4104A', 'MSO-X4154A', 'DSO6102A', 'MSO6012A', 'DSO9104A',
                                 'MSO9404A', 'DSO7034B', 'MSO7104B', 'AKIP-4119-1', 'AKIP-4131-1A', 'AKIP-4131-2A','HDO8108A', 'RTO'):
                 self.fluk_on.configure(command=self.connect_fluke_9500)
                 self.lab1.place(x=40,y=55)
@@ -999,7 +999,7 @@ class Param_osc(Thread):
             self.param_wj312()
         elif my_gui.a1[1] == 'HDO8108A':
             self.param_hdo8108()
-        elif my_gui.a1[1] in ('DSO-X4034A', 'MSO-X4104A', 'MSO-X3034A', 'MSO-X3054A','MSO-X3104A','MSO-X3104T'):
+        elif my_gui.a1[1] in ('DSO-X4034A', 'MSO-X4104A', 'MSO-X4154A', 'MSO-X3034A', 'MSO-X3054A','MSO-X3104A','MSO-X3104T'):
             self.param_msox3()
         elif my_gui.a1[1] in ('DSO6102A', 'MSO6012A', 'DSO7034B', 'MSO7104B'):
             self.param_dso6()
@@ -1026,6 +1026,26 @@ class Call_oscill(Thread):
         self.cel2 = cel2
         self.accur = accur
         self.start()
+
+    '''def excel_colour(self, func):
+        global cell
+        for row in my_gui.ws.rows:
+            for cell in row:
+                def colour_cell():
+                    cell.fill = my_gui.colour_cell
+                    self.tree2_img = my_gui.img3
+                
+                def colour_cell_accur():
+                    if self.data_error > self.accur or self.data_error < -self.accur:
+                        colour_cell()
+                
+                if cell.value == self.cel1:
+                    cell.value = self.data_true
+                    func()
+                    
+                if cell.value == self.cel2:
+                    cell.value = self.data_error
+                    colour_cell_accur()'''
 
     def call_wj312(self):
         time.sleep(1)
@@ -1091,6 +1111,17 @@ class Call_oscill(Thread):
                     if self.data_error > self.accur or self.data_error < -self.accur:
                             cell.fill = my_gui.colour_cell
                             self.tree2_img = my_gui.img3
+
+        '''@self.excel_colour
+        def excel_tds(self):
+            if self.vosc2  == 'MEASU:MEAS4:VAL?':
+                if self.data_true > self.accur:
+                    cell.fill = my_gui.colour_cell
+                    self.tree2_img = my_gui.img3
+            elif self.vosc2 == 'MEASU:MEAS3:VAL?':
+                if self.data_error > self.accur:
+                    cell.fill = my_gui.colour_cell
+                    self.tree2_img = my_gui.img3'''
 
         my_gui.inst_dmm.write('ACQ:MOD SAM')
 
@@ -1369,7 +1400,7 @@ class Call_oscill(Thread):
             self.call_hdo8108()
         elif my_gui.a1[1] in ('TDS2002', 'TDS2012B', 'TDS2014', 'TDS2014C', 'TDS2014B', 'TDS2024', 'TDS2024B', 'TDS2024C', 'TPS2024'):
             self.call_tds2()
-        elif my_gui.a1[1] in ('DSO-X4034A', 'MSO-X4104A', 'MSO-X3034A', 'MSO-X3054A','MSO-X3104A','MSO-X3104T'):
+        elif my_gui.a1[1] in ('DSO-X4034A', 'MSO-X4104A', 'MSO-X4154A', 'MSO-X3034A', 'MSO-X3054A','MSO-X3104A','MSO-X3104T'):
             self.call_msox_3()
         elif my_gui.a1[1] in ('DSO6102A', 'MSO6012A', 'DSO7034B', 'MSO7104B'):
             self.call_dso_6()
@@ -1551,91 +1582,6 @@ class Call_generator(Thread):
         my_gui.progress1.step(1)
         my_gui.count += 1
         sem.release()
-
-'''class Call_DSO90000(Thread):
-    """Class callibration oscilloscope DSOX92004A"""
-    def __init__(self, vfluk, vosc1, vosc2, vdmm, cel1, cel2, cel3, cel4, accur):
-        Thread.__init__(self)
-        self.vfluk = vfluk
-        self.vosc1 = vosc1
-        self.vosc2 = vosc2
-        self.vdmm = vdmm
-        self.cel1 = cel1
-        self.cel2 = cel2
-        self.cel3 = cel3
-        self.cel4 = cel4
-        self.accur = accur
-        self.data_true_dmm = None
-        self.data_true_dmm0 = None
-        self.data_true0 = None
-        self.start()
-
-    def meas_aver(self):
-        my_gui.inst_dmm2.write(self.vdmm)
-        my_gui.inst_dmm.write(self.vfluk) # выход Cal out
-        time.sleep(1)
-        my_gui.inst_dmm2.write('MEAS:VOLT:DC?')
-        self.data_true_dmm = float(my_gui.inst_dmm2.read()) * 1000
-        self.data_true = float(my_gui.inst_dmm.query(':MEAS:VAV?')) * 1000
-        self.data_error = self.data_true
-
-    def call_dso_90000(self):
-        time.sleep(1)
-        my_gui.inst_dmm.write(':ACQ:AVER ON; :ACQ:COUN 64')
-        time.sleep(2)
-        if self.vosc2 == ':MEAS:VAV?':
-            self.meas_aver()
-
-        if self.cel1[0:4] == 'vofs':
-            my_gui.inst_dmm.write(f'CHAN{self.vosc1[4]}:OFFS {self.vosc2}')
-            self.meas_aver()
-            time.sleep(1)
-            my_gui.inst_dmm.write(':ACQ:AVER OFF') # измерения с 0 смещением и выкл выходом
-            time.sleep(1)
-            my_gui.inst_dmm.write(f'CHAN{self.vosc1[4]}:OFFS 0')
-            my_gui.inst_dmm.write(':CAL:OUTP DC,0')
-            time.sleep(1)
-            my_gui.inst_dmm.write(':ACQ:AVER ON; :ACQ:COUN 64')
-            time.sleep(2)
-            my_gui.inst_dmm2.write('MEAS:VOLT:DC?')
-            self.data_true_dmm0 = float(my_gui.inst_dmm2.read()) * 1000
-            self.data_true0 = float(my_gui.inst_dmm.query(':MEAS:VAV?')) * 1000
-
-        if self.cel2[0:3] == 'nul':
-            self.data_true = float(my_gui.inst_dmm.query(':MEAS:VAV?')) * 1000
-            self.data_error = self.data_true
-
-        for row in my_gui.ws.rows:
-            for cell in row:
-                if cell.value == self.cel1:
-                    cell.value = self.data_true_dmm
-                if cell.value == self.cel2:
-                    cell.value = self.data_true
-                if cell.value == self.cel3:
-                    cell.value = self.data_true_dmm0
-                if cell.value == self.cel4:
-                    cell.value = self.data_true0
-
-        my_gui.inst_dmm.write(':ACQ:AVER OFF')
-
-    def run(self):
-        sem.acquire()
-        my_gui.statusbar["text"] = f'Статус: работа   Прогресс: {my_gui.count} из {my_gui.cnt()[my_gui.a1[1]]}'
-        my_gui.lb2.delete(0, 'end')
-        my_gui.lb2.insert('end', '{} канал, напряжение {} Вольт'.format(self.vosc1.split(':')[0][-1],self.vfluk.split(' ')[1]))
-        my_gui.lb2.see('end')
-        my_gui.inst_dmm.write(self.vosc1)
-
-        if my_gui.a1[1] == 'DSOX92004A':
-            self.call_dso_90000()
-
-        my_gui.tree2.insert('', 0, text='', image=self.tree2_img, values=(self.vfluk.split(' ')[1],round(self.data_true,4),round(self.data_error,4),f'±{self.accur}'))
-        my_gui.wb.save('{}\\Protocol\\{}'.format(my_gui.folder_1,my_gui.vardict_str['name_protokol'].get()))
-        my_gui.inst_dmm.write(':CAL:OUTP DC,0')
-        time.sleep(1)
-        my_gui.progress1.step(1)
-        my_gui.count += 1
-        sem.release()'''
 # ===============================================================================
 class Supportfunc(Thread):
     def __init__(self, name):
