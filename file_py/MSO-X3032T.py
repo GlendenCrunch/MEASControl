@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-for j in range(1,5,1):
+for j in range(1,3,1):
     # dcv
     Supportfunc(f'message-Подключите формирователь на КАНАЛ №{j} осциллографа')
     Supportfunc('resetoscil')
@@ -22,9 +22,9 @@ for j in range(1,5,1):
     Call_oscill('VOLT 0.12', f'CHAN{j}:SCAL 0.05', ':MEAS:VPP?', f'pp50_1M_{j}', '', 84)
     Param_osc(f'{j}', 'ROUT:SIGN:IMP 50', 'SCOP:SHAP SIN;, FREQ:FIX 1E+06', f'TIM:SCAL 100E-6\nCHAN{j}:IMP ONEM', '')
     Call_oscill('VOLT 0.12', f'CHAN{j}:SCAL 0.05', ':MEAS:VPP?', f'pp1_1M_{j}', '', 84)
-    Param_osc(f'{j}', 'ROUT:SIGN:IMP 50', 'SCOP:SHAP SIN;, FREQ:FIX 1E+09', f'TIM:SCAL 10E-9\nCHAN{j}:IMP FIFT', '')
+    Param_osc(f'{j}', 'ROUT:SIGN:IMP 50', 'SCOP:SHAP SIN;, FREQ:FIX 350E+06', f'TIM:SCAL 10E-9\nCHAN{j}:IMP FIFT', '')
     Call_oscill('VOLT 0.12', f'CHAN{j}:SCAL 0.02', ':MEAS:VPP?', f'pp50_1G_{j}', '', 84)
-    Param_osc(f'{j}', 'ROUT:SIGN:IMP 50', 'SCOP:SHAP SIN;, FREQ:FIX 1E+09', f'TIM:SCAL 10E-9\nCHAN{j}:IMP ONEM', '')
+    Param_osc(f'{j}', 'ROUT:SIGN:IMP 50', 'SCOP:SHAP SIN;, FREQ:FIX 350E+06', f'TIM:SCAL 10E-9\nCHAN{j}:IMP ONEM', '')
     Call_oscill('VOLT 0.12', f'CHAN{j}:SCAL 0.02', ':MEAS:VPP?', f'pp1_1G_{j}', '', 84)
 
 Supportfunc(f'message-Калибровка завершена')

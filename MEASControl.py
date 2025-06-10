@@ -262,7 +262,7 @@ class MeasControlGUI():
         text3 = ('AKIP:\rV7-78/1\r\r\r\r\r\r\r\r\r\r\r\r\r')
         text4 = ('Lecroy:\rWJ312A\rWJ324A\rHDO8108A\r\r\r\r\r\r\r\r\r\r\r')
         text5 = ('Tektronix:\rTDS2002\rTDS2012B\rTDS2014(B,C)\rTDS2024(B,C)\rTPS2024\r\r\r\r\r\r\r\r\r')
-        text6 = ('Agilent/Keysight:\rMSO-X 3104A\rMSO-X 3034A\rMSO-X 3054A\rMSO-X 4104A\rMSO-X 4154A\rDSO-X 4034A\rDSO-X 92004A\rDSO6102A\rMSO6012A\rDSO7034B\rMSO7104B\rDSO9104A\rMSO9404A\r')
+        text6 = ('Agilent/Keysight:\rMSO-X3032T\rMSO-X3104(A,T)\rMSO-X3034A\rMSO-X3054A\rMSO-X4104A\rMSO-X4154A\rDSO-X4034A\rDSO-X92004A\rDSO6102A\rMSO6012A\rDSO7034B\rMSO7104B\rDSO9104A\rMSO9404A\r')
         text7 = ('Siglent:\rAKIP-4119/1\rAKIP-4131/1A\rAKIP-4131/2A\r\r\r\r\r\r\r\r\r\r\r')
         text8 = ('R&S:\rRTO1024\rRTO1044\r\r\r\r\r\r\r\r\r\r\r\r')
         text9 = ('Agilent/Keysight:\r33622A\r\r\r\r\r\r\r\r\r\r\r\r\r')
@@ -364,7 +364,7 @@ class MeasControlGUI():
     def cnt(self):
         cnt_dict = {}
         cnt_dict0 = {'34401A':1, '34401A_gost':1, '34420A':1, '34410A':1, '34411A':1, '34460A':1, '34461A':1, '34465A':1, '34470A':1, 'V7-78-1':1, '33622A':2,
-                    'WJ312A':2, 'WJ324A':4, 'TDS2002':2, 'TDS2012B':2, 'TDS2014':4, 'TDS2014C':4, 'TDS2014B':4, 'TDS2024':4, 'TDS2024B':4, 'TDS2024C':4, 'TPS2024':4, 'MSO-X3034A':4, 
+                    'WJ312A':2, 'WJ324A':4, 'TDS2002':2, 'TDS2012B':2, 'TDS2014':4, 'TDS2014C':4, 'TDS2014B':4, 'TDS2024':4, 'TDS2024B':4, 'TDS2024C':4, 'TPS2024':4, 'MSO-X3032T':2, 'MSO-X3034A':4, 
                     'MSO-X3054A':4, 'MSO-X3104T':4, 'MSO-X3104A':4, 'DSO-X4034A':4, 'MSO-X4104A':4, 'MSO-X4154A':4, 'DSO6102A':2, 'MSO6012A':2, 'DSO9104A':4, 'MSO9404A':4,
                     'DSO7034B':4, 'MSO7104B':4, 'AKIP-4119-1':4, 'AKIP-4131-1A':4, 'AKIP-4131-2A':4, 'HDO8108A':8, 'RTO1024':4, 'RTO1044':4, 'DSOX92004A':4}
         
@@ -437,7 +437,7 @@ class MeasControlGUI():
             self.a1[1] = self.a1[1].replace('/', '-').replace(' ', '')
             if self.a1[1] == '34401A':
                 self.chkbtn_1.place(x=0,y=40)
-            elif self.a1[1] in ('WJ312A', 'WJ324A', 'TDS2002', 'TDS2012B', 'TDS2014', 'TDS2014C', 'TDS2014B', 'TDS2024', 'TDS2024B', 'TDS2024C', 'TPS2024',
+            elif self.a1[1] in ('WJ312A', 'WJ324A', 'TDS2002', 'TDS2012B', 'TDS2014', 'TDS2014C', 'TDS2014B', 'TDS2024', 'TDS2024B', 'TDS2024C', 'TPS2024', 'MSO-X3032T',
                                 'MSO-X3034A', 'DSO-X4034A', 'MSO-X3104T', 'MSO-X3054A', 'MSO-X3104A', 'MSO-X4104A', 'MSO-X4154A', 'DSO6102A', 'MSO6012A', 'DSO9104A',
                                 'MSO9404A', 'DSO7034B', 'MSO7104B', 'AKIP-4119-1', 'AKIP-4131-1A', 'AKIP-4131-2A','HDO8108A', 'RTO'):
                 self.fluk_on.configure(command=self.connect_fluke_9500)
@@ -999,7 +999,7 @@ class Param_osc(Thread):
             self.param_wj312()
         elif my_gui.a1[1] == 'HDO8108A':
             self.param_hdo8108()
-        elif my_gui.a1[1] in ('DSO-X4034A', 'MSO-X4104A', 'MSO-X4154A', 'MSO-X3034A', 'MSO-X3054A','MSO-X3104A','MSO-X3104T'):
+        elif my_gui.a1[1] in ('DSO-X4034A', 'MSO-X4104A', 'MSO-X4154A', 'MSO-X3034A', 'MSO-X3054A','MSO-X3104A','MSO-X3104T', 'MSO-X3032T'):
             self.param_msox3()
         elif my_gui.a1[1] in ('DSO6102A', 'MSO6012A', 'DSO7034B', 'MSO7104B'):
             self.param_dso6()
@@ -1145,9 +1145,12 @@ class Call_oscill(Thread):
             self.data_true_1 = self.data_true / 1E-9
             self.data_true = (0.35 / self.data_true) * 1E-6
             self.data_error = self.data_true
-        elif self.vosc2 in (':MEAS:VRMS?'):
+        elif self.vosc2 == ':MEAS:VRMS?':
             self.data_band2 = float(my_gui.inst_dmm.query(self.vosc2))
             self.data_true = round(20 * math.log(data_band / self.data_band2, 10), 2)
+            self.data_error = self.data_true
+        elif self.vosc2 == ':MEAS:VPP?':
+            self.data_true = self.data_true * 1E+3
             self.data_error = self.data_true
 
         for row in my_gui.ws.rows:
@@ -1400,7 +1403,7 @@ class Call_oscill(Thread):
             self.call_hdo8108()
         elif my_gui.a1[1] in ('TDS2002', 'TDS2012B', 'TDS2014', 'TDS2014C', 'TDS2014B', 'TDS2024', 'TDS2024B', 'TDS2024C', 'TPS2024'):
             self.call_tds2()
-        elif my_gui.a1[1] in ('DSO-X4034A', 'MSO-X4104A', 'MSO-X4154A', 'MSO-X3034A', 'MSO-X3054A','MSO-X3104A','MSO-X3104T'):
+        elif my_gui.a1[1] in ('DSO-X4034A', 'MSO-X4104A', 'MSO-X4154A', 'MSO-X3034A', 'MSO-X3054A','MSO-X3104A','MSO-X3104T', 'MSO-X3032T'):
             self.call_msox_3()
         elif my_gui.a1[1] in ('DSO6102A', 'MSO6012A', 'DSO7034B', 'MSO7104B'):
             self.call_dso_6()
