@@ -13,7 +13,7 @@ for j in range(1,5,1):
     # trise
     Supportfunc(f'message-Подключите внешнию нагрузку 50 Ом на КАНАЛ №{j} осциллографа')
     Param_osc(f'{j}', 'ROUT:SIGN:IMP 50', 'SCOP:SHAP EDGE', 'HOR:SEC 5E-9', '')
-    Call_oscill('VOLT 3.1', f'CH{j}:VOL 1\nTRIG:MAI:LEV -1.5', 'MEASU:MEAS4:VAL?', f'tr{j}_1', '', 2.1)
+    Call_oscill('VOLT 3.1', f'CH{j}:VOL 1\nTRIG:MAI:LEV -1', 'MEASU:MEAS4:VAL?', f'tr{j}_1', '', 2.1)
 
 Supportfunc(f'message-Калибровка завершена')
 Clear_merge()
