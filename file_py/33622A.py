@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from calibration_dmm import Call_generator, Supportfunc, Clear_merge
+
 for j in range(1,3,1):
     # freq
     Supportfunc(f'message-Подключите КАНАЛ А частотмера на КАНАЛ №{j} генератора')
@@ -55,6 +57,6 @@ for j in range(1,3,1):
 
     my_gui.inst_dmm.write(f'OUTP{j} OFF')
 
-Supportfunc(f'message-Калибровка завершена')
+Supportfunc('message-Калибровка завершена')
 Clear_merge()
 Supportfunc('reset_gener')

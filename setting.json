@@ -42,6 +42,7 @@
             "33622A": 2
         },
         "Oscilloscope": {
+            "ADS-222": 2,
             "AKIP-4119-1": 4,
             "AKIP-4131-1A": 4,
             "AKIP-4131-2A": 4,
@@ -58,6 +59,7 @@
             "MSO-X3104T": 4,
             "MSO-X4104A": 4,
             "MSO-X4154A": 4,
+            "MSO-X6004A": 4,
             "MSO6012A": 2,
             "MSO7104B": 4,
             "MSO9404A": 4,
@@ -73,12 +75,21 @@
             "TDS2024C": 4,
             "TPS2024": 4,
             "WJ312A": 2,
-            "WJ324A": 4
+            "WJ324A": 4,
+            "MSO5204": 4,
+            "DSOZ594A":4
         }
     },
     "font_ar10b": "arial 10 bold",
     "font_ar12b": "arial 12 bold",
     "language": "Russia",
+    "vendor_id": {
+        "0x1AB1": "Rigol",
+        "0x05FF": "LeCroy",
+        "0x0957": "Keysight Technologies",
+        "0x2A8D": "Agilent Technologies",
+        "0x14EB": "PENDULUM"
+    },
     "sign_pribor": {
         "0x0090": "CNT-90XL",
         "0x0101": "34465A",
@@ -97,6 +108,7 @@
         "0x175D": "MSO7104B",
         "0x1770": "MSO-X 3104T",
         "0x1775": "MSO-X 3032T",
+        "0x1790": "MSO-X 6004A",
         "0x17A0": "MSO-X 3104A",
         "0x17A2": "MSO-X 3054A",
         "0x17A4": "MSO-X 3034A",
@@ -111,7 +123,10 @@
         "0x900B": "DSO9104A",
         "0x900D": "MSO9404A",
         "0x901A": "DSOX92004A",
-        "0xEE3A": "AKIP-4119/1"
+        "0xEE3A": "AKIP-4119/1",
+        "0x0515": "MSO5204",
+        "0x1023": "HDO8108A",
+        "0x905A": "DSOZ594A"
     },
     "theme": "Dark"
 }

@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from calibration_oscil import Param_osc, Call_oscill, Supportfunc, Clear_merge
+
 for j in range(1,3,1):
     # dcv
     Supportfunc(f'message-Подключите формирователь без нагрузки на КАНАЛ №{j} осциллографа')

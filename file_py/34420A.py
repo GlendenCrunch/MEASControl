@@ -1,5 +1,7 @@
 #!/usr/bin/python3-32
 # -*- coding: utf-8 -*-
+from calibration_dmm import Call, Supportfunc, Clear_merge
+
 Supportfunc('resetdmm')
 if self.vardict_boo['dcv_var'].get() == 1:
     Supportfunc('message-Соедините провода для измерения постоянного напряжения по КАНАЛУ 1 (красный(+)-черный(-))')

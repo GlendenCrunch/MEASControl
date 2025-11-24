@@ -322,6 +322,26 @@ devices:
       - q: "*IDN?"
         r: "Agilent Technologies,DSO9104A,MY52460118,04.10.0004"
       - q: "SYST:REM"
+  DSOZ594A:
+    eom:
+      USB INSTR:
+        q: "\n"
+        r: "\n"
+    error: ERROR
+    dialogues:
+      - q: "*IDN?"
+        r: "Agilent Technologies,DSOZ594A,MY54856743,04.10.0004"
+      - q: "SYST:REM"
+  DSOX92004A:
+    eom:
+      USB INSTR:
+        q: "\n"
+        r: "\n"
+    error: ERROR
+    dialogues:
+      - q: "*IDN?"
+        r: "Agilent Technologies,DSOX92004A,MY54856743,04.10.0004"
+      - q: "SYST:REM"
   AKIP-4131/1A:
     eom:
       USB INSTR:
@@ -368,6 +388,10 @@ resources:
     device: WJ312A
   USB0::0x0957::0x900B::MY52460118::INSTR:
     device: DSO9104A
+  USB0::0x0957::0x905A::MY54856743::INSTR:
+    device: DSOZ594A
+  USB0::0x0957::0x901A::MY54856743::INSTR:
+    device: DSOX92004A  
 #  USB0::0x0957::0x173D::MY50340343::INSTR:
 #    device: DSO7034B
   USB0::0xF4EC::0x1006::SDSMMFCX6R5397::INSTR:

@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from calibration_oscil import Param_osc, Call_oscill, Supportfunc, Clear_merge
+
 for j in range(1,5,1):
     # dcv
     Supportfunc(f'message-Подключите формирователь 9530 на КАНАЛ №{j} осциллографа')
@@ -132,6 +134,6 @@ for j in range(1,5,1):
     Param_osc(f'{j}', 'ROUT:SIGN:IMP 50', 'SCOP:SHAP EDGE', 'TIM:SCAL 0.0000000001', f'CHAN{j}:COUP DC')
     Call_oscill('VOLT 0.4', f'CHAN{j}:SCAL 0.1', 'MEAS2:ARES?', f'tr{j}_1', '', 103.08)
 
-Supportfunc(f'message-Калибровка завершена')
+Supportfunc('message-Калибровка завершена')
 Clear_merge()
 Supportfunc('resetoscil')

@@ -1,5 +1,7 @@
 #!/usr/bin/python3-32
 # -*- coding: utf-8 -*-
+from calibration_dmm import Call, Supportfunc, Clear_merge
+
 Supportfunc('resetdmm')
 if self.vardict_boo['dcv_var'].get() == 1 or self.vardict_boo['acv_var'].get() == 1 or self.vardict_boo['f_var'].get() == 1 or self.vardict_boo['r2_var'].get() == 1:
     Supportfunc('message-Подключите провода к клеммам измерения напряжения, частоты или сопротивления')

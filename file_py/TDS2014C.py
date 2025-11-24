@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from calibration_oscil import Param_osc, Call_oscill, Supportfunc, Clear_merge
+
 num_step = 63
 for j in range(1,5,1):
     # dcv
@@ -39,6 +41,6 @@ for j in range(1,5,1):
 
     g,h,k,l = [0,0,0,0]
 
-Supportfunc(f'message-Калибровка завершена')
+Supportfunc('message-Калибровка завершена')
 Clear_merge()
 Supportfunc('resetoscil')

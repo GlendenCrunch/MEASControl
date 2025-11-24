@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from calibration_oscil import Param_osc, Call_DSO9000, Supportfunc, Clear_merge
+
 for j in range(1,5,1):
     # null
     Supportfunc(f'message-Подключите формирователь и мультиметр через тройник на КАНАЛ №{j} осциллографа')
@@ -92,6 +94,6 @@ for j in range(1,5,1):
     Call_DSO9000('VOLT 15', f'CHAN{j}:SCAL 5', ':MEAS:VAV?', 'CONF:VOLT:DC 100', f'dcv{j}+12', f'odcv{j}+12', '', '', 2)
     Call_DSO9000('VOLT -15', f'CHAN{j}:SCAL 5', ':MEAS:VAV?', 'CONF:VOLT:DC 100', f'dcv{j}-12', f'odcv{j}-12', '', '', 2)
 
-Supportfunc(f'message-Калибровка завершена')
+Supportfunc('message-Калибровка завершена')
 Clear_merge()
 Supportfunc('resetoscil')
