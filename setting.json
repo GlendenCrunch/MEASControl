@@ -88,7 +88,8 @@
         "0x05FF": "LeCroy",
         "0x0957": "Keysight Technologies",
         "0x2A8D": "Agilent Technologies",
-        "0x14EB": "PENDULUM"
+        "0x14EB": "PENDULUM",
+        "0xF4EC": "AKIP"
     },
     "sign_pribor": {
         "0x0090": "CNT-90XL",

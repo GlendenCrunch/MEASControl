@@ -369,10 +369,10 @@ class Call_oscill(Thread):
         time.sleep(1)
         my_gui.inst_dmm.write('ACQ:MOD AVE; NUMAV 16')
         time.sleep(3)
-        #if my_gui.a1[1] == 'TDS2014':
-        #    self.data_true = float(my_gui.inst_dmm.query(self.vosc2).split(' ')[1]) # :MEASUREMENT:MEAS1:VALUE 9.9E37 TDS2014?
-        #else:
-        self.data_true = float(my_gui.inst_dmm.query(self.vosc2))
+        if my_gui.a1[1] == 'TDS2014':
+            self.data_true = float(my_gui.inst_dmm.query(self.vosc2).split(' ')[1]) # :MEASUREMENT:MEAS1:VALUE 9.9E37 TDS2014?
+        else:
+            self.data_true = float(my_gui.inst_dmm.query(self.vosc2))
         if self.vosc2 in ('MEASU:MEAS1:VAL?'):
             if my_gui.a1[1] == 'TPS2024':
                 self.data_error = (self.data_true - float(self.vfluk.split(' ')[1])) * 1000

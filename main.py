@@ -140,9 +140,7 @@ class MeasControlGUI(tk.Tk):
         self.lbf2 = tk.LabelFrame(self.tab1, text=self.lang['LabelFrame_2'], width=200, height=200, fg=self.theme['.']['fg_colour'], bg=self.theme['.']['bg_colour'], font=self.sett_json['font_ar10b'])
         self.lbf2.place(x=205, y=5)
         self.lbf3 = tk.LabelFrame(self.tab1, text=self.lang['LabelFrame_3'], width=200, height=100, fg=self.theme['.']['fg_colour'], bg=self.theme['.']['bg_colour'], font=self.sett_json['font_ar10b'])
-        #self.lbf3.place(x=405, y=505)
         self.lbf33 = tk.LabelFrame(self.tab1, text=self.lang['LabelFrame_33'], width=200, height=100, fg=self.theme['.']['fg_colour'], bg=self.theme['.']['bg_colour'], font=self.sett_json['font_ar10b'])
-        #self.lbf33.place(x=405, y=105)
         lbf4 = tk.LabelFrame(self.tab2, text=self.lang['LabelFrame_4'], width=200, height=390, fg=self.theme['.']['fg_colour'], bg=self.theme['.']['bg_colour'], font=self.sett_json['font_ar10b'])
         lbf4.place(x=5, y=5)
 
@@ -250,16 +248,16 @@ class MeasControlGUI(tk.Tk):
     def about_win(self):
         self.win_one(self.lang['add_cascade_4'], '880x450+{}+{}')
         text1 = 'MEASControl\rVersion: 1.13a\rDate: 2025-09-24\rAutor: g1enden (I T L)'
-        text2 = 'Agilent/Keysight:\r34401A\r34410A\r34411A\r34420A\r34460A\r34461A\r34465A\r34470A\r\r\r\r\r\r\r\r\r'
-        text3 = 'AKIP:\rV7-78/1\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r'
-        text4 = 'Lecroy:\rWJ312A\rWJ324A\rHDO8108A\r\r\r\r\r\r\r\r\r\r\r\r\r\r'
-        text5 = 'Tektronix:\rTDS2002\rTDS2012B\rTDS2014(B,C)\rTDS2024(B,C)\rTPS2024\r\r\r\r\r\r\r\r\r\r\r\r'
+        text2 = 'Agilent/Keysight:\r34401A\r34410A\r34411A\r34420A\r34460A\r34461A\r34465A\r34470A\r'
+        text3 = 'AKIP:\rV7-78/1\r'
+        text4 = 'Lecroy:\rWJ312A\rWJ324A\rHDO8108A\r'
+        text5 = 'Tektronix:\rTDS2002\rTDS2012B\rTDS2014(B,C)\rTDS2024(B,C)\rTPS2024\r'
         text6 = 'Agilent/Keysight:\rMSO-X3032T\rMSO-X3104(A,T)\rMSO-X3034A\rMSO-X3054A\rMSO-X4104A\rMSO-X4154A\rDSO-X4034A\rMSO-X6004A\rDSO-X92004A\rDSO6102A\rMSO6012A\rDSO7034B\rMSO7104B\rDSO9104A\rMSO9404A\rDSOZ594A\r'
-        text7 = 'Siglent(AKIP):\rAKIP-4119/1\rAKIP-4131/1A\rAKIP-4131/2A\r\r\r\r\r\r\r\r\r\r\r\r\r\r'
-        text8 = 'R&S:\rRTO1024\rRTO1044\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r'
-        text9 = 'OWON(AKTAKOM):\rADS-222\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r'
-        text10 = 'Rigol:\rMSO5204\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r'
-        text11 = 'Agilent/Keysight:\r33622A\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r'
+        text7 = 'Siglent(AKIP):\rAKIP-4119/1\rAKIP-4131/1A\rAKIP-4131/2A\r'
+        text8 = 'R&S:\rRTO1024\rRTO1044\r'
+        text9 = 'OWON(AKTAKOM):\rADS-222\r'
+        text10 = 'Rigol:\rMSO5204\r'
+        text11 = 'Agilent/Keysight:\r33622A\r'
 
         top_1 = tk.Frame(self.top, height=70, relief="raise")
         top_1.pack(side='top', fill='x')
@@ -274,31 +272,31 @@ class MeasControlGUI(tk.Tk):
         autor = tk.Label(top_1, justify='left', text=text1, font=self.sett_json['font_ar10b'], foreground='deepskyblue4')
         autor.place(x=260,y=0)
         lbf5 = tk.LabelFrame(top_2, text='Мультиметры', width=200, height=300, font=self.sett_json['font_ar10b'], foreground='deepskyblue4')
-        lbf5.grid(row=0, column=0)
+        lbf5.grid(row=0, column=0, sticky='n')
         lbf6 = tk.LabelFrame(top_2, text='Осциллографы', width=500, height=300, font=self.sett_json['font_ar10b'], foreground='deepskyblue4')
-        lbf6.grid(row=0, column=1)
+        lbf6.grid(row=0, column=1, sticky='n')
         lbf7 = tk.LabelFrame(top_2, text='Генераторы', width=500, height=300, font=self.sett_json['font_ar10b'], foreground='deepskyblue4')
-        lbf7.grid(row=0, column=2)
+        lbf7.grid(row=0, column=2, sticky='n')
         support_2 = tk.Label(lbf5, text=text2, font=('arial', 10), foreground='deepskyblue4')
-        support_2.grid(row=0, column=0)
+        support_2.grid(row=0, column=0, sticky='n')
         support_3 = tk.Label(lbf5, text=text3, font=('arial', 10), foreground='deepskyblue4')
-        support_3.grid(row=0, column=1)
+        support_3.grid(row=0, column=1, sticky='n')
         support_4 = tk.Label(lbf6, text=text4, font=('arial', 10), foreground='deepskyblue4')
-        support_4.grid(row=0, column=0)
+        support_4.grid(row=0, column=0, sticky='n')
         support_5 = tk.Label(lbf6, text=text5, font=('arial', 10), foreground='deepskyblue4')
-        support_5.grid(row=0, column=1)
+        support_5.grid(row=0, column=1, sticky='n')
         support_6 = tk.Label(lbf6, text=text6, font=('arial', 10), foreground='deepskyblue4')
-        support_6.grid(row=0, column=2)
+        support_6.grid(row=0, column=2, sticky='n')
         support_7 = tk.Label(lbf6, text=text7, font=('arial', 10), foreground='deepskyblue4')
-        support_7.grid(row=0, column=3)
+        support_7.grid(row=0, column=3, sticky='n')
         support_8 = tk.Label(lbf6, text=text8, font=('arial', 10), foreground='deepskyblue4')
-        support_8.grid(row=0, column=4)
+        support_8.grid(row=0, column=4, sticky='n')
         support_9 = tk.Label(lbf6, text=text9, font=('arial', 10), foreground='deepskyblue4')
-        support_9.grid(row=0, column=5)
+        support_9.grid(row=0, column=5, sticky='n')
         support_10 = tk.Label(lbf6, text=text10, font=('arial', 10), foreground='deepskyblue4')
-        support_10.grid(row=0, column=6)
+        support_10.grid(row=0, column=6, sticky='n')
         support_11 = tk.Label(lbf7, text=text11, font=('arial', 10), foreground='deepskyblue4')
-        support_11.grid(row=0, column=1)
+        support_11.grid(row=0, column=1, sticky='n')
 
         _button = tk.Button(top_4, text=self.lang['Button_7'], width=10, fg='#ffffff', bg=self.theme['.']['bg_button'], font=self.sett_json['font_ar12b'], command=self.top.destroy)
         _button.pack(side='top')
