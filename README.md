@@ -1,5 +1,5 @@
 ### MEASControl - calibration DMM & oscilloscope
-+ Python 3.8.6 32-bit
++ Python 3.11.9
 + pip install: pyvisa, pyvisa-sim, openpyexcel, pyserial, pyusb
 + Driver: NI-VISA
 + Connect: RS-232, USB, Ethernet
@@ -21,6 +21,7 @@
   + Rigol: MSO5204
 + Suported generators:
   + Keysight/Agilent: 33622A
+  + Micran: G7M-20A
 + Virtual pribors (pyvisa-sim):
   + Agilent 34401A (ASRL9::INSTR)
   + Agilent 34411A (ASRL8::INSTR)

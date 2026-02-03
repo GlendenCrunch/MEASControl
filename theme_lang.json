@@ -1,0 +1,198 @@
+{
+    "Dark": {
+        ".": {
+            "bg_button": "#6699CC",
+            "bg_colour": "#848a98",
+            "configure": {
+                "background": "#848a98",
+                "font": "arial"
+            },
+            "fg_colour": "gold"
+        },
+        "TNotebook": {
+            "configure": {
+                "background": "#848a98",
+                "tabmargins": [
+                    2,
+                    0,
+                    0,
+                    0
+                ]
+            }
+        },
+        "TNotebook.Tab": {
+            "configure": {
+                "background": "#848a98",
+                "font": "arial 18",
+                "foreground": "black",
+                "pading": [
+                    10,
+                    2
+                ]
+            },
+            "map": {
+                "background": [
+                    [
+                        "selected",
+                        "gold"
+                    ]
+                ]
+            }
+        },
+        "Treeview": {
+            "configure": {
+                "background": "white",
+                "font": "arial 10",
+                "foreground": "blue"
+            }
+        }
+    },
+    "Light": {
+        ".": {
+            "bg_button": "cyan4",
+            "bg_colour": "snow3",
+            "configure": {
+                "background": "snow3",
+                "font": "arial"
+            },
+            "fg_colour": "cyan4"
+        },
+        "TNotebook": {
+            "configure": {
+                "background": "snow3",
+                "tabmargins": [
+                    2,
+                    0,
+                    0,
+                    0
+                ]
+            }
+        },
+        "TNotebook.Tab": {
+            "configure": {
+                "background": "snow3",
+                "font": "arial 18",
+                "foreground": "black",
+                "pading": [
+                    10,
+                    2
+                ]
+            },
+            "map": {
+                "background": [
+                    [
+                        "selected",
+                        "cyan4"
+                    ]
+                ]
+            }
+        },
+        "Treeview": {
+            "configure": {
+                "background": "white",
+                "font": "arial 10",
+                "foreground": "blue"
+            }
+        }
+    },
+    "Russia": {
+        "fmenu_close":"Закрыть",
+        "fset_1":"Калибровка/Поверка",
+        "fset_2":"Стили",
+        "fset_3":"Виртуальный прибор",
+        "fset_4":"Микран Г7М",
+        "add_cascade_1":"Файл",
+        "add_cascade_2":"Протокол",
+        "add_cascade_3":"Настройки",
+        "add_cascade_4":"О программе",
+        "tab_control_1":"Соединение",
+        "tab_control_2":"Поверка/калибровка",
+        "statusbar_1":"Статус: ожидание...",
+        "tree_head_1":"Наименовение",
+        "tree_head_2":"Тип",
+        "tree_head_3":"Зав. №",
+        "tree_head_4":"*IDN?",
+        "tree2_head_1":"Установленно",
+        "tree2_head_2":"Измеренно",
+        "tree2_head_3":"Погрешность",
+        "tree2_head_4":"Допуск",
+        "LabelFrame_1":"Поверяемый прибор",
+        "LabelFrame_2":"Калибратор",
+        "LabelFrame_3":"Мультиметр",
+        "LabelFrame_33":"Измеритель мощности",
+        "LabelFrame_4":"Параметры поверки",
+        "Button_1":"Подключить",
+        "Button_2":"Подключить",
+        "Button_3":"☼ Обновить",
+        "Button_5":"► Старт",
+        "Button_6":"▌▌ Пауза",
+        "Button_7":"OK",
+        "Label_1":"адресс gpib:",
+        "Label_2":"канал форм-ля:",
+        "Label_3":"Тип:",
+        "Label_4":"Зав.№:",
+        "Label_5":"Температура,°C:",
+        "Label_6":"Влажность,%:",
+        "Label_7":"Давление,кПа:",
+        "Label_8":"Заказчик:",
+        "Label_9":"Поверитель:",
+        "Label_10":"Название протокола:",
+        "lb_insert_1":"Файл протокола не выбран",
+        "about_win_2":"Мультиметры:",
+        "about_win_3":"Осциллографы:",
+        "set_style_win_2":"Цветовая тема:",
+        "set_style_win_3":"Язык:",
+        "set_style_win_4":"Стиль изменён",
+        "pribor_1":"Обнаруженные приборы и порты:"
+    },
+    "English": {
+        "fmenu_close":"Close",
+        "fset_1":"Calibration",
+        "fset_2":"Style",
+        "fset_3":"Virtual pribor",
+        "fset_4":"Micran G7M",
+        "add_cascade_1":"File",
+        "add_cascade_2":"Protokol",
+        "add_cascade_3":"Setting",
+        "add_cascade_4":"About",
+        "tab_control_1":"    Connect    ",
+        "tab_control_2":"       Calibration        ",
+        "statusbar_1":"Status: wait...     ",
+        "tree_head_1":"Name",
+        "tree_head_2":"Type",
+        "tree_head_3":"№",
+        "tree_head_4":"*IDN?",
+        "tree2_head_1":"Set",
+        "tree2_head_2":"Measure",
+        "tree2_head_3":"Error",
+        "tree2_head_4":"Accurancy",
+        "LabelFrame_1":"Calibration device",
+        "LabelFrame_2":"Calibrator",
+        "LabelFrame_3":"DMM",
+        "LabelFrame_33":"Power meter",
+        "LabelFrame_4":"Set calibration",
+        "Button_1":"Connect",
+        "Button_2":"Connect",
+        "Button_3":"☼ Update  ",
+        "Button_5":"► Start",
+        "Button_6":"▌▌ Pause",
+        "Button_7":"OK",
+        "Label_1":"adress gpib:",
+        "Label_2":"chanel shaper:",
+        "Label_3":"Type:",
+        "Label_4":"№:",
+        "Label_5":"Temperature,°C:",
+        "Label_6":"Humidity,%:",
+        "Label_7":"Press,kPa:",
+        "Label_8":"Customer:",
+        "Label_9":"Executor:",
+        "Label_10":"Name protokol:",
+        "lb_insert_1":"File protokol not found",
+        "about_win_2":"Multimeters:",
+        "about_win_3":"Oscilloscop:",
+        "set_style_win_2":"Colour theme:",
+        "set_style_win_3":"Language:",
+        "set_style_win_4":"Style change",
+        "pribor_1":"Discovered probors and ports:"
+    }
+}

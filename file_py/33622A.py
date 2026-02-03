@@ -55,8 +55,6 @@ for j in range(1,3,1):
     Call_generator(f'SOUR{j}:APPL:SIN 110e6,1.414 VRMS,0', '50', f'dbm{j}_29', 100)
     Call_generator(f'SOUR{j}:APPL:SIN 120e6,1.414 VRMS,0', '50', f'dbm{j}_30', 100)
 
-    my_gui.inst_dmm.write(f'OUTP{j} OFF')
-
 Supportfunc('message-Калибровка завершена')
 Clear_merge()
 Supportfunc('reset_gener')

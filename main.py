@@ -51,13 +51,11 @@ class MeasControlGUI(tk.Tk):
 
         with open(f'{self.folder_1}\\setting.json','r', encoding='utf-8') as file_json:
             self.sett_json = json.load(file_json)
-        with open(f'{self.folder_1}\\theme.json','r', encoding='utf-8') as file_json:
-            self.theme_json = json.load(file_json)
-        with open(f'{self.folder_1}\\language.json','r', encoding='utf-8') as file_json:
-            self.lang_json = json.load(file_json)
+        with open(f'{self.folder_1}\\theme_lang.json','r', encoding='utf-8') as file_json:
+            self.theme_lang_json = json.load(file_json)
 
-        self.lang = self.lang_json[self.sett_json['language']]
-        self.theme = self.theme_json[self.sett_json['theme']]
+        self.lang = self.theme_lang_json[self.sett_json['language']]
+        self.theme = self.theme_lang_json[self.sett_json['theme']]
         self.sign_pribor = self.sett_json['sign_pribor']
 
         self.style = ttk.Style()
@@ -76,6 +74,7 @@ class MeasControlGUI(tk.Tk):
         fsetting.add_command(label=self.lang['fset_1'], command=self.setting_win)
         fsetting.add_command(label=self.lang['fset_2'], command=self.set_style_win)
         fsetting.add_command(label=self.lang['fset_3'], command=self.virt_dmm)
+        fsetting.add_command(label=self.lang['fset_4'], command=self.micran_set)
 
         main_menu.add_cascade(label=self.lang['add_cascade_1'], menu=fmenu)
         main_menu.add_cascade(label=self.lang['add_cascade_2'], command=self.protokol)
@@ -246,18 +245,13 @@ class MeasControlGUI(tk.Tk):
         self.top.geometry(size_win.format(win_width, win_high))
 
     def about_win(self):
-        self.win_one(self.lang['add_cascade_4'], '880x450+{}+{}')
+        self.win_one(self.lang['add_cascade_4'], '540x450+{}+{}')
         text1 = 'MEASControl\rVersion: 1.13a\rDate: 2025-09-24\rAutor: g1enden (I T L)'
-        text2 = 'Agilent/Keysight:\r34401A\r34410A\r34411A\r34420A\r34460A\r34461A\r34465A\r34470A\r'
-        text3 = 'AKIP:\rV7-78/1\r'
-        text4 = 'Lecroy:\rWJ312A\rWJ324A\rHDO8108A\r'
-        text5 = 'Tektronix:\rTDS2002\rTDS2012B\rTDS2014(B,C)\rTDS2024(B,C)\rTPS2024\r'
-        text6 = 'Agilent/Keysight:\rMSO-X3032T\rMSO-X3104(A,T)\rMSO-X3034A\rMSO-X3054A\rMSO-X4104A\rMSO-X4154A\rDSO-X4034A\rMSO-X6004A\rDSO-X92004A\rDSO6102A\rMSO6012A\rDSO7034B\rMSO7104B\rDSO9104A\rMSO9404A\rDSOZ594A\r'
-        text7 = 'Siglent(AKIP):\rAKIP-4119/1\rAKIP-4131/1A\rAKIP-4131/2A\r'
-        text8 = 'R&S:\rRTO1024\rRTO1044\r'
-        text9 = 'OWON(AKTAKOM):\rADS-222\r'
-        text10 = 'Rigol:\rMSO5204\r'
-        text11 = 'Agilent/Keysight:\r33622A\r'
+        text2 = 'Agilent/Keysight:\r34401A\r34410A\r34411A\r34420A\r34460A\r34461A\r34465A\r34470A\r-----\rAKIP:\rV7-78/1\r'
+        text3 = 'Agilent/Keysight:\rMSO-X3032T\rMSO-X3104(A,T)\rMSO-X3034A\rMSO-X3054A\rMSO-X4104A\rMSO-X4154A\rDSO-X4034A\rMSO-X6004A\rDSO-X92004A\rDSO6102A\rMSO6012A\rDSO7034B\rMSO7104B\rDSO9104A\rMSO9404A\rDSOZ594A\r'
+        text4 = 'LeCroy:\rWJ312A\rWJ324A\rHDO8108A\r-----\rTektronix:\rTDS2002\rTDS2012B\rTDS2014(B,C)\rTDS2024(B,C)\rTPS2024\r'
+        text5 = 'R&S:\rRTO1024\rRTO1044\r-----\rSiglent(AKIP):\rAKIP-4119/1\rAKIP-4131/1A\rAKIP-4131/2A\r-----\rRigol:\rMSO5204\r-----\rOWON(AKTAKOM):\rADS-222\r'
+        text6 = 'Agilent/Keysight:\r33622A\r-----\rMicran:\rG7M-20A'
 
         top_1 = tk.Frame(self.top, height=70, relief="raise")
         top_1.pack(side='top', fill='x')
@@ -272,31 +266,21 @@ class MeasControlGUI(tk.Tk):
         autor = tk.Label(top_1, justify='left', text=text1, font=self.sett_json['font_ar10b'], foreground='deepskyblue4')
         autor.place(x=260,y=0)
         lbf5 = tk.LabelFrame(top_2, text='Мультиметры', width=200, height=300, font=self.sett_json['font_ar10b'], foreground='deepskyblue4')
-        lbf5.grid(row=0, column=0, sticky='n')
+        lbf5.grid(row=0, column=1, sticky='n')
         lbf6 = tk.LabelFrame(top_2, text='Осциллографы', width=500, height=300, font=self.sett_json['font_ar10b'], foreground='deepskyblue4')
-        lbf6.grid(row=0, column=1, sticky='n')
+        lbf6.grid(row=0, column=0, sticky='n')
         lbf7 = tk.LabelFrame(top_2, text='Генераторы', width=500, height=300, font=self.sett_json['font_ar10b'], foreground='deepskyblue4')
         lbf7.grid(row=0, column=2, sticky='n')
-        support_2 = tk.Label(lbf5, text=text2, font=('arial', 10), foreground='deepskyblue4')
+        support_1 = tk.Label(lbf5, text=text2, font=('arial', 10), foreground='deepskyblue4')
+        support_1.grid(row=0, column=0, sticky='n')
+        support_2 = tk.Label(lbf6, text=text3, font=('arial', 10), foreground='deepskyblue4')
         support_2.grid(row=0, column=0, sticky='n')
-        support_3 = tk.Label(lbf5, text=text3, font=('arial', 10), foreground='deepskyblue4')
+        support_3 = tk.Label(lbf6, text=text4, font=('arial', 10), foreground='deepskyblue4')
         support_3.grid(row=0, column=1, sticky='n')
-        support_4 = tk.Label(lbf6, text=text4, font=('arial', 10), foreground='deepskyblue4')
-        support_4.grid(row=0, column=0, sticky='n')
-        support_5 = tk.Label(lbf6, text=text5, font=('arial', 10), foreground='deepskyblue4')
+        support_4 = tk.Label(lbf6, text=text5, font=('arial', 10), foreground='deepskyblue4')
+        support_4.grid(row=0, column=2, sticky='n')
+        support_5 = tk.Label(lbf7, text=text6, font=('arial', 10), foreground='deepskyblue4')
         support_5.grid(row=0, column=1, sticky='n')
-        support_6 = tk.Label(lbf6, text=text6, font=('arial', 10), foreground='deepskyblue4')
-        support_6.grid(row=0, column=2, sticky='n')
-        support_7 = tk.Label(lbf6, text=text7, font=('arial', 10), foreground='deepskyblue4')
-        support_7.grid(row=0, column=3, sticky='n')
-        support_8 = tk.Label(lbf6, text=text8, font=('arial', 10), foreground='deepskyblue4')
-        support_8.grid(row=0, column=4, sticky='n')
-        support_9 = tk.Label(lbf6, text=text9, font=('arial', 10), foreground='deepskyblue4')
-        support_9.grid(row=0, column=5, sticky='n')
-        support_10 = tk.Label(lbf6, text=text10, font=('arial', 10), foreground='deepskyblue4')
-        support_10.grid(row=0, column=6, sticky='n')
-        support_11 = tk.Label(lbf7, text=text11, font=('arial', 10), foreground='deepskyblue4')
-        support_11.grid(row=0, column=1, sticky='n')
 
         _button = tk.Button(top_4, text=self.lang['Button_7'], width=10, fg='#ffffff', bg=self.theme['.']['bg_button'], font=self.sett_json['font_ar12b'], command=self.top.destroy)
         _button.pack(side='top')
@@ -359,7 +343,7 @@ class MeasControlGUI(tk.Tk):
 
     def cnt(self):
         cnt_dict = {}
-        for item_0 in ['Call(', 'Call_oscill(', 'Call_DSO9000', 'Call_generator(']:
+        for item_0 in ['Call(', 'Call_oscill(', 'Call_DSO9000', 'Call_generator(', 'Call_generator_uhf(']:
             for item_j in ('DMM', 'Generator', 'Oscilloscope'):
                 for item_i in self.sett_json['ch_pribor'][item_j]:
                     osc_item = sum(1 for line in open(f'{self.folder_1}\\file_py\\{item_i}.py', encoding='utf-8') if line.lstrip().startswith(item_0))
@@ -370,6 +354,21 @@ class MeasControlGUI(tk.Tk):
 
     def virt_dmm(self):
         self.pribor(f'{self.folder_1}\\virt_pribor.yaml@sim')
+
+    def micran_set(self):
+        try:
+            self.date_time()
+            self.rm_g7m = pyvisa.ResourceManager(f'{self.folder_1}\\lib\\MiVISA64.dll')
+            self.inst_dmm = self.rm_g7m.open_resource(resource_name = 'TCPIP::169.254.0.255::8888::SOCKET::GNM',
+                                        resource_pyclass = pyvisa.resources.MessageBasedResource,
+                                        open_timeout = 5e3)
+            self.inst_dmm._encoding = "Windows-1251"
+            self.inst_dmm.timeout = 120e3
+            self.data_1 = self.inst_dmm.query("*IDN?")
+            self.connect_param()
+        except:
+            self.lb.insert('end', 'Ошибка! Прибор не определён')
+            self.lb.itemconfig('end', bg='salmon')
 
     def visa_search(self, param):
         self.rm = pyvisa.ResourceManager(param)
@@ -409,6 +408,7 @@ class MeasControlGUI(tk.Tk):
         self.tree.delete(*self.tree.get_children())
         self.tree2.delete(*self.tree2.get_children())
         self.fluk_on.configure(command=self.connect_fluke_5500)
+        self.dmm_on.configure(command=self.connect_dmm)
         self.lbf3.place(x=405, y=505)
         self.lbf33.place(x=405, y=505)
         self.lab1.place(x=40,y=255)
@@ -420,6 +420,7 @@ class MeasControlGUI(tk.Tk):
     def owon_get(self):
         if self.combo_dmm.get() == 'OWON(AKTAKOM)':
             self.dmm_on.configure(command=self.conect_owon)
+            self.lb.insert('end', 'выбран OWON')
 
     def conect_owon(self):
         self.date_time()
@@ -451,7 +452,7 @@ class MeasControlGUI(tk.Tk):
     def connect_param(self):
         self.a1 = self.data_1.split(',')
         self.a1[1] = self.a1[1].replace('/', '-').replace(' ', '')
-        self.a1[2] = self.a1[2].replace('/', '-').replace(' ', '')
+        self.a1[2] = self.a1[2].replace('/', '-').replace(' ', '').strip('\x00\n') # .strip('\x00\n') for G7M
         if self.a1[1] == '34401A':
             self.chkbtn_1.place(x=0,y=40)
         elif self.a1[1] in list(self.sett_json['ch_pribor']['Oscilloscope'].keys()):
@@ -460,17 +461,19 @@ class MeasControlGUI(tk.Tk):
             self.lab2.place(x=15,y=85)
             self.spinbox1.place(x=133, y=55)
             self.spinbox2.place(x=133, y=85)
-        if self.a1[1] in ('MSO-X6004A', 'DSO9104A', 'MSO9404A', 'DSOX92004A', 'DSOZ594A', '33622A'):
+        if self.a1[1] in ('MSO-X6004A', 'DSO9104A', 'MSO9404A', 'DSOX92004A', 'DSOZ594A', '33622A', 'Г7М-20А-6'):
             self.lbf3.place(x=405, y=5)
             if self.a1[1] in ('DSOX92004A', 'DSOZ594A'):
                 self.lab2.configure(text='Внутренний калибратор\nCal Out')
                 self.lab1.place(x=10,y=550)
                 self.spinbox1.place(x=133, y=550)
                 self.spinbox2.place(x=133, y=850)
-            elif self.a1[1] == '33622A':
+            elif self.a1[1] in ('33622A', 'Г7М-20А-6'):
                 self.lbf33.place(x=405, y=105)
                 self.lbf2.configure(text='Частотомер')
                 self.fluk_on.configure(command=self.connect_counter)
+            if self.a1[1] == 'Г7М-20А-6':
+                self.lbf3.configure(text='Анализатор спектра')
         if self.a1[1] == 'RTO':
             self.a1[1] = self.a1[1]+self.data_1.split(',')[2].split('/')[0].split('.')[1].replace('00k','')
             self.a1[2] = self.a1[2].split('/')[1]

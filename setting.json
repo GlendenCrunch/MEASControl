@@ -39,7 +39,8 @@
             "V7-78-1": 1
         },
         "Generator": {
-            "33622A": 2
+            "33622A": 2,
+            "Г7М-20А-6": 1
         },
         "Oscilloscope": {
             "ADS-222": 2,
@@ -51,6 +52,7 @@
             "DSO7034B": 4,
             "DSO9104A": 4,
             "DSOX92004A": 4,
+            "DSOZ594A": 4,
             "HDO8108A": 8,
             "MSO-X3032T": 2,
             "MSO-X3034A": 4,
@@ -60,6 +62,7 @@
             "MSO-X4104A": 4,
             "MSO-X4154A": 4,
             "MSO-X6004A": 4,
+            "MSO5204": 4,
             "MSO6012A": 2,
             "MSO7104B": 4,
             "MSO9404A": 4,
@@ -75,22 +78,12 @@
             "TDS2024C": 4,
             "TPS2024": 4,
             "WJ312A": 2,
-            "WJ324A": 4,
-            "MSO5204": 4,
-            "DSOZ594A":4
+            "WJ324A": 4
         }
     },
     "font_ar10b": "arial 10 bold",
     "font_ar12b": "arial 12 bold",
     "language": "Russia",
-    "vendor_id": {
-        "0x1AB1": "Rigol",
-        "0x05FF": "LeCroy",
-        "0x0957": "Keysight Technologies",
-        "0x2A8D": "Agilent Technologies",
-        "0x14EB": "PENDULUM",
-        "0xF4EC": "AKIP"
-    },
     "sign_pribor": {
         "0x0090": "CNT-90XL",
         "0x0101": "34465A",
@@ -98,9 +91,11 @@
         "0x036A": "TDS 2024B",
         "0x03A4": "TDS 2014C",
         "0x03A6": "TDS 2024C",
+        "0x0515": "MSO5204",
         "0x0A07": "34411A",
         "0x0DAD": "V7-78/1",
         "0x1006": "AKIP-4131/1A",
+        "0x1023": "HDO8108A",
         "0x1301": "34461A",
         "0x1401": "34461A",
         "0x1722": "MSO6012A",
@@ -119,15 +114,22 @@
         "0x1A07": "34461A",
         "0x1F01": "N5183A",
         "0x5418": "N1913A",
+        "0x0D0B": "N9030A",
         "0x5607": "33622A",
         "0x5707": "33622A",
         "0x900B": "DSO9104A",
         "0x900D": "MSO9404A",
         "0x901A": "DSOX92004A",
-        "0xEE3A": "AKIP-4119/1",
-        "0x0515": "MSO5204",
-        "0x1023": "HDO8108A",
-        "0x905A": "DSOZ594A"
+        "0x905A": "DSOZ594A",
+        "0xEE3A": "AKIP-4119/1"
     },
-    "theme": "Dark"
+    "theme": "Dark",
+    "vendor_id": {
+        "0x05FF": "LeCroy",
+        "0x0957": "Keysight Technologies",
+        "0x14EB": "PENDULUM",
+        "0x1AB1": "Rigol",
+        "0x2A8D": "Agilent Technologies",
+        "0xF4EC": "AKIP"
+    }
 }

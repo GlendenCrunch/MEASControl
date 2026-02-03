@@ -196,6 +196,8 @@ class Call_generator(Thread):
                     if self.data_error > self.accur or self.data_error < -self.accur:
                             cell.fill = my_gui.colour_cell
                             self.tree2_img = my_gui.img3
+        
+        #my_gui.inst_dmm.write(f'OUTP{j} OFF')
 
     def run(self):
         sem.acquire()
@@ -210,6 +212,118 @@ class Call_generator(Thread):
             self.call_33622a()
 
         my_gui.tree2.insert('', 0, text='', image=self.tree2_img, values=(self.form.split(',')[-2],round(self.data_true,4),round(self.data_error,4),f'±{self.accur}'))
+        my_gui.wb.save(f"{my_gui.folder_1}\\Protocol\\{my_gui.vardict_str['name_proc'].get()}")
+        time.sleep(1)
+        my_gui.progress1.step(1)
+        my_gui.count += 1
+        sem.release()
+
+class Param_generator_uhf(Thread):
+    """Class callibration generators ultra high frequencies"""
+    def __init__(self, freq, power, pribor):
+        Thread.__init__(self)
+        self.freq = freq
+        self.power = power
+        self.pribor = pribor
+        self.run_once = False
+        self.start()
+
+    def param_pribor(self):
+        my_gui.inst_dmm2.write('CAL:AUTO OFF')
+        my_gui.inst_dmm2.write('FREQ:SPAN 25 kHz')
+        my_gui.inst_dmm2.write('UNIT:POW dBm') # mW
+        self.run_once = True
+        print('Yes!')
+
+    def param_g7m(self):
+        if self.run_once is False:
+            self.param_pribor()
+
+        my_gui.inst_dmm.write(self.freq)
+        my_gui.inst_dmm.write(self.power)
+        my_gui.inst_dmm2.write('DISP:WIND:TRAC:Y:SCALe:RLEV 10')
+        my_gui.inst_dmm.write('OUTP:STAT ON')
+        time.sleep(1)
+        my_gui.inst_dmm2.write(self.pribor)
+        time.sleep(1)
+        my_gui.inst_dmm2.write('CALC:MARK1:MAX')
+        my_gui.inst_dmm2.write('CALC:MARK1:MODE DELT')
+        time.sleep(1)
+
+    def run(self):
+        sem.acquire()
+        self.param_g7m()
+        sem.release()
+
+class Call_generator_uhf(Thread):
+    """Class callibration generators ultra high frequencies"""
+    def __init__(self, freq, power, pribor, cel, accur):
+        Thread.__init__(self)
+        self.freq = freq
+        self.power = power
+        self.pribor = pribor
+        self.cel = cel
+        self.accur = accur
+        self.start()
+
+    def call_g7m(self):
+        my_gui.inst_dmm.write(self.freq)
+        my_gui.inst_dmm.write(self.power)
+        my_gui.inst_dmm.write('OUTP:STAT ON')
+        time.sleep(3)
+        if self.cel[0] == 'f':
+            my_gui.inst_count.write(f':CONF:FREQ {self.pribor.split(" ")[1]}')
+            time.sleep(1)
+            my_gui.inst_count.write(self.pribor)
+            time.sleep(2)
+            self.data_true = float(my_gui.inst_count.read())
+            self.data_error = (self.data_true - (float(self.freq.split(' ')[1]) * 1E+6)) / float(self.freq.split(' ')[1])
+        elif self.cel[0] == 'p': # use power meter
+            my_gui.inst_power.write('UNIT:POW DBM')
+            my_gui.inst_power.write(self.pribor)
+            time.sleep(1)
+            self.data_true = float(my_gui.inst_power.query('FETC1?'))
+            self.data_error = self.data_true - float(self.power.split(' ')[1])
+        elif self.cel[:2] == 'no' or self.cel[0] in ('h', 'a'): # use signal analyzer
+            my_gui.inst_dmm2.write(self.pribor)
+            if self.cel[0] == 'a':
+                my_gui.inst_dmm2.write('DISP:WIND:TRAC:Y:SCALe:RLEV -30')
+            time.sleep(1)
+            my_gui.inst_dmm2.write('CALC:MARK1:MAX')
+            time.sleep(1)
+            self.data_true = float(my_gui.inst_dmm2.query('CALC:MARK1:Y?'))
+            if self.cel[0] == 'a':
+                self.data_error = self.data_true - float(self.power.split(' ')[1])
+            else:
+                self.data_error = self.data_true
+
+        for row in my_gui.ws.rows:
+            for cell in row:
+                if cell.value == self.cel:
+                    cell.value = self.data_true
+                    if self.cel[0] == 'h' or self.cel[:2] == 'no':
+                        if self.data_error > self.accur:
+                            cell.fill = my_gui.colour_cell
+                            self.tree2_img = my_gui.img3
+                    else:
+                        if self.data_error > self.accur or self.data_error < -self.accur:
+                                cell.fill = my_gui.colour_cell
+                                self.tree2_img = my_gui.img3
+        
+        my_gui.inst_dmm.write('OUTP:STAT OFF')
+
+    def run(self):
+        sem.acquire()
+        my_gui.statusbar["text"] = f'Статус: работа   Прогресс: {my_gui.count} из {my_gui.cnt()[my_gui.a1[1]]}'
+        my_gui.lb2.delete(0, 'end')
+        my_gui.lb2.insert('end', f"Установлено: {self.freq.split(' ')[1]} MГц, {self.power.split(' ')[1]} dBm")
+        my_gui.lb2.see('end')
+        self.tree2_img = my_gui.img2
+        
+        if my_gui.a1[1] == 'Г7М-20А-6':
+            self.call_g7m()
+
+        my_gui.tree2.insert('', 0, text='', image=self.tree2_img, values=(self.freq.split(' ')[1],round(self.data_true,4),round(self.data_error,4),f'±{self.accur}'))
         my_gui.wb.save(f"{my_gui.folder_1}\\Protocol\\{my_gui.vardict_str['name_proc'].get()}")
         time.sleep(1)
         my_gui.progress1.step(1)
@@ -253,8 +367,8 @@ class Supportfunc(Thread):
 
     def reset_gener(self):
         self.reset_common()
-        my_gui.inst_power.write('*RST')
-        my_gui.inst_power.write('*CLS')
+        #my_gui.inst_power.write('*RST')
+        #my_gui.inst_power.write('*CLS')
 
     def capacitorcomp(self):
         my_gui.inst_dmm.write('CONF:CAP')

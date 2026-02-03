@@ -22,7 +22,7 @@ for j in range(1,5,1):
     Call_oscill('VOLT -30', f'C{j}: VDIV 10', 'MSRB?', f'dcv{j}-_7', f'gdcv{j}-_7', 450)
     # trise
     Supportfunc(f'message-Подключите внешнию нагрузку 50 Ом на КАНАЛ №{j} осциллографа')
-    Param_osc(f'{j}', 'ROUT:SIGN:IMP 50', 'SCOP:SHAP EDGE', 'TDIV 5ns', 'MLEN 500')
+    Param_osc(f'{j}', 'ROUT:SIGN:IMP 50', 'SCOP:SHAP EDGE', 'TDIV 5ns', 'MLEN 50')
     Call_oscill('VOLT 0.5', f'C{j}:VDIV 200mv', 'MSRC?', f'tr_{j}', '', 1.75)
     # period
     Param_osc(f'{j}', 'ROUT:SIGN:IMP 50', 'SCOP:SHAP SIN', 'TDIV 20ms', 'MLEN 500')
