@@ -3,7 +3,7 @@ from calibration_oscil import Param_osc, Call_oscill, Supportfunc, Clear_merge
 
 for j in range(1,5,1):
     # dcv
-    Supportfunc(f'message-Подключите формирователь на КАНАЛ №{j} осциллографа')
+    Supportfunc(f'message-Подключите формирователь 9530 на КАНАЛ №{j} осциллографа')
     Supportfunc('resetoscil')
     Param_osc(f'{j}', 'ROUT:SIGN:IMP 1E+06', 'SCOP:SHAP DC', 'TIM:SCAL 0.001', f'CHAN{j}:COUP DCLimit')
     Call_oscill('VOLT 0.0045', f'CHAN{j}:SCAL 0.001', 'MEAS1:ARES?', f'dcv{j}+_1_1', '', 2)
@@ -98,9 +98,9 @@ for j in range(1,5,1):
     Call_oscill('VOLT 0.0009', f'CHAN{j}:SCAL 3', 'MEAS1:ARES?', f'odcv{j}_1_19', '', 302.5)
     Call_oscill('VOLT 40', f'CHAN{j}:SCAL 3', 'MEAS1:ARES?', f'odcv{j}_1_20', '', 442.5)
     Call_oscill('VOLT -40', f'CHAN{j}:SCAL 3', 'MEAS1:ARES?', f'odcv{j}_1_21', '', 442.5)
-    Call_oscill('VOLT 0.0009', f'CHAN{j}:SCAL 10', 'MEAS1:ARES?', f'odcv{j}_1_22', '', 442.5)
-    Call_oscill('VOLT 40', f'CHAN{j}:SCAL 10', 'MEAS1:ARES?', f'odcv{j}_1_23', '', 1002.5)
-    Call_oscill('VOLT -40', f'CHAN{j}:SCAL 10', 'MEAS1:ARES?', f'odcv{j}_1_24', '', 1002.5)
+    Call_oscill('VOLT 0.0009', f'CHAN{j}:SCAL 10', 'MEAS1:ARES?', f'odcv{j}_1_22', '', 1002.5)
+    Call_oscill('VOLT 40', f'CHAN{j}:SCAL 10', 'MEAS1:ARES?', f'odcv{j}_1_23', '', 1142.5)
+    Call_oscill('VOLT -40', f'CHAN{j}:SCAL 10', 'MEAS1:ARES?', f'odcv{j}_1_24', '', 1142.5)
     Param_osc(f'{j}', 'ROUT:SIGN:IMP 1E+06', 'SCOP:SHAP DC', 'TIM:SCAL 0.01', f'CHAN{j}:COUP DC')
     Call_oscill('VOLT 0.0009', f'CHAN{j}:SCAL 0.003', 'MEAS1:ARES?', f'odcv{j}_50_1', '', 2.8)
     Call_oscill('VOLT 1', f'CHAN{j}:SCAL 0.003', 'MEAS1:ARES?', f'odcv{j}_50_2', '', 6.3)
@@ -128,7 +128,7 @@ for j in range(1,5,1):
     Call_oscill('VOLT -5', f'CHAN{j}:SCAL 1', 'MEAS1:ARES?', f'odcv{j}_50_24', '', 120)
     # trise
     Supportfunc('resetoscil')
-    Param_osc(f'{j}', 'ROUT:SIGN:IMP 50', 'SCOP:SHAP EDGE', 'TIM:SCAL 0.00000000005', f'CHAN{j}:COUP DC')
+    Param_osc(f'{j}', 'ROUT:SIGN:IMP 50', 'SCOP:SHAP EDGE', 'TIM:SCAL 50E-12', f'CHAN{j}:COUP DC')
     Call_oscill('VOLT 0.4', f'CHAN{j}:SCAL 0.05', 'MEAS2:ARES?', f'tr{j}_1', '', 176.78)
 
 Supportfunc('message-Калибровка завершена')

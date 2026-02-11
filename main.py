@@ -249,7 +249,7 @@ class MeasControlGUI(tk.Tk):
         text1 = 'MEASControl\rVersion: 1.13a\rDate: 2025-09-24\rAutor: g1enden (I T L)'
         text2 = 'Agilent/Keysight:\r34401A\r34410A\r34411A\r34420A\r34460A\r34461A\r34465A\r34470A\r-----\rAKIP:\rV7-78/1\r'
         text3 = 'Agilent/Keysight:\rMSO-X3032T\rMSO-X3104(A,T)\rMSO-X3034A\rMSO-X3054A\rMSO-X4104A\rMSO-X4154A\rDSO-X4034A\rMSO-X6004A\rDSO-X92004A\rDSO6102A\rMSO6012A\rDSO7034B\rMSO7104B\rDSO9104A\rMSO9404A\rDSOZ594A\r'
-        text4 = 'LeCroy:\rWJ312A\rWJ324A\rHDO8108A\r-----\rTektronix:\rTDS2002\rTDS2012B\rTDS2014(B,C)\rTDS2024(B,C)\rTPS2024\r'
+        text4 = 'LeCroy:\rWJ312A\rWJ324A\rHDO8108A\r-----\rTektronix:\rTDS2002\rTDS2012B\rTDS2014(B,C)\rTDS2024(B,C)\rTPS2014\rTPS2024\r'
         text5 = 'R&S:\rRTO1024\rRTO1044\r-----\rSiglent(AKIP):\rAKIP-4119/1\rAKIP-4131/1A\rAKIP-4131/2A\r-----\rRigol:\rMSO5204\r-----\rOWON(AKTAKOM):\rADS-222\r'
         text6 = 'Agilent/Keysight:\r33622A\r-----\rMicran:\rG7M-20A'
 
@@ -452,10 +452,14 @@ class MeasControlGUI(tk.Tk):
     def connect_param(self):
         self.a1 = self.data_1.split(',')
         self.a1[1] = self.a1[1].replace('/', '-').replace(' ', '')
-        self.a1[2] = self.a1[2].replace('/', '-').replace(' ', '').strip('\x00\n') # .strip('\x00\n') for G7M
+        if self.a1[1] == 'Г7М-20А-6':
+            self.a1[2] = self.a1[2].replace('/', '-').replace(' ', '').strip('\x00\n') # .strip('\x00\n') for G7M
         if self.a1[1] == '34401A':
             self.chkbtn_1.place(x=0,y=40)
-        elif self.a1[1] in list(self.sett_json['ch_pribor']['Oscilloscope'].keys()):
+        if self.a1[1] == 'RTO':
+            self.a1[1] = self.a1[1]+self.data_1.split(',')[2].split('/')[0].split('.')[1].replace('00k','')
+            self.a1[2] = self.a1[2].split('/')[1]
+        if self.a1[1] in list(self.sett_json['ch_pribor']['Oscilloscope'].keys()):
             self.fluk_on.configure(command=self.connect_fluke_9500)
             self.lab1.place(x=40,y=55)
             self.lab2.place(x=15,y=85)
@@ -474,9 +478,6 @@ class MeasControlGUI(tk.Tk):
                 self.fluk_on.configure(command=self.connect_counter)
             if self.a1[1] == 'Г7М-20А-6':
                 self.lbf3.configure(text='Анализатор спектра')
-        if self.a1[1] == 'RTO':
-            self.a1[1] = self.a1[1]+self.data_1.split(',')[2].split('/')[0].split('.')[1].replace('00k','')
-            self.a1[2] = self.a1[2].split('/')[1]
 
         for item_j in ('DMM', 'Generator', 'Oscilloscope'):
             for item_i in self.sett_json['ch_pribor'][item_j]:
@@ -572,8 +573,7 @@ class MeasControlGUI(tk.Tk):
             if self.b1[0] == 'Fluke':
                 self.query(f"ROUT:SIGN:PATH CH{self.spinbox2.get()}")
                 self.active_head = self.query(f"ROUT:FITT? CH{self.spinbox2.get()}")
-                self.lb.insert('end', self.active_head)
-                self.lb.see('end')
+                self.tree.insert('', 'end', text='', image=self.img2, values=('Active head', self.active_head.split(',')[0], self.active_head.split(',')[1], self.active_head))
         except:
             self.lb.insert('end', 'Формирователь не обнаружен')
 
@@ -588,8 +588,7 @@ class MeasControlGUI(tk.Tk):
             if self.b1[0] == 'Fluke':
                 self.inst_fluke_9500.write(f"ROUT:SIGN:PATH CH{self.spinbox2.get()}")
                 self.active_head = self.inst_fluke_9500.query(f"ROUT:FITT? CH{self.spinbox2.get()}")
-                self.lb.insert('end', self.active_head)
-                self.lb.see('end')
+                self.tree.insert('', 'end', text='', image=self.img2, values=('Active head', self.active_head.split(',')[0], self.active_head.split(',')[1], self.active_head))
         except:
             self.lb.insert('end', 'Формирователь не обнаружен')'''
 

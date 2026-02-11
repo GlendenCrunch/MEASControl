@@ -112,7 +112,7 @@ class Param_osc(Thread):
         my_gui.inst_dmm.write(f'CH{self.name}:PRObe 1')
         my_gui.query(self.imp)
         my_gui.query(self.rezfluke)
-        if my_gui.a1[1] == 'TPS2024':
+        if my_gui.a1[1] in ('TPS2014', 'TPS2024'):
             my_gui.inst_dmm.write(f'CH{self.name}:POS -3')
         else:
             my_gui.inst_dmm.write(f'CH{self.name}:POS 0')  # смещение сигнала
@@ -294,7 +294,7 @@ class Param_osc(Thread):
             self.param_dso9()
         elif my_gui.a1[1] in ('DSOX92004A', 'DSOZ594A'):
             self.param_dsox90000()
-        elif my_gui.a1[1] in ('TDS2002', 'TDS2012B', 'TDS2014', 'TDS2014C', 'TDS2014B', 'TDS2024', 'TDS2024B', 'TDS2024C', 'TPS2024'):
+        elif my_gui.a1[1] in ('TDS2002', 'TDS2012B', 'TDS2014', 'TDS2014C', 'TDS2014B', 'TDS2024', 'TDS2024B', 'TDS2024C', 'TPS2014', 'TPS2024'):
             self.param_tds2()
         elif my_gui.a1[1] in ('AKIP-4119-1', 'AKIP-4131-1A', 'AKIP-4131-2A'):
             self.param_akip4131()
@@ -374,7 +374,7 @@ class Call_oscill(Thread):
         else:
             self.data_true = float(my_gui.inst_dmm.query(self.vosc2))
         if self.vosc2 in ('MEASU:MEAS1:VAL?'):
-            if my_gui.a1[1] == 'TPS2024':
+            if my_gui.a1[1] in ('TPS2014', 'TPS2024'):
                 self.data_error = (self.data_true - float(self.vfluk.split(' ')[1])) * 1000
             else:
                 self.data_error = ((self.data_true - float(self.vfluk.split(' ')[1])) / float(self.vfluk.split(' ')[1])) * 100
@@ -654,7 +654,7 @@ class Call_oscill(Thread):
         time.sleep(1)
         if self.cel1[0:4] == 'odcv':
             my_gui.inst_dmm.write(f"{self.vosc1.split(':')[0]}:OFFS {self.vfluk.split(' ')[1]}")
-            time.sleep(2)
+            time.sleep(3)
 
         my_gui.inst_dmm.write('ACQ:COUN 1000')
         time.sleep(2)
@@ -787,7 +787,7 @@ class Call_oscill(Thread):
             self.call_wj312()
         elif my_gui.a1[1] == 'HDO8108A':
             self.call_hdo8108()
-        elif my_gui.a1[1] in ('TDS2002', 'TDS2012B', 'TDS2014', 'TDS2014C', 'TDS2014B', 'TDS2024', 'TDS2024B', 'TDS2024C', 'TPS2024'):
+        elif my_gui.a1[1] in ('TDS2002', 'TDS2012B', 'TDS2014', 'TDS2014C', 'TDS2014B', 'TDS2024', 'TDS2024B', 'TDS2024C', 'TPS2014', 'TPS2024'):
             self.call_tds2()
         elif my_gui.a1[1] in ('DSO-X4034A', 'MSO-X4104A', 'MSO-X4154A', 'MSO-X3034A', 'MSO-X3054A','MSO-X3104A','MSO-X3104T', 'MSO-X3032T'):
             self.call_msox_3()
