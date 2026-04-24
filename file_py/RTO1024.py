@@ -129,7 +129,7 @@ for j in range(1,5,1):
     # trise
     Supportfunc('resetoscil')
     Param_osc(f'{j}', 'ROUT:SIGN:IMP 50', 'SCOP:SHAP EDGE', 'TIM:SCAL 50E-12', f'CHAN{j}:COUP DC')
-    Call_oscill('VOLT 0.4', f'CHAN{j}:SCAL 0.05', 'MEAS2:ARES?', f'tr{j}_1', '', 176.78)
+    Call_oscill('VOLT 0.4', f'CHAN{j}:SCAL 0.05', 'MEAS2:ARES?', f'tr{j}_1', '', 175)
 
 Supportfunc('message-Калибровка завершена')
 Clear_merge()

@@ -249,7 +249,7 @@ class MeasControlGUI(tk.Tk):
         text1 = 'MEASControl\rVersion: 1.13a\rDate: 2025-09-24\rAutor: g1enden (I T L)'
         text2 = 'Agilent/Keysight:\r34401A\r34410A\r34411A\r34420A\r34460A\r34461A\r34465A\r34470A\r-----\rAKIP:\rV7-78/1\r'
         text3 = 'Agilent/Keysight:\rMSO-X3032T\rMSO-X3104(A,T)\rMSO-X3034A\rMSO-X3054A\rMSO-X4104A\rMSO-X4154A\rDSO-X4034A\rMSO-X6004A\rDSO-X92004A\rDSO6102A\rMSO6012A\rDSO7034B\rMSO7104B\rDSO9104A\rMSO9404A\rDSOZ594A\r'
-        text4 = 'LeCroy:\rWJ312A\rWJ324A\rHDO8108A\r-----\rTektronix:\rTDS2002\rTDS2012B\rTDS2014(B,C)\rTDS2024(B,C)\rTPS2014\rTPS2024\r'
+        text4 = 'LeCroy:\rWJ312A\rWJ324A\rHDO8108A\r-----\rTektronix:\rTDS220\rTDS2002\rTDS2012B\rTDS2014(B,C)\rTDS2024(B,C)\rTPS2014\rTPS2024\r'
         text5 = 'R&S:\rRTO1024\rRTO1044\r-----\rSiglent(AKIP):\rAKIP-4119/1\rAKIP-4131/1A\rAKIP-4131/2A\r-----\rRigol:\rMSO5204\r-----\rOWON(AKTAKOM):\rADS-222\r'
         text6 = 'Agilent/Keysight:\r33622A\r-----\rMicran:\rG7M-20A'
 
@@ -576,21 +576,6 @@ class MeasControlGUI(tk.Tk):
                 self.tree.insert('', 'end', text='', image=self.img2, values=('Active head', self.active_head.split(',')[0], self.active_head.split(',')[1], self.active_head))
         except:
             self.lb.insert('end', 'Формирователь не обнаружен')
-
-    '''def connect_fluke_9500(self): # протестировать в следующий раз
-        self.inst_fluke_9500 = self.rm.open_resource(self.combo_flu.get(), baud_rate=115200, data_bits=8, timeout=1, write_termination='\r', read_termination='\n')
-        time.sleep(2)
-        self.inst_fluke_9500.write('++auto 1')
-        self.inst_fluke_9500.write(f'++addr {self.spinbox1.get()}')
-        self.data_2 = self.inst_fluke_9500.query('*IDN?')
-        self.connect_fluke_set()
-        try:
-            if self.b1[0] == 'Fluke':
-                self.inst_fluke_9500.write(f"ROUT:SIGN:PATH CH{self.spinbox2.get()}")
-                self.active_head = self.inst_fluke_9500.query(f"ROUT:FITT? CH{self.spinbox2.get()}")
-                self.tree.insert('', 'end', text='', image=self.img2, values=('Active head', self.active_head.split(',')[0], self.active_head.split(',')[1], self.active_head))
-        except:
-            self.lb.insert('end', 'Формирователь не обнаружен')'''
 
     def entry_in_cell(self):
         for row in self.ws.rows:

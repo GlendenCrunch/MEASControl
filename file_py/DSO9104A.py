@@ -71,7 +71,10 @@ for j in range(1,5,1):
     Call_DSO9000('VOLT 0.01', f'CHAN{j}:SCAL 0.2', '', '', '', f'nul{j}_6', '', '', 17)
     Call_DSO9000('VOLT 0.01', f'CHAN{j}:SCAL 0.5', '', '', '', f'nul{j}_7', '', '', 41)
     Call_DSO9000('VOLT 0.01', f'CHAN{j}:SCAL 1', '', '', '', f'nul{j}_8', '', '', 81)
+
+for j in range(1,5,1):
     # band
+    Supportfunc(f'message-Подключите только формирователь на КАНАЛ №{j} осциллографа')
     Supportfunc('resetoscil')
     Param_osc(f'{j}', 'ROUT:SIGN:IMP 50', 'SCOP:SHAP SIN;, FREQ:FIX 50E+06', 'TIM:SCAL 20E-9', '')
     Call_DSO9000('VOLT 0.03', f'CHAN{j}:SCAL 0.005', f':MEAS:VRMS? CYCL,AC,CHAN{j}', '', f'pin{j}_50_1', f'pdb{j}_50_1', '', '', 3)
