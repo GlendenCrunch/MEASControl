@@ -258,6 +258,7 @@ class Param_osc(Thread):
             my_gui.query(self.ffluke)
             my_gui.tdiv_2 = self.ffluke.split(' ')[1]
         elif self.rezfluke == 'SCOP:SHAP EDGE':
+            my_gui.dev.write(3, self.ffluke, 1000)
             my_gui.query("PAR:EDGE:TRAN RIS")
             my_gui.query("PAR:EDGE:SPE 500E-12")
             if self.ffluke.split(' ')[1] == 'RISE':
@@ -683,7 +684,7 @@ class Call_oscill(Thread):
         time.sleep(1)
         my_gui.dev.write(3, ':ACQ:AVER 4', 1000)
         time.sleep(5)
-        if self.vosc2 == ':MEAS:RTIM?':
+        if self.vosc2 in (':MEAS:RTIM?', ':MEAS:FTIM?'):
             my_gui.dev.write(3, self.cel2, 1000)
         if self.vosc2[6:] == 'MAX?':
             if self.vosc1.split(' ')[1] in ('2mv','5mv','10mv','20mv','50mv','100mv','200mv'):
@@ -691,22 +692,24 @@ class Call_oscill(Thread):
             else:
                 self.data_true = float(my_gui.send_owon(self.vosc2).tobytes().decode('utf-8')[:-2])
             self.data_error = ((self.data_true - float(self.vfluk.split(' ')[1])) / float(self.vfluk.split(' ')[1])) * 100
-        elif self.vosc2 == 'MEASU:MEAS3:VAL?':
-            self.data_true = self.data_true * float(f'1E+{my_gui.tdiv_2[-1:]}')
-            self.data_error = self.data_true - float(my_gui.tdiv_2.split('E')[0])
-        elif self.vosc2 == ':MEAS:RTIM?':
+        elif self.vosc2 == ':MEAS:PER?':
+            #self.data_true = self.data_true * float(f'1E+{my_gui.tdiv_2[-1:]}')
+            #self.data_error = self.data_true - float(my_gui.tdiv_2.split('E')[0])
+            self.data_true = float(my_gui.send_owon(self.vosc2).tobytes().decode('utf-8')[:-2])
+            self.data_error = self.data_true
+        elif self.vosc2 in (':MEAS:RTIM?', ':MEAS:FTIM?'):
             time.sleep(1)
             self.data_true = float(my_gui.send_owon(self.vosc2).tobytes().decode('utf-8')[:-2])
             self.data_error = self.data_true
-        elif self.vosc2 == 'MEASU:MEAS2:VAL?':
+        '''elif self.vosc2 == 'MEASU:MEAS2:VAL?':
             self.data_true = self.data_true * 1E+3
-            self.data_error = (float(self.vfluk.split(' ')[1]) / (2 * math.sqrt(2))) * 1E+3
+            self.data_error = (float(self.vfluk.split(' ')[1]) / (2 * math.sqrt(2))) * 1E+3'''
 
         for row in my_gui.ws.rows:
             for cell in row:
                 if cell.value == self.cel1:
                     cell.value = self.data_true
-                    if self.vosc2  == ':MEAS:RTIM?':
+                    if self.vosc2  in (':MEAS:RTIM?', ':MEAS:FTIM?'):
                         if self.data_true > self.accur:
                             cell.fill = my_gui.colour_cell
                             self.tree2_img = my_gui.img3

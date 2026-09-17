@@ -419,10 +419,10 @@ class MeasControlGUI(tk.Tk):
 
     def owon_get(self):
         if self.combo_dmm.get() == 'OWON(AKTAKOM)':
-            self.dmm_on.configure(command=self.conect_owon)
+            self.dmm_on.configure(command=self.connect_owon)
             self.lb.insert('end', 'выбран OWON')
 
-    def conect_owon(self):
+    def connect_owon(self):
         self.date_time()
         self.dev = usb.core.find(idVendor=0x5345, idProduct=0x1234)
         self.dev.set_configuration()

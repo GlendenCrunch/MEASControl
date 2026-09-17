@@ -1,5 +1,5 @@
 ### MEASControl - calibration DMM & oscilloscope
-+ Python 3.11.9
++ Python 3.11.9 🐍
 + pip install: pyvisa, pyvisa-sim, openpyexcel, pyserial, pyusb
 + Driver: NI-VISA
 + Connect: RS-232, USB, Ethernet
